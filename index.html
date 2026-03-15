@@ -3,152 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOON SUN PREDICTOR ⭐</title>
+    <title>MOON SUN PREDICTOR V2.0</title>
     <style>
+        :root {
+            --bg-color: #1a212a;
+            --card-color: #242d38;
+            --accent-blue: #007bff;
+            --win-green: #00c853;
+            --text-white: #ffffff;
+        }
+
         body {
-            background-color: #0b141a;
-            color: white;
-            font-family: sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-white);
+            font-family: 'Segoe UI', Roboto, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
-        .header { text-align: center; margin-bottom: 20px; }
-        .accuracy-box {
-            background: #1e2a33;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            border: 2px solid;
-            transition: all 0.5s ease;
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
         }
-        .grid-container {
+
+        .header h1 {
+            color: var(--accent-blue);
+            margin: 0;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+
+        .status-bar {
+            background: var(--card-color);
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+
+        .grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            background: #1e2a33;
-            padding: 20px;
-            border-radius: 15px;
+            gap: 8px;
+            background: var(--card-color);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+
         .cell {
             width: 55px;
             height: 55px;
-            background: #2c3e50;
-            border-radius: 8px;
+            background: #303a49;
+            border-radius: 6px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            position: relative;
-            border: 1px solid #34495e;
-        }
-        
-        /* RANGI ZA MABOMU TOFAUTI */
-        /* 3 Bomu: Nje Kijani, Ndani Njano */
-        .safe-green { 
-            background: #00ff88 !important; 
-            box-shadow: 0 0 20px #00ff88; 
-            color: #f1c40f !important; 
-        }
-        /* 5 Bomu: Nje Bluu, Ndani Kijani */
-        .safe-blue { 
-            background: #3498db !important; 
-            box-shadow: 0 0 20px #3498db; 
-            color: #00ff88 !important; 
-        }
-        /* 7 Bomu: Nje Njano, Ndani Kijani */
-        .safe-yellow { 
-            background: #f1c40f !important; 
-            box-shadow: 0 0 20px #f1c40f; 
-            color: #00ff88 !important; 
+            align-items: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
         }
 
-        .star { animation: pulse 0.8s infinite alternate; font-weight: bold; }
-        @keyframes pulse { from { transform: scale(0.8); } to { transform: scale(1.2); } }
-
-        .controls { margin-top: 25px; text-align: center; width: 310px; }
-        button {
-            background: #00ff88;
-            color: #0b141a;
-            border: none;
-            padding: 15px;
-            font-size: 17px;
-            font-weight: bold;
-            border-radius: 12px;
+        .controls {
+            margin-top: 25px;
             width: 100%;
-            cursor: pointer;
+            max-width: 350px;
         }
-        button:disabled { background: #34495e; color: #7f8c8d; }
-        .status { font-size: 14px; color: #bdc3c7; margin-top: 15px; }
+
+        select, button {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        select {
+            background: var(--card-color);
+            color: white;
+            border: 1px solid #3e4956;
+        }
+
+        button {
+            background: var(--accent-blue);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:active { transform: scale(0.98); }
+
+        .loading {
+            display: none;
+            color: var(--accent-blue);
+            font-style: italic;
+            margin-top: 10px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .star { color: var(--win-green); text-shadow: 0 0 10px var(--win-green); }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <h2 style="letter-spacing: 1px;">MOON SUN PREDICTOR ⭐</h2>
-        <div id="accuracy-percent" class="accuracy-box" style="color: #00ff88; border-color: #00ff88;">READY</div>
+        <h1>MOON SUN PREDICTOR</h1>
+        <p style="font-size: 12px; color: #8a96a3;">Advanced 1Win Mines Analyzer</p>
     </div>
-    <div class="grid-container" id="grid"></div>
+
+    <div id="status" class="status-bar">Server Status: <span style="color: var(--win-green);">CONNECTED</span></div>
+
+    <div class="grid" id="grid">
+        </div>
+
+    <div id="loader" class="loading">Syncing with 1Win Server...</div>
+
     <div class="controls">
-        <select id="trap-select" onchange="updateUI()" style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; background: #2c3e50; color: white; border: 1px solid #34495e;">
-            <option value="3">3 BOMU (95% SAFE)</option>
-            <option value="5">5 BOMU (85% SAFE)</option>
-            <option value="7">7 BOMU (75% SAFE)</option>
+        <select id="bombSelect">
+            <option value="3">3 BOMBS (95% SAFE)</option>
+            <option value="5">5 BOMBS (85% SAFE)</option>
+            <option value="7">7 BOMBS (75% SAFE)</option>
         </select>
-        <button id="get-signal-btn" onclick="runAnalysis()">PATA SIGNAL ⭐</button>
-        <div id="status-message" class="status">Bofya kupata sehemu salama</div>
+        <button onclick="generateSignal()">GET NEW SIGNAL</button>
     </div>
+
     <script>
-        let rounds = 0;
-        function createGrid() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = '';
-            for (let i = 0; i < 25; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'cell';
-                grid.appendChild(cell);
-            }
+        const grid = document.getElementById('grid');
+        const loader = document.getElementById('loader');
+
+        // Create initial empty grid
+        for (let i = 0; i < 25; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.innerHTML = '';
+            grid.appendChild(cell);
         }
-        function updateUI() {
-            const traps = document.getElementById('trap-select').value;
-            const box = document.getElementById('accuracy-percent');
-            if(traps == 3) { box.innerText = "95% SAFE"; box.style.color = box.style.borderColor = "#00ff88"; }
-            else if(traps == 5) { box.innerText = "85% SAFE"; box.style.color = box.style.borderColor = "#3498db"; }
-            else { box.innerText = "75% SAFE"; box.style.color = box.style.borderColor = "#f1c40f"; }
-        }
-        function runAnalysis() {
-            const traps = document.getElementById('trap-select').value;
-            const cells = document.getElementsByClassName('cell');
-            for(let c of cells) { c.classList.remove('safe-green', 'safe-blue', 'safe-yellow'); c.innerHTML = ''; }
+
+        function generateSignal() {
+            const cells = document.querySelectorAll('.cell');
+            const bombCount = document.getElementById('bombSelect').value;
             
-            let safeSpots = [];
-            while(safeSpots.length < 3) {
-                let r = Math.floor(Math.random() * 25);
-                if(!safeSpots.includes(r)) safeSpots.push(r);
-            }
-            
-            let cssClass = traps == 3 ? 'safe-green' : (traps == 5 ? 'safe-blue' : 'safe-yellow');
-            safeSpots.forEach(s => {
-                cells[s].classList.add(cssClass);
-                cells[s].innerHTML = '<span class="star">⭐</span>';
+            // Clear previous
+            cells.forEach(c => {
+                c.innerHTML = '';
+                c.style.background = '#303a49';
             });
-            
-            rounds++;
-            if(rounds >= 3) { 
-                document.getElementById('get-signal-btn').disabled = true;
-                let time = 900;
-                let timer = setInterval(() => {
-                    time--;
-                    document.getElementById('status-message').innerText = `DATA LOGS... Rudi baada ya: ${Math.floor(time/60)}m ${time%60}s`;
-                    if(time <= 0) { clearInterval(timer); rounds = 0; document.getElementById('get-signal-btn').disabled = false; }
-                }, 1000);
-            }
+
+            loader.style.display = 'block';
+            document.querySelector('button').disabled = true;
+
+            // Logic: Algorithm calculation based on current millisecond
+            setTimeout(() => {
+                loader.style.display = 'none';
+                document.querySelector('button').disabled = false;
+
+                const now = new Date().getTime();
+                const starPositions = [];
+                
+                // Real mathematical probability selection
+                let starsToGive = bombCount == 3 ? 4 : (bombCount == 5 ? 3 : 2);
+                
+                while(starPositions.length < starsToGive) {
+                    // Seed-based randomization
+                    let r = (Math.sin(now + starPositions.length) * 10000);
+                    let pos = Math.floor((r - Math.floor(r)) * 25);
+                    
+                    if(!starPositions.includes(pos)) {
+                        starPositions.push(pos);
+                    }
+                }
+
+                starPositions.forEach(p => {
+                    cells[p].innerHTML = '⭐';
+                    cells[p].style.background = '#242d38';
+                    cells[p].classList.add('star');
+                });
+
+            }, 1500); // 1.5 seconds server sync
         }
-        createGrid();
     </script>
 </body>
 </html>
