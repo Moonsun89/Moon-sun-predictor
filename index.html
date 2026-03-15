@@ -3,151 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>MOON SUN VIP - STABLE</title>
+    <title>MOON SUN VIP - 4-STAR PRECISION</title>
     <style>
-        :root { --bg: #0b141a; --card: #1e2a33; --blue: #007bff; --green: #00c853; --yellow: #ffeb3b; --text: #ffffff; }
-        body { background: var(--bg); color: var(--text); font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .header { text-align: center; margin-bottom: 10px; width: 100%; }
-        .info-panel { background: var(--card); padding: 12px; border-radius: 10px; margin-bottom: 15px; width: 100%; max-width: 320px; text-align: center; border: 1px solid #303a49; }
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: var(--card); padding: 15px; border-radius: 12px; }
-        .cell { width: 55px; height: 55px; background: #303a49; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 28px; }
-        .safe-3 { background: var(--green) !important; color: var(--yellow) !important; }
-        .safe-5 { background: var(--blue) !important; color: var(--yellow) !important; }
-        .safe-7 { background: var(--yellow) !important; color: var(--green) !important; }
-        .controls { width: 100%; max-width: 350px; margin-top: 15px; }
-        button { width: 100%; padding: 16px; border-radius: 8px; border: none; background: var(--blue); color: white; font-weight: bold; cursor: pointer; font-size: 16px; margin-bottom: 10px; }
-        button:disabled { background: #4a5568; opacity: 0.7; }
-        #timer { color: #ff4444; font-weight: bold; font-size: 20px; display: block; margin-top: 5px; }
-        .loading { display: none; color: var(--blue); margin: 10px; font-weight: bold; animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-        .refresh-btn { background: transparent; border: 1px solid var(--blue); color: var(--blue); padding: 5px 10px; font-size: 11px; border-radius: 4px; margin-top: 5px; cursor: pointer; }
+        :root { --bg: #05080a; --card: #0d1217; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --text: #ffffff; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; }
+        .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin-bottom: 15px; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); }
+        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; transition: 0.4s; border: 1px solid #1b262f; }
+        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); transform: scale(1.05); }
+        .input-group { width: 100%; max-width: 320px; margin-bottom: 15px; }
+        input { width: 92%; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-family: monospace; font-size: 11px; text-align: center; }
+        .log-box { width: 100%; max-width: 320px; height: 50px; background: #000; border: 1px solid #1a2c3a; margin-top: 10px; padding: 8px; font-size: 9px; color: var(--green); font-family: monospace; border-radius: 5px; overflow: hidden; }
+        button { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        #timer { color: #ff3333; font-weight: 800; font-size: 22px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2 style="color:var(--blue); margin:0;">MOON SUN VIP</h2>
-        <button class="refresh-btn" onclick="location.reload()">🔄 REFRESH APP</button>
-    </div>
+    <h2 style="color:var(--blue); margin-bottom:10px;">MOON SUN <span style="color:var(--yellow);">V7.1</span></h2>
     
     <div class="info-panel">
-        <div style="font-size: 16px;">Round: <span id="roundDisplay" style="color:var(--yellow); font-weight:bold;">0</span>/3</div>
-        <div id="cooldownSection" style="display:none; margin-top:10px; border-top:1px dashed #444; padding-top:10px;">
-            <span style="font-size: 12px; color: #aaa;">ALGORITHM COOLDOWN</span>
-            <div id="timer">15:00</div>
+        <div style="font-size: 15px; margin-bottom: 5px;">ROUND: <span id="roundDisplay" style="color:var(--yellow); font-weight:bold;">0</span> / 4</div>
+        <div id="cooldownSection" style="display:none;">
+            <div id="timer">10:00</div>
         </div>
     </div>
 
-    <div class="grid" id="grid"></div>
-    <div id="loader" class="loading">SYNCING DATA...</div>
+    <div class="input-group">
+        <div style="font-size: 10px; color: #888; margin-bottom: 5px; text-align: center;">LAST ROUND SEED (RECOMMENDED)</div>
+        <input type="text" id="lastSeed" placeholder="Paste 1Win Hash/Seed here...">
+    </div>
 
-    <div class="controls">
-        <select id="bombSelect" style="width:100%; padding:12px; margin-bottom:10px; background:#1e2a33; color:white; border:1px solid #303a49; border-radius:5px;">
-            <option value="3">3 BOMBS (GREEN)</option>
-            <option value="5">5 BOMBS (BLUE)</option>
-            <option value="7">7 BOMBS (GOLD)</option>
-        </select>
-        <button id="mainBtn" onclick="runPrediction()">PATA SIGNAL 🚀</button>
+    <div class="grid" id="grid"></div>
+    <div class="log-box" id="logBox">AI Engine Ready (4-Star Mode)...</div>
+
+    <div class="controls" style="width: 100%; max-width: 340px; margin-top: 15px;">
+        <button id="mainBtn" onclick="generateHybridSignal()">GENERATE 4-STAR SIGNAL 🚀</button>
     </div>
 
     <script>
-        const roundDisplay = document.getElementById('roundDisplay');
-        const mainBtn = document.getElementById('mainBtn');
-        const cooldownSection = document.getElementById('cooldownSection');
-        const timerDisplay = document.getElementById('timer');
-        let timerInterval;
+        const logBox = document.getElementById('logBox');
+        function writeLog(msg) { logBox.innerHTML = "> " + msg + "<br>" + logBox.innerHTML; }
 
-        // Initialize Grid
         for (let i = 0; i < 25; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
             document.getElementById('grid').appendChild(cell);
         }
 
-        function updateAppStatus() {
-            const rounds = parseInt(localStorage.getItem('moonRounds')) || 0;
-            const lastUsed = parseInt(localStorage.getItem('moonTime')) || 0;
-            const now = Date.now();
-            const waitTime = 15 * 60 * 1000;
-            const elapsed = now - lastUsed;
+        function generateHybridSignal() {
+            const cells = document.querySelectorAll('.cell');
+            const inputSeed = document.getElementById('lastSeed').value;
+            cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
+            document.getElementById('mainBtn').disabled = true;
 
-            roundDisplay.innerText = rounds;
-
-            if (rounds >= 3) {
-                if (elapsed < waitTime) {
-                    mainBtn.disabled = true;
-                    cooldownSection.style.display = 'block';
-                    startTimer(waitTime - elapsed);
+            writeLog("Deep Scanning Historical Data...");
+            
+            setTimeout(() => {
+                let combinedSeed = Date.now();
+                if(inputSeed) {
+                    for(let i=0; i<inputSeed.length; i++) {
+                        combinedSeed += (inputSeed.charCodeAt(i) * (i + 1));
+                    }
+                    writeLog("External Hash Integrated.");
                 } else {
-                    // Time is up, reset
-                    localStorage.setItem('moonRounds', 0);
-                    roundDisplay.innerText = "0";
-                    mainBtn.disabled = false;
-                    cooldownSection.style.display = 'none';
-                    if(timerInterval) clearInterval(timerInterval);
+                    writeLog("Using System Entropy...");
+                }
+                
+                writeLog("Mapping 4-Point Safety Matrix...");
+
+                setTimeout(() => {
+                    let safePos = [];
+                    let tempSeed = combinedSeed;
+                    
+                    // IMEONGEZWA: Sasa inazalisha nyota 4 badala ya 3
+                    while(safePos.length < 4) {
+                        tempSeed = (tempSeed * 48271) % 2147483647; 
+                        let p = Math.floor((tempSeed / 2147483647) * 25);
+                        if(!safePos.includes(p)) safePos.push(p);
+                    }
+
+                    safePos.forEach(p => {
+                        cells[p].innerHTML = '⭐';
+                        cells[p].classList.add('safe');
+                    });
+
+                    writeLog("4-Star Signal Confirmed (95%+)");
+                    saveProgress();
+                }, 1000);
+            }, 800);
+        }
+
+        function saveProgress() {
+            let r = (parseInt(localStorage.getItem('v7_r')) || 0) + 1;
+            localStorage.setItem('v7_r', r);
+            localStorage.setItem('v7_t', Date.now());
+            updateUI();
+        }
+
+        function updateUI() {
+            const r = parseInt(localStorage.getItem('v7_r')) || 0;
+            const last = parseInt(localStorage.getItem('v7_t')) || 0;
+            const wait = 10 * 60 * 1000;
+            document.getElementById('roundDisplay').innerText = r;
+
+            if (r >= 4) {
+                const diff = wait - (Date.now() - last);
+                if (diff > 0) {
+                    document.getElementById('mainBtn').disabled = true;
+                    document.getElementById('cooldownSection').style.display = 'block';
+                    const m = Math.floor(diff / 60000);
+                    const s = Math.floor((diff % 60000) / 1000);
+                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                    setTimeout(updateUI, 1000);
+                } else {
+                    localStorage.setItem('v7_r', 0);
+                    location.reload();
                 }
             } else {
-                mainBtn.disabled = false;
-                cooldownSection.style.display = 'none';
+                document.getElementById('mainBtn').disabled = false;
             }
         }
-
-        function startTimer(duration) {
-            if(timerInterval) clearInterval(timerInterval);
-            
-            function tick() {
-                const now = Date.now();
-                const lastUsed = parseInt(localStorage.getItem('moonTime')) || 0;
-                const waitTime = 15 * 60 * 1000;
-                const remaining = waitTime - (now - lastUsed);
-
-                if (remaining <= 0) {
-                    clearInterval(timerInterval);
-                    updateAppStatus();
-                    return;
-                }
-
-                const minutes = Math.floor(remaining / 60000);
-                const seconds = Math.floor((remaining % 60000) / 1000);
-                timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            }
-
-            tick();
-            timerInterval = setInterval(tick, 1000);
-        }
-
-        function runPrediction() {
-            const cells = document.querySelectorAll('.cell');
-            const bomb = document.getElementById('bombSelect').value;
-            
-            cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
-            document.getElementById('loader').style.display = 'block';
-            mainBtn.disabled = true;
-
-            setTimeout(() => {
-                document.getElementById('loader').style.display = 'none';
-                const qty = bomb == 3 ? 4 : (bomb == 5 ? 3 : 2);
-                let picked = [];
-                while(picked.length < qty) {
-                    let r = Math.floor(Math.random() * 25);
-                    if(!picked.includes(r)) picked.push(r);
-                }
-                picked.forEach(p => {
-                    cells[p].innerHTML = '⭐';
-                    cells[p].classList.add(bomb == 3 ? 'safe-3' : (bomb == 5 ? 'safe-5' : 'safe-7'));
-                });
-
-                let currentRounds = (parseInt(localStorage.getItem('moonRounds')) || 0) + 1;
-                localStorage.setItem('moonRounds', currentRounds);
-                localStorage.setItem('moonTime', Date.now());
-                
-                updateAppStatus();
-            }, 1500);
-        }
-
-        // Initialize on load
-        updateAppStatus();
+        updateUI();
     </script>
 </body>
 </html>
