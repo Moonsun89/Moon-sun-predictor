@@ -4,50 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>MOON SUN PREDICTOR VIP</title>
+    <title>MOON SUN VIP - STABLE</title>
     <style>
         :root { --bg: #0b141a; --card: #1e2a33; --blue: #007bff; --green: #00c853; --yellow: #ffeb3b; --text: #ffffff; }
-        body { background: var(--bg); color: var(--text); font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; overflow: hidden; }
-        
-        /* Layout */
-        .header { text-align: center; margin-bottom: 10px; }
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        .header { text-align: center; margin-bottom: 10px; width: 100%; }
         .info-panel { background: var(--card); padding: 12px; border-radius: 10px; margin-bottom: 15px; width: 100%; max-width: 320px; text-align: center; border: 1px solid #303a49; }
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: var(--card); padding: 15px; border-radius: 12px; box-shadow: 0 0 20px rgba(0,123,255,0.2); }
-        .cell { width: 55px; height: 55px; background: #303a49; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 28px; transition: 0.3s; }
-        
-        /* Rangi */
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: var(--card); padding: 15px; border-radius: 12px; }
+        .cell { width: 55px; height: 55px; background: #303a49; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 28px; }
         .safe-3 { background: var(--green) !important; color: var(--yellow) !important; }
         .safe-5 { background: var(--blue) !important; color: var(--yellow) !important; }
         .safe-7 { background: var(--yellow) !important; color: var(--green) !important; }
-
-        /* Buttons & Controls */
         .controls { width: 100%; max-width: 350px; margin-top: 15px; }
         button { width: 100%; padding: 16px; border-radius: 8px; border: none; background: var(--blue); color: white; font-weight: bold; cursor: pointer; font-size: 16px; margin-bottom: 10px; }
-        .refresh-btn { background: transparent; border: 1px solid var(--blue); color: var(--blue); padding: 8px; font-size: 12px; }
         button:disabled { background: #4a5568; opacity: 0.7; }
-        
-        #timer { color: #ff4444; font-weight: bold; font-size: 18px; }
+        #timer { color: #ff4444; font-weight: bold; font-size: 20px; display: block; margin-top: 5px; }
         .loading { display: none; color: var(--blue); margin: 10px; font-weight: bold; animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
+        .refresh-btn { background: transparent; border: 1px solid var(--blue); color: var(--blue); padding: 5px 10px; font-size: 11px; border-radius: 4px; margin-top: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h2 style="color:var(--blue); margin:0;">MOON SUN VIP</h2>
-        <button class="refresh-btn" onclick="manualRefresh()">🔄 REFRESH SERVER SEED</button>
+        <button class="refresh-btn" onclick="location.reload()">🔄 REFRESH APP</button>
     </div>
     
     <div class="info-panel">
-        <div style="font-size: 16px;">Round: <span id="roundDisplay" style="color:var(--yellow);">0</span>/3</div>
-        <div id="cooldownSection" style="display:none;">
+        <div style="font-size: 16px;">Round: <span id="roundDisplay" style="color:var(--yellow); font-weight:bold;">0</span>/3</div>
+        <div id="cooldownSection" style="display:none; margin-top:10px; border-top:1px dashed #444; padding-top:10px;">
+            <span style="font-size: 12px; color: #aaa;">ALGORITHM COOLDOWN</span>
             <div id="timer">15:00</div>
         </div>
     </div>
 
     <div class="grid" id="grid"></div>
-    <div id="loader" class="loading">ANALYZING HASH...</div>
+    <div id="loader" class="loading">SYNCING DATA...</div>
 
     <div class="controls">
         <select id="bombSelect" style="width:100%; padding:12px; margin-bottom:10px; background:#1e2a33; color:white; border:1px solid #303a49; border-radius:5px;">
@@ -61,63 +54,79 @@
     <script>
         const roundDisplay = document.getElementById('roundDisplay');
         const mainBtn = document.getElementById('mainBtn');
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const cooldownSection = document.getElementById('cooldownSection');
+        const timerDisplay = document.getElementById('timer');
+        let timerInterval;
 
-        // Sauti ya Digital Beep
-        function playSound(freq, duration) {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = freq;
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            osc.start();
-            osc.stop(audioCtx.currentTime + duration);
-        }
-
-        function manualRefresh() {
-            playSound(800, 0.1);
-            alert("Server Seed imekuwa updated! Unaweza kuendelea.");
-        }
-
+        // Initialize Grid
         for (let i = 0; i < 25; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
             document.getElementById('grid').appendChild(cell);
         }
 
-        function refreshApp() {
-            let rounds = parseInt(localStorage.getItem('moonRounds')) || 0;
-            let lastUsed = parseInt(localStorage.getItem('moonTime')) || 0;
+        function updateAppStatus() {
+            const rounds = parseInt(localStorage.getItem('moonRounds')) || 0;
+            const lastUsed = parseInt(localStorage.getItem('moonTime')) || 0;
             const now = Date.now();
             const waitTime = 15 * 60 * 1000;
+            const elapsed = now - lastUsed;
 
             roundDisplay.innerText = rounds;
+
             if (rounds >= 3) {
-                const timeLeft = waitTime - (now - lastUsed);
-                if (timeLeft > 0) {
+                if (elapsed < waitTime) {
                     mainBtn.disabled = true;
-                    document.getElementById('cooldownSection').style.display = 'block';
+                    cooldownSection.style.display = 'block';
+                    startTimer(waitTime - elapsed);
                 } else {
+                    // Time is up, reset
                     localStorage.setItem('moonRounds', 0);
-                    refreshApp();
+                    roundDisplay.innerText = "0";
+                    mainBtn.disabled = false;
+                    cooldownSection.style.display = 'none';
+                    if(timerInterval) clearInterval(timerInterval);
                 }
             } else {
                 mainBtn.disabled = false;
-                document.getElementById('cooldownSection').style.display = 'none';
+                cooldownSection.style.display = 'none';
             }
+        }
+
+        function startTimer(duration) {
+            if(timerInterval) clearInterval(timerInterval);
+            
+            function tick() {
+                const now = Date.now();
+                const lastUsed = parseInt(localStorage.getItem('moonTime')) || 0;
+                const waitTime = 15 * 60 * 1000;
+                const remaining = waitTime - (now - lastUsed);
+
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    updateAppStatus();
+                    return;
+                }
+
+                const minutes = Math.floor(remaining / 60000);
+                const seconds = Math.floor((remaining % 60000) / 1000);
+                timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }
+
+            tick();
+            timerInterval = setInterval(tick, 1000);
         }
 
         function runPrediction() {
             const cells = document.querySelectorAll('.cell');
+            const bomb = document.getElementById('bombSelect').value;
+            
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
             document.getElementById('loader').style.display = 'block';
             mainBtn.disabled = true;
-            playSound(400, 0.2);
 
             setTimeout(() => {
                 document.getElementById('loader').style.display = 'none';
-                const bomb = document.getElementById('bombSelect').value;
                 const qty = bomb == 3 ? 4 : (bomb == 5 ? 3 : 2);
                 let picked = [];
                 while(picked.length < qty) {
@@ -128,14 +137,17 @@
                     cells[p].innerHTML = '⭐';
                     cells[p].classList.add(bomb == 3 ? 'safe-3' : (bomb == 5 ? 'safe-5' : 'safe-7'));
                 });
-                
-                playSound(1200, 0.3); // Sauti ya ushindi
-                localStorage.setItem('moonRounds', (parseInt(localStorage.getItem('moonRounds')) || 0) + 1);
+
+                let currentRounds = (parseInt(localStorage.getItem('moonRounds')) || 0) + 1;
+                localStorage.setItem('moonRounds', currentRounds);
                 localStorage.setItem('moonTime', Date.now());
-                refreshApp();
-            }, 1800);
+                
+                updateAppStatus();
+            }, 1500);
         }
-        refreshApp();
+
+        // Initialize on load
+        updateAppStatus();
     </script>
 </body>
 </html>
