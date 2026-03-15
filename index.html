@@ -1,193 +1,265 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="sw">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOON SUN PREDICTOR V2.0</title>
+    <title>MOON SUN PREDICTOR - COLOR VIP</title>
     <style>
         :root {
-            --bg-color: #1a212a;
-            --card-color: #242d38;
-            --accent-blue: #007bff;
-            --win-green: #00c853;
-            --text-white: #ffffff;
+            --bg: #0b141a;
+            --card: #1e2a33;
+            --blue: #007bff;
+            --green: #00c853;
+            --yellow: #ffeb3b;
+            --text: #ffffff;
+            --default-cell: #303a49;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-white);
-            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-family: sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 0;
             padding: 20px;
+            margin: 0;
+            min-height: 100vh;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        .header h1 {
-            color: var(--accent-blue);
+        .header h2 {
+            color: var(--blue);
             margin: 0;
-            font-size: 24px;
-            text-transform: uppercase;
+            font-size: 26px;
         }
 
-        .status-bar {
-            background: var(--card-color);
+        .info-panel {
+            background: var(--card);
             padding: 10px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 2px solid var(--blue);
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .info-text {
             font-size: 14px;
-            border-bottom: 2px solid var(--accent-blue);
+            color: #8a96a3;
+            margin: 5px 0;
+        }
+
+        #timer {
+            color: #ff4444;
+            font-weight: bold;
+            font-size: 16px;
         }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 8px;
-            background: var(--card-color);
+            background: var(--card);
             padding: 15px;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
         }
 
         .cell {
             width: 55px;
             height: 55px;
-            background: #303a49;
+            background: var(--default-cell);
             border-radius: 6px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
+            font-size: 28px;
             transition: all 0.3s ease;
         }
 
+        /* Rangi Maalum za Mabomu */
+        .safe-3 { background: var(--green) !important; color: var(--yellow) !important; text-shadow: 0 0 10px rgba(255,235,59,0.7); }
+        .safe-5 { background: var(--blue) !important; color: var(--yellow) !important; text-shadow: 0 0 10px rgba(255,235,59,0.7); }
+        .safe-7 { background: var(--yellow) !important; color: var(--green) !important; text-shadow: 0 0 10px rgba(0,200,83,0.7); }
+
         .controls {
-            margin-top: 25px;
             width: 100%;
             max-width: 350px;
-        }
-
-        select, button {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            border: none;
-            font-weight: bold;
-            font-size: 16px;
+            margin-top: 25px;
+            text-align: center;
         }
 
         select {
-            background: var(--card-color);
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: var(--card);
             color: white;
             border: 1px solid #3e4956;
+            border-radius: 6px;
+            font-size: 14px;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         button {
-            background: var(--accent-blue);
+            width: 100%;
+            padding: 16px;
+            border-radius: 8px;
+            border: none;
+            background: var(--blue);
             color: white;
+            font-weight: bold;
+            font-size: 16px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
+            text-transform: uppercase;
+        }
+
+        button:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+            opacity: 0.7;
         }
 
         button:active { transform: scale(0.98); }
 
         .loading {
             display: none;
-            color: var(--accent-blue);
-            font-style: italic;
-            margin-top: 10px;
+            color: var(--blue);
+            margin: 15px 0;
+            font-weight: bold;
             animation: blink 1s infinite;
         }
 
         @keyframes blink { 50% { opacity: 0; } }
-
-        .star { color: var(--win-green); text-shadow: 0 0 10px var(--win-green); }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>MOON SUN PREDICTOR</h1>
-        <p style="font-size: 12px; color: #8a96a3;">Advanced 1Win Mines Analyzer</p>
+        <h2>MOON SUN</h2>
+        <p style="font-size: 12px; color: #8a96a3; margin:0;">PREDICTOR VIP</p>
     </div>
 
-    <div id="status" class="status-bar">Server Status: <span style="color: var(--win-green);">CONNECTED</span></div>
+    <div class="info-panel">
+        <div class="info-text">Round: <span id="roundCount" style="color:white; font-weight:bold;">0</span>/3</div>
+        <div id="countdown" class="info-text" style="display:none;">Next update in: <span id="timer">15:00</span></div>
+    </div>
 
     <div class="grid" id="grid">
         </div>
 
-    <div id="loader" class="loading">Syncing with 1Win Server...</div>
+    <div id="loader" class="loading">Inachambua Data za Server...</div>
 
     <div class="controls">
         <select id="bombSelect">
-            <option value="3">3 BOMBS (95% SAFE)</option>
-            <option value="5">5 BOMBS (85% SAFE)</option>
-            <option value="7">7 BOMBS (75% SAFE)</option>
+            <option value="3">3 BOMBS (GREEN SAFE)</option>
+            <option value="5">5 BOMBS (BLUE PRO)</option>
+            <option value="7">7 BOMBS (YELLOW GOLD)</option>
         </select>
-        <button onclick="generateSignal()">GET NEW SIGNAL</button>
+        <button id="btn" onclick="generateSignal()">PATA SIGNAL 🚀</button>
     </div>
 
     <script>
         const grid = document.getElementById('grid');
-        const loader = document.getElementById('loader');
+        const btn = document.getElementById('btn');
+        let rounds = localStorage.getItem('colorRounds') ? parseInt(localStorage.getItem('colorRounds')) : 0;
+        let lastUsed = localStorage.getItem('colorLastUsed') || 0;
 
-        // Create initial empty grid
+        // Create Grid
         for (let i = 0; i < 25; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
-            cell.innerHTML = '';
             grid.appendChild(cell);
+        }
+
+        function checkCooldown() {
+            const now = Date.now();
+            const diff = now - lastUsed;
+            const fifteenMinutes = 15 * 60 * 1000;
+
+            if (rounds >= 3 && diff < fifteenMinutes) {
+                btn.disabled = true;
+                document.getElementById('countdown').style.display = 'block';
+                startTimer(fifteenMinutes - diff);
+            } else if (diff >= fifteenMinutes) {
+                rounds = 0;
+                localStorage.setItem('colorRounds', 0);
+                document.getElementById('countdown').style.display = 'none';
+                btn.disabled = false;
+            }
+            document.getElementById('roundCount').innerText = rounds;
+        }
+
+        function startTimer(duration) {
+            let timer = duration / 1000;
+            const display = document.getElementById('timer');
+            const interval = setInterval(() => {
+                let minutes = parseInt(timer / 60, 10);
+                let seconds = parseInt(timer % 60, 10);
+                display.innerText = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    checkCooldown();
+                }
+            }, 1000);
         }
 
         function generateSignal() {
             const cells = document.querySelectorAll('.cell');
             const bombCount = document.getElementById('bombSelect').value;
-            
-            // Clear previous
+
+            // Clear previous styles
             cells.forEach(c => {
                 c.innerHTML = '';
                 c.style.background = '#303a49';
+                c.classList.remove('safe-3', 'safe-5', 'safe-7');
             });
+            
+            document.getElementById('loader').style.display = 'block';
+            btn.disabled = true;
 
-            loader.style.display = 'block';
-            document.querySelector('button').disabled = true;
-
-            // Logic: Algorithm calculation based on current millisecond
+            // Simulating Server Fetch
             setTimeout(() => {
-                loader.style.display = 'none';
-                document.querySelector('button').disabled = false;
-
-                const now = new Date().getTime();
-                const starPositions = [];
+                document.getElementById('loader').style.display = 'none';
                 
-                // Real mathematical probability selection
-                let starsToGive = bombCount == 3 ? 4 : (bombCount == 5 ? 3 : 2);
+                // Logic: How many stars to give (more bombs, fewer stars)
+                const starCount = bombCount == 3 ? 4 : (bombCount == 5 ? 3 : 2);
+                const positions = [];
                 
-                while(starPositions.length < starsToGive) {
-                    // Seed-based randomization
-                    let r = (Math.sin(now + starPositions.length) * 10000);
-                    let pos = Math.floor((r - Math.floor(r)) * 25);
-                    
-                    if(!starPositions.includes(pos)) {
-                        starPositions.push(pos);
-                    }
+                while(positions.length < starCount) {
+                    let p = Math.floor(Math.random() * 25);
+                    if(!positions.includes(p)) positions.push(p);
                 }
 
-                starPositions.forEach(p => {
+                // Apply Color Logic
+                positions.forEach(p => {
                     cells[p].innerHTML = '⭐';
-                    cells[p].style.background = '#242d38';
-                    cells[p].classList.add('star');
+                    if(bombCount == 3) {
+                        cells[p].classList.add('safe-3');
+                    } else if(bombCount == 5) {
+                        cells[p].classList.add('safe-5');
+                    } else if(bombCount == 7) {
+                        cells[p].classList.add('safe-7');
+                    }
                 });
 
-            }, 1500); // 1.5 seconds server sync
+                rounds++;
+                lastUsed = Date.now();
+                localStorage.setItem('colorRounds', rounds);
+                localStorage.setItem('colorLastUsed', lastUsed);
+                checkCooldown();
+            }, 2000);
         }
+
+        checkCooldown();
     </script>
 </body>
 </html>
