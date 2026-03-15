@@ -1,165 +1,58 @@
-        <!DOCTYPE html>
+                    <!DOCTYPE html>
 <html lang="sw">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOON SUN PREDICTOR - COLOR VIP</title>
+    <title>MOON SUN PREDICTOR - FIXED</title>
     <style>
         :root {
-            --bg: #0b141a;
-            --card: #1e2a33;
-            --blue: #007bff;
-            --green: #00c853;
-            --yellow: #ffeb3b;
-            --text: #ffffff;
-            --default-cell: #303a49;
+            --bg: #0b141a; --card: #1e2a33; --blue: #007bff;
+            --green: #00c853; --yellow: #ffeb3b; --text: #ffffff;
         }
-
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            margin: 0;
-            min-height: 100vh;
+            background: var(--bg); color: var(--text); font-family: sans-serif;
+            display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0;
         }
-
-        .header {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .header h2 {
-            color: var(--blue);
-            margin: 0;
-            font-size: 26px;
-        }
-
         .info-panel {
-            background: var(--card);
-            padding: 10px 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-            border-bottom: 2px solid var(--blue);
-            width: 100%;
-            max-width: 320px;
+            background: var(--card); padding: 10px; border-radius: 8px;
+            margin-bottom: 15px; width: 100%; max-width: 320px; text-align: center;
         }
-
-        .info-text {
-            font-size: 14px;
-            color: #8a96a3;
-            margin: 5px 0;
-        }
-
-        #timer {
-            color: #ff4444;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
         .grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            background: var(--card);
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+            background: var(--card); padding: 15px; border-radius: 12px;
         }
-
         .cell {
-            width: 55px;
-            height: 55px;
-            background: var(--default-cell);
-            border-radius: 6px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 28px;
-            transition: all 0.3s ease;
+            width: 55px; height: 55px; background: #303a49; border-radius: 6px;
+            display: flex; justify-content: center; align-items: center; font-size: 28px;
         }
+        /* Rangi Maalum */
+        .safe-3 { background: var(--green) !important; color: var(--yellow) !important; }
+        .safe-5 { background: var(--blue) !important; color: var(--yellow) !important; }
+        .safe-7 { background: var(--yellow) !important; color: var(--green) !important; }
 
-        /* Rangi Maalum za Mabomu */
-        .safe-3 { background: var(--green) !important; color: var(--yellow) !important; text-shadow: 0 0 10px rgba(255,235,59,0.7); }
-        .safe-5 { background: var(--blue) !important; color: var(--yellow) !important; text-shadow: 0 0 10px rgba(255,235,59,0.7); }
-        .safe-7 { background: var(--yellow) !important; color: var(--green) !important; text-shadow: 0 0 10px rgba(0,200,83,0.7); }
-
-        .controls {
-            width: 100%;
-            max-width: 350px;
-            margin-top: 25px;
-            text-align: center;
-        }
-
-        select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            background: var(--card);
-            color: white;
-            border: 1px solid #3e4956;
-            border-radius: 6px;
-            font-size: 14px;
-            appearance: none;
-            -webkit-appearance: none;
-        }
-
+        .controls { width: 100%; max-width: 350px; margin-top: 20px; }
         button {
-            width: 100%;
-            padding: 16px;
-            border-radius: 8px;
-            border: none;
-            background: var(--blue);
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.2s;
-            text-transform: uppercase;
+            width: 100%; padding: 16px; border-radius: 8px; border: none;
+            background: var(--blue); color: white; font-weight: bold; cursor: pointer;
         }
-
-        button:disabled {
-            background: #4a5568;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        button:active { transform: scale(0.98); }
-
-        .loading {
-            display: none;
-            color: var(--blue);
-            margin: 15px 0;
-            font-weight: bold;
-            animation: blink 1s infinite;
-        }
-
+        button:disabled { background: #4a5568; opacity: 0.6; }
+        .loading { display: none; color: var(--blue); margin: 10px; animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2>MOON SUN</h2>
-        <p style="font-size: 12px; color: #8a96a3; margin:0;">PREDICTOR VIP</p>
-    </div>
-
+    <h2 style="color:var(--blue); margin-bottom:5px;">MOON SUN</h2>
     <div class="info-panel">
-        <div class="info-text">Round: <span id="roundCount" style="color:white; font-weight:bold;">0</span>/3</div>
-        <div id="countdown" class="info-text" style="display:none;">Next update in: <span id="timer">15:00</span></div>
+        <div>Round: <span id="roundCount">0</span>/3</div>
+        <div id="countdown" style="display:none; color:#ff4444;">Subiri: <span id="timer">15:00</span></div>
     </div>
 
-    <div class="grid" id="grid">
-        </div>
-
-    <div id="loader" class="loading">Inachambua Data za Server...</div>
+    <div class="grid" id="grid"></div>
+    <div id="loader" class="loading">Inachambua Data...</div>
 
     <div class="controls">
-        <select id="bombSelect">
+        <select id="bombSelect" style="width:100%; padding:10px; margin-bottom:10px; background:#1e2a33; color:white; border-radius:5px;">
             <option value="3">3 BOMBS (GREEN SAFE)</option>
             <option value="5">5 BOMBS (BLUE PRO)</option>
             <option value="7">7 BOMBS (YELLOW GOLD)</option>
@@ -170,44 +63,49 @@
     <script>
         const grid = document.getElementById('grid');
         const btn = document.getElementById('btn');
-        let rounds = localStorage.getItem('colorRounds') ? parseInt(localStorage.getItem('colorRounds')) : 0;
-        let lastUsed = localStorage.getItem('colorLastUsed') || 0;
+        const roundDisplay = document.getElementById('roundCount');
+        
+        let rounds = parseInt(localStorage.getItem('mRounds')) || 0;
+        let lastTime = parseInt(localStorage.getItem('mLastTime')) || 0;
 
-        // Create Grid
         for (let i = 0; i < 25; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
             grid.appendChild(cell);
         }
 
-        function checkCooldown() {
+        function updateUI() {
             const now = Date.now();
-            const diff = now - lastUsed;
-            const fifteenMinutes = 15 * 60 * 1000;
-
-            if (rounds >= 3 && diff < fifteenMinutes) {
+            const waitTime = 15 * 60 * 1000;
+            
+            if (rounds >= 3 && (now - lastTime) < waitTime) {
                 btn.disabled = true;
                 document.getElementById('countdown').style.display = 'block';
-                startTimer(fifteenMinutes - diff);
-            } else if (diff >= fifteenMinutes) {
-                rounds = 0;
-                localStorage.setItem('colorRounds', 0);
-                document.getElementById('countdown').style.display = 'none';
+                const remaining = waitTime - (now - lastTime);
+                startTimer(remaining);
+            } else {
+                if ((now - lastTime) >= waitTime) {
+                    rounds = 0;
+                    localStorage.setItem('mRounds', 0);
+                }
                 btn.disabled = false;
+                document.getElementById('countdown').style.display = 'none';
             }
-            document.getElementById('roundCount').innerText = rounds;
+            roundDisplay.innerText = rounds;
         }
 
-        function startTimer(duration) {
-            let timer = duration / 1000;
-            const display = document.getElementById('timer');
+        function startTimer(ms) {
+            const timerSpan = document.getElementById('timer');
             const interval = setInterval(() => {
-                let minutes = parseInt(timer / 60, 10);
-                let seconds = parseInt(timer % 60, 10);
-                display.innerText = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
-                if (--timer < 0) {
+                const now = Date.now();
+                const remaining = (15 * 60 * 1000) - (now - localStorage.getItem('mLastTime'));
+                if (remaining <= 0) {
                     clearInterval(interval);
-                    checkCooldown();
+                    updateUI();
+                } else {
+                    let m = Math.floor(remaining / 60000);
+                    let s = Math.floor((remaining % 60000) / 1000);
+                    timerSpan.innerText = `${m}:${s < 10 ? '0'+s : s}`;
                 }
             }, 1000);
         }
@@ -215,51 +113,33 @@
         function generateSignal() {
             const cells = document.querySelectorAll('.cell');
             const bombCount = document.getElementById('bombSelect').value;
+            cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
-            // Clear previous styles
-            cells.forEach(c => {
-                c.innerHTML = '';
-                c.style.background = '#303a49';
-                c.classList.remove('safe-3', 'safe-5', 'safe-7');
-            });
-            
             document.getElementById('loader').style.display = 'block';
             btn.disabled = true;
 
-            // Simulating Server Fetch
             setTimeout(() => {
                 document.getElementById('loader').style.display = 'none';
-                
-                // Logic: How many stars to give (more bombs, fewer stars)
-                const starCount = bombCount == 3 ? 4 : (bombCount == 5 ? 3 : 2);
-                const positions = [];
-                
-                while(positions.length < starCount) {
-                    let p = Math.floor(Math.random() * 25);
-                    if(!positions.includes(p)) positions.push(p);
+                const count = bombCount == 3 ? 4 : (bombCount == 5 ? 3 : 2);
+                const pos = [];
+                while(pos.length < count) {
+                    let r = Math.floor(Math.random() * 25);
+                    if(!pos.includes(r)) pos.push(r);
                 }
 
-                // Apply Color Logic
-                positions.forEach(p => {
+                pos.forEach(p => {
                     cells[p].innerHTML = '⭐';
-                    if(bombCount == 3) {
-                        cells[p].classList.add('safe-3');
-                    } else if(bombCount == 5) {
-                        cells[p].classList.add('safe-5');
-                    } else if(bombCount == 7) {
-                        cells[p].classList.add('safe-7');
-                    }
+                    cells[p].classList.add(bombCount == 3 ? 'safe-3' : (bombCount == 5 ? 'safe-5' : 'safe-7'));
                 });
 
                 rounds++;
-                lastUsed = Date.now();
-                localStorage.setItem('colorRounds', rounds);
-                localStorage.setItem('colorLastUsed', lastUsed);
-                checkCooldown();
-            }, 2000);
+                localStorage.setItem('mRounds', rounds);
+                localStorage.setItem('mLastTime', Date.now());
+                updateUI();
+            }, 1500);
         }
 
-        checkCooldown();
+        updateUI();
     </script>
 </body>
 </html>
