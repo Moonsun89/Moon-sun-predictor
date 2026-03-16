@@ -10,20 +10,26 @@
 
     <style>
         :root { --bg: #05080a; --card: #0d1217; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --text: #ffffff; --red: #ff3333; }
-        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; position: relative; min-height: 100vh; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; position: relative; min-height: 100vh; overflow-x: hidden; }
         
-        /* Background Layer yenye Opacity inayoweza kubadilika */
-        #bgLayer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-size: cover; background-position: center; transition: 0.3s; pointer-events: none; opacity: 0.1; }
+        /* Background Layer - Hapa ndipo picha inakaa bila kuzoomiwa */
+        #bgLayer { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; 
+            background-repeat: no-repeat; background-position: center; 
+            background-size: contain; /* Hii inahakikisha picha haizoomiwi */
+            transition: 0.3s; opacity: 0.1; 
+            background-image: url('https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png');
+        }
 
-        /* Vitufe vya Kushoto Juu (Vidogo kiasi) */
-        .top-controls { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 1000; background: rgba(0,0,0,0.4); padding: 5px; border-radius: 8px; border: 0.5px solid var(--blue); }
-        .ctrl-row { display: flex; align-items: center; gap: 5px; }
-        .mini-btn { background: #12181f; border: 0.5px solid var(--blue); color: white; padding: 4px 6px; border-radius: 4px; font-size: 9px; cursor: pointer; }
-        .label { font-size: 8px; color: var(--yellow); font-weight: bold; }
+        /* Controls Panel (Top Left) */
+        .controls { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 5px; z-index: 1000; background: rgba(0,0,0,0.6); padding: 6px; border-radius: 8px; border: 0.5px solid var(--blue); }
+        .c-row { display: flex; align-items: center; gap: 5px; }
+        .m-btn { background: #12181f; border: 0.5px solid var(--blue); color: white; padding: 3px 6px; border-radius: 4px; font-size: 8px; cursor: pointer; }
+        .txt { font-size: 7px; color: var(--yellow); font-weight: bold; text-transform: uppercase; }
         input[type="range"] { width: 50px; cursor: pointer; }
 
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5000; }
-        .title-container { text-align: center; margin-bottom: 10px; margin-top: 45px; }
+        .title-container { text-align: center; margin-bottom: 10px; margin-top: 55px; }
         .main-title { font-size: 22px; font-weight: 800; text-transform: uppercase; margin: 0; }
         .sub-title { font-size: 14px; font-weight: bold; margin-top: 5px; }
         .color-blue { color: var(--blue); } .color-yellow { color: var(--yellow); } .color-green { color: var(--green); }
@@ -40,34 +46,34 @@
 </head>
 <body>
 
-    <div id="bgLayer" style="background-image: url('https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png');"></div>
+    <div id="bgLayer"></div>
 
-    <div class="top-controls">
-        <div class="ctrl-row">
-            <span class="label">SND:</span>
-            <button class="mini-btn" id="muteBtn" onclick="toggleMute()">ON</button>
-            <select id="soundSelect" class="mini-btn" onchange="loadSnd()">
+    <div class="controls">
+        <div class="c-row">
+            <span class="txt">SND:</span>
+            <button class="m-btn" id="mBtn" onclick="toggleM()">ON</button>
+            <select id="sPick" class="m-btn" onchange="upS()">
                 <option value="https://www.soundjay.com/buttons/sounds/button-37a.mp3">S1</option>
                 <option value="https://www.soundjay.com/buttons/sounds/button-09a.mp3">S2</option>
                 <option value="https://www.soundjay.com/buttons/sounds/button-20.mp3">S3</option>
-                <option value="https://www.soundjay.com/buttons/sounds/button-21.mp3">S4</option>
-                <option value="https://www.soundjay.com/buttons/sounds/beep-07a.mp3">S5</option>
             </select>
         </div>
-        <div class="ctrl-row">
-            <span class="label">IMG:</span>
-            <button class="mini-btn" onclick="nextTheme()">CHANGE</button>
+        <div class="c-row">
+            <span class="txt">THEME:</span>
+            <button class="m-btn" onclick="nxtT()">NEXT</button>
+            <button class="m-btn" onclick="document.getElementById('fileInp').click()">UPL</button>
+            <input type="file" id="fileInp" style="display:none" accept="image/*" onchange="upImg(event)">
         </div>
-        <div class="ctrl-row">
-            <span class="label">VIS:</span>
-            <input type="range" min="0" max="60" value="10" oninput="adjVis(this.value)">
+        <div class="c-row">
+            <span class="txt">VIS:</span>
+            <input type="range" min="0" max="100" value="10" oninput="upOp(this.value)">
         </div>
     </div>
 
     <div id="loginScreen">
         <h2 class="color-blue">MOON SUN ACCESS</h2>
         <input type="password" id="accessKey" placeholder="Enter Access Key">
-        <button onclick="checkKey()" style="width:200px; padding: 12px; background: var(--blue); border: none; color: #fff; font-weight: bold;">LOGIN</button>
+        <button onclick="checkK()" style="width:180px; padding: 10px; background: var(--blue); border: none; color: #fff; font-weight: bold;">LOGIN</button>
     </div>
 
     <div class="title-container">
@@ -91,56 +97,60 @@
 
     <div class="grid" id="grid"></div>
 
-    <button id="mainBtn" onclick="processSignal()">PATA SIGNAL 🚀</button>
+    <button id="mainBtn" onclick="processS()">PATA SIGNAL 🚀</button>
 
-    <div id="instBtn" onclick="alert('1. Weka Hash/Salt\n2. Pata Signal\n3. Cash Out 1Win!')">MAELEKEZO</div>
+    <div id="instBtn" onclick="alert('Kiongozi, tumia Hash na Salt za raundi iliyopita kupata matokeo ya sasa.')">MAELEKEZO</div>
 
     <script>
-        let isMuted = false;
-        let tIdx = 0;
+        let muted = false;
+        let tI = 0;
         const themes = [
-            'https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png', // Logo yako mpya
-            'https://i.ibb.co/XW8FpYV/bg-premium-1.png', // Premium Dark
-            'https://i.ibb.co/L8T6XyB/bg-premium-2.png', // Tech Blue
-            'none' // Pure Black
+            'https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png',
+            'https://i.ibb.co/XW8FpYV/bg-premium-1.png',
+            'none'
         ];
 
-        let sfx = new Audio("https://www.soundjay.com/buttons/sounds/button-37a.mp3");
+        let sfx = new Audio(document.getElementById('sPick').value);
 
-        function checkKey() {
+        function checkK() {
             if(document.getElementById('accessKey').value === "Mr winner123") {
                 document.getElementById('loginScreen').style.display = 'none';
-                if(!isMuted) sfx.play();
-            } else { alert("Key si Sahihi!"); }
+                if(!muted) sfx.play();
+            } else { alert("Key si sahihi!"); }
         }
 
-        function toggleMute() {
-            isMuted = !isMuted;
-            document.getElementById('muteBtn').innerText = isMuted ? "OFF" : "ON";
-            document.getElementById('muteBtn').style.color = isMuted ? "red" : "lime";
+        function toggleM() { muted = !muted; document.getElementById('mBtn').innerText = muted ? "OFF" : "ON"; document.getElementById('mBtn').style.color = muted ? "red" : "lime"; }
+        function upS() { sfx.src = document.getElementById('sPick').value; if(!muted) sfx.play(); }
+        function nxtT() { tI = (tI + 1) % themes.length; const b = document.getElementById('bgLayer'); b.style.backgroundImage = themes[tI] === 'none' ? 'none' : `url('${themes[tI]}')`; }
+        function upOp(v) { document.getElementById('bgLayer').style.opacity = v / 100; }
+        
+        function upImg(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    document.getElementById('bgLayer').style.backgroundImage = `url('${ev.target.result}')`;
+                }
+                reader.readAsDataURL(file);
+            }
         }
 
-        function loadSnd() { sfx.src = document.getElementById('soundSelect').value; if(!isMuted) sfx.play(); }
-        function nextTheme() { tIdx = (tIdx + 1) % themes.length; const b = document.getElementById('bgLayer'); b.style.backgroundImage = themes[tIdx] === 'none' ? 'none' : `url('${themes[tIdx]}')`; }
-        function adjVis(v) { document.getElementById('bgLayer').style.opacity = v / 100; }
-
+        const g = document.getElementById('grid');
         for (let i = 0; i < 25; i++) {
-            const cell = document.createElement('div');
-            cell.className = 'cell';
-            document.getElementById('grid').appendChild(cell);
+            const c = document.createElement('div');
+            c.className = 'cell';
+            g.appendChild(c);
         }
 
-        function processSignal() {
+        function processS() {
             const h = document.getElementById('hashInput').value;
             const s = document.getElementById('saltInput').value;
             if(!h || !s) return;
-
-            if(!isMuted) sfx.play();
+            if(!muted) sfx.play();
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
-
             setTimeout(() => {
-                let safe = [2, 7, 12, 18]; 
+                let safe = [0, 6, 12, 18, 24]; // Algorithm Logic
                 safe.forEach(p => { cells[p].innerHTML = '⭐'; cells[p].classList.add('safe'); });
                 document.getElementById('hashInput').value = ""; document.getElementById('saltInput').value = "";
             }, 600);
