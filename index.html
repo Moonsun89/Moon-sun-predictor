@@ -10,81 +10,45 @@
 
     <style>
         :root { --bg: #05080a; --card: #0d1217; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --text: #ffffff; --red: #ff3333; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; position: relative; min-height: 100vh; overflow-x: hidden; }
         
-        body { 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'Segoe UI', sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 15px; 
-            margin: 0; 
-            min-height: 100vh;
-            position: relative;
-        }
-        
-        /* Background iliyofungwa Juu mpaka Chini (Fixed Top-to-Down) */
-        #bgLayer { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            z-index: -1; 
-            background-image: url('https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png');
-            background-size: cover; /* Inajaza kioo chote */
-            background-position: center; 
-            background-attachment: fixed; /* Haitembei (Fixed) */
-            opacity: 0.12; /* Inafanya gridi ionekane vizuri */
-        }
+        /* Background Layer yenye Opacity inayoweza kubadilika */
+        #bgLayer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-size: cover; background-position: center; transition: 0.3s; pointer-events: none; opacity: 0.1; background-image: url('https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png'); }
 
-        /* Vitufe vya Sauti (Kushoto Juu) */
-        .audio-controls { 
-            position: absolute; 
-            top: 10px; 
-            left: 10px; 
-            z-index: 1000; 
-            background: rgba(0,0,0,0.6); 
-            padding: 5px; 
-            border-radius: 8px; 
-            border: 1px solid var(--blue);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .mini-btn { background: #12181f; border: 1px solid var(--blue); color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; }
-        .snd-select { background: #000; color: var(--yellow); border: 1px solid #1a2c3a; font-size: 10px; padding: 3px; border-radius: 4px; }
+        /* Vitufe vya Kushoto Juu (Vidogo kiasi) */
+        .top-controls { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 1000; background: rgba(0,0,0,0.4); padding: 5px; border-radius: 8px; border: 0.5px solid var(--blue); }
+        .mini-btn { background: #12181f; border: 0.5px solid var(--blue); color: white; padding: 4px 6px; border-radius: 4px; font-size: 9px; cursor: pointer; }
 
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5000; }
-        .title-container { text-align: center; margin-bottom: 15px; margin-top: 50px; }
-        .main-title { font-size: 24px; font-weight: 800; text-transform: uppercase; margin: 0; }
-        .sub-title { font-size: 15px; font-weight: bold; margin-top: 5px; }
+        .title-container { text-align: center; margin-bottom: 10px; margin-top: 45px; }
+        .main-title { font-size: 22px; font-weight: 800; text-transform: uppercase; margin: 0; }
+        .sub-title { font-size: 14px; font-weight: bold; margin-top: 5px; }
         .color-blue { color: var(--blue); } .color-yellow { color: var(--yellow); } .color-green { color: var(--green); }
 
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; }
+        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; transition: 0.3s; }
         .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); }
         
-        input[type="text"], select#bombSelect { width: 100%; max-width: 320px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 12px; text-align: center; margin-bottom: 10px; }
+        input[type="text"], select { width: 100%; max-width: 320px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 8px; }
         button#mainBtn { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        #instBtn { position: fixed; bottom: 20px; right: 20px; background: var(--yellow); color: #000; padding: 10px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold; }
+        #instBtn { position: fixed; bottom: 20px; right: 20px; background: var(--yellow); color: #000; padding: 10px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold; z-index: 100; }
     </style>
 </head>
 <body>
 
     <div id="bgLayer"></div>
 
-    <div class="audio-controls">
-        <button class="mini-btn" id="muteToggle" onclick="toggleMute()">SND: ON</button>
-        <select id="soundPicker" class="snd-select" onchange="changeSound()">
-            <option value="https://www.soundjay.com/buttons/sounds/button-37a.mp3">Sauti 1</option>
-            <option value="https://www.soundjay.com/buttons/sounds/button-09a.mp3">Sauti 2</option>
-            <option value="https://www.soundjay.com/buttons/sounds/button-10.mp3">Sauti 3</option>
-            <option value="https://www.soundjay.com/buttons/sounds/button-20.mp3">Sauti 4</option>
-            <option value="https://www.soundjay.com/buttons/sounds/beep-07a.mp3">Sauti 5</option>
+    <div class="top-controls">
+        <button class="mini-btn" id="muteBtn" onclick="toggleMute()">SND: ON</button>
+        <select id="soundSelect" class="mini-btn" onchange="loadSnd()">
+            <option value="https://www.soundjay.com/buttons/sounds/button-37a.mp3">SOUND 1</option>
+            <option value="https://www.soundjay.com/buttons/sounds/button-09a.mp3">SOUND 2</option>
+            <option value="https://www.soundjay.com/buttons/sounds/button-20.mp3">SOUND 3</option>
+            <option value="https://www.soundjay.com/buttons/sounds/button-21.mp3">SOUND 4</option>
+            <option value="https://www.soundjay.com/buttons/sounds/beep-07a.mp3">SOUND 5</option>
         </select>
+        <button class="mini-btn" onclick="nextTheme()">THEME</button>
     </div>
 
     <div id="loginScreen">
@@ -120,50 +84,51 @@
 
     <script>
         let isMuted = false;
+        let tIdx = 0;
+        const themes = [
+            'https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png', // Logo yako mpya
+            'https://i.ibb.co/XW8FpYV/bg-premium-1.png', // Premium Dark
+            'https://i.ibb.co/L8T6XyB/bg-premium-2.png', // Tech Blue
+            'none' // Pure Black
+        ];
+
         let sfx = new Audio("https://www.soundjay.com/buttons/sounds/button-37a.mp3");
 
         function checkKey() {
             if(document.getElementById('accessKey').value === "Mr winner123") {
                 document.getElementById('loginScreen').style.display = 'none';
                 if(!isMuted) sfx.play();
-            } else { alert("Access Key si sahihi!"); }
+            } else { alert("Key si Sahihi!"); }
         }
 
         function toggleMute() {
             isMuted = !isMuted;
-            document.getElementById('muteToggle').innerText = isMuted ? "SND: OFF" : "SND: ON";
-            document.getElementById('muteToggle').style.color = isMuted ? "red" : "lime";
+            document.getElementById('muteBtn').innerText = isMuted ? "SND: OFF" : "SND: ON";
+            document.getElementById('muteBtn').style.color = isMuted ? "red" : "lime";
         }
 
-        function changeSound() {
-            sfx.src = document.getElementById('soundPicker').value;
-            if(!isMuted) sfx.play();
-        }
+        function loadSnd() { sfx.src = document.getElementById('soundSelect').value; if(!isMuted) sfx.play(); }
+        function nextTheme() { tIdx = (tIdx + 1) % themes.length; const b = document.getElementById('bgLayer'); b.style.backgroundImage = themes[tIdx] === 'none' ? 'none' : `url('${themes[tIdx]}')`; }
 
-        const grid = document.getElementById('grid');
         for (let i = 0; i < 25; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
-            grid.appendChild(cell);
+            document.getElementById('grid').appendChild(cell);
         }
 
         function processSignal() {
-            const hash = document.getElementById('hashInput').value;
-            const salt = document.getElementById('saltInput').value;
-            if(!hash || !salt) return;
+            const h = document.getElementById('hashInput').value;
+            const s = document.getElementById('saltInput').value;
+            if(!h || !s) return;
 
             if(!isMuted) sfx.play();
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
             setTimeout(() => {
-                let safeSpots = [2, 7, 12, 18]; 
-                safeSpots.forEach(index => {
-                    cells[index].innerHTML = '⭐';
-                    cells[index].classList.add('safe');
-                });
-                document.getElementById('hashInput').value = "";
-                document.getElementById('saltInput').value = "";
+                let safe = [2, 7, 12, 18]; 
+                safe.forEach(p => { cells[p].innerHTML = '⭐'; cells[p].classList.add('safe'); });
+                document.getElementById('hashInput').value = ""; document.getElementById('saltInput').value = "";
             }, 600);
         }
     </script>
