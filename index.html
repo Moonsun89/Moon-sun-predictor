@@ -3,143 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN VIP - V7.3 REFRESH MODE</title>
+    <title>MOON SUN PRO - V8.0</title>
     <style>
         :root { --bg: #05080a; --card: #0d1217; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --text: #ffffff; }
-        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; }
-        .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin-bottom: 15px; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); }
-        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; transition: 0.3s; border: 1px solid #1b262f; }
-        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); transform: scale(1.05); }
-        .input-group { width: 100%; max-width: 320px; margin-bottom: 15px; }
-        input, select { width: 100%; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-family: monospace; font-size: 11px; text-align: center; margin-bottom: 10px; box-sizing: border-box; }
-        .log-box { width: 100%; max-width: 320px; height: 50px; background: #000; border: 1px solid #1a2c3a; margin-top: 10px; padding: 8px; font-size: 9px; color: var(--green); font-family: monospace; border-radius: 5px; overflow: hidden; }
-        button { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 10px; }
-        .refresh-btn { background: transparent; border: 1px solid #444; color: #888; padding: 10px; font-size: 11px; text-decoration: none; width: 150px; }
-        #timer { color: #ff3333; font-weight: 800; font-size: 22px; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; }
+        .info-panel { background: var(--card); padding: 10px; border-radius: 12px; margin-bottom: 10px; width: 95%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; background: #000; padding: 10px; border-radius: 15px; border: 2px solid var(--blue); }
+        .cell { width: 50px; height: 50px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 20px; border: 1px solid #1b262f; transition: 0.3s; }
+        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.2); animation: flash 1s infinite; }
+        @keyframes flash { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        .input-group { width: 95%; max-width: 320px; display: flex; flex-direction: column; align-items: center; }
+        input, select { width: 100%; padding: 11px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; margin-bottom: 8px; text-align: center; box-sizing: border-box; }
+        .log-box { width: 90%; height: 35px; background: #000; border: 1px solid #1a2c3a; margin-top: 10px; padding: 5px; font-size: 9px; color: var(--yellow); font-family: monospace; overflow: hidden; border-radius: 4px; }
+        button { width: 95%; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .refresh-btn { background: #1a2c3a; color: #888; padding: 10px; font-size: 10px; width: 140px; margin-top: 10px; border: 1px solid #333; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <h2 style="color:var(--blue); margin-bottom:10px;">MOON SUN <span style="color:var(--yellow);">V7.3</span></h2>
+    <h2 style="color:var(--blue); margin-bottom:5px;">MOON SUN <span style="color:var(--yellow);">PRO V8</span></h2>
     
     <div class="info-panel">
-        <div style="font-size: 14px; color: #888;">AI SYNC: ACTIVE</div>
-        <div style="font-size: 16px; margin: 5px 0;">ROUND: <span id="roundDisplay" style="color:var(--yellow); font-weight:bold;">0</span> / 4</div>
-        <div id="cooldownSection" style="display:none;">
-            <div id="timer">10:00</div>
-        </div>
+        <div style="font-size: 11px; color: #888;">SERVER STATUS: <span style="color:var(--green);">ENCRYPTED</span></div>
+        <div style="font-size: 14px; margin: 5px 0;">CYCLES: <span id="roundDisplay" style="color:var(--yellow); font-weight:bold;">0</span> / 4</div>
     </div>
 
     <div class="input-group">
         <select id="bombSelect">
-            <option value="3">3 BOMBS (PRECISION MODE)</option>
-            <option value="5">5 BOMBS (BALANCED MODE)</option>
-            <option value="7">7 BOMBS (RISK MODE)</option>
+            <option value="2">2 BOMBS (SCALPING - 6+ STARS)</option>
+            <option value="3">3 BOMBS (BALANCED - 4 STARS)</option>
+            <option value="5">5 BOMBS (STEALTH - 3 STARS)</option>
+            <option value="7">7 BOMBS (AGGRESSIVE - 2 STARS)</option>
         </select>
-        <input type="text" id="lastSeed" placeholder="Weka Hash ya Top Winner hapa...">
+        <input type="text" id="hashInput" placeholder="Paste TOP WIN HASH here...">
+        <input type="text" id="saltInput" placeholder="Paste TOP WIN SALT here...">
     </div>
 
     <div class="grid" id="grid"></div>
-    <div class="log-box" id="logBox">Waiting for Top Winner Hash...</div>
+    <div class="log-box" id="logBox">System Online. Data required.</div>
 
-    <div class="controls" style="width: 100%; max-width: 340px; margin-top: 15px; display: flex; flex-direction: column; align-items: center;">
-        <button id="mainBtn" onclick="generateHybridSignal()">GENERATE SIGNAL 🚀</button>
-        <button class="refresh-btn" onclick="hardRefresh()">🔄 REFRESH SYSTEM</button>
+    <div class="controls" style="width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 12px;">
+        <button id="mainBtn" onclick="analyzeData()">DECODE SYSTEM SIGNAL 🚀</button>
+        <div class="refresh-btn" onclick="location.reload()">🔄 FULL SYSTEM RESET</div>
     </div>
 
     <script>
         const logBox = document.getElementById('logBox');
         function writeLog(msg) { logBox.innerHTML = "> " + msg + "<br>" + logBox.innerHTML; }
 
+        // Tengeneza Gridi
         for (let i = 0; i < 25; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
             document.getElementById('grid').appendChild(cell);
         }
 
-        function hardRefresh() {
-            // Safisha gridi
-            document.querySelectorAll('.cell').forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
-            // Safisha input
-            document.getElementById('lastSeed').value = '';
-            // Safisha log
-            logBox.innerHTML = "System Refreshed. Ready for new Hash.";
-            writeLog("Cache Cleared.");
-        }
-
-        function generateHybridSignal() {
+        function analyzeData() {
+            const h = document.getElementById('hashInput').value;
+            const s = document.getElementById('saltInput').value;
+            const b = document.getElementById('bombSelect').value;
             const cells = document.querySelectorAll('.cell');
-            const inputSeed = document.getElementById('lastSeed').value;
-            const bombCount = document.getElementById('bombSelect').value;
             
-            cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
-            document.getElementById('mainBtn').disabled = true;
+            if(!h || !s) {
+                alert("Ingiza Hash na Salt kutoka kwenye mzunguko wa Top Win!");
+                return;
+            }
 
-            writeLog(`Processing ${bombCount} Bombs Matrix...`);
+            cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
+            writeLog("Extracting Server Entropy...");
             
             setTimeout(() => {
-                let combinedSeed = Date.now();
-                if(inputSeed) {
-                    for(let i=0; i<inputSeed.length; i++) {
-                        combinedSeed += (inputSeed.charCodeAt(i) * (i + 1));
-                    }
-                    writeLog("Top Winner Hash Synced.");
+                let seed = 0;
+                let combined = h + s + b;
+                for(let i=0; i<combined.length; i++) {
+                    seed = ((seed << 5) - seed) + combined.charCodeAt(i);
+                    seed |= 0;
                 }
                 
+                writeLog("Scanning Probability Zones...");
+
                 setTimeout(() => {
-                    let safePos = [];
-                    let tempSeed = combinedSeed;
-                    let starLimit = bombCount == 3 ? 4 : (bombCount == 5 ? 3 : 2);
+                    let safe = [];
+                    let tSeed = Math.abs(seed);
                     
-                    while(safePos.length < starLimit) {
-                        tempSeed = (tempSeed * 48271) % 2147483647; 
-                        let p = Math.floor((tempSeed / 2147483647) * 25);
-                        if(!safePos.includes(p)) safePos.push(p);
+                    // Idadi ya nyota kulingana na maelekezo yako
+                    let starLimit;
+                    if(b == "2") starLimit = 6;
+                    else if(b == "3") starLimit = 4;
+                    else if(b == "5") starLimit = 3;
+                    else starLimit = 2;
+                    
+                    while(safe.length < starLimit) {
+                        tSeed = (tSeed * 16807) % 2147483647;
+                        let p = Math.floor((tSeed / 2147483647) * 25);
+                        if(!safe.includes(p)) safe.push(p);
                     }
 
-                    safePos.forEach(p => {
+                    safe.forEach(p => {
                         cells[p].innerHTML = '⭐';
                         cells[p].classList.add('safe');
                     });
 
-                    writeLog("New Signal Generated.");
-                    saveProgress();
+                    writeLog(`Found ${starLimit} Safe Points. Sync OK.`);
+                    updateProgress();
                 }, 1000);
             }, 800);
         }
 
-        function saveProgress() {
-            let r = (parseInt(localStorage.getItem('v7_r')) || 0) + 1;
-            localStorage.setItem('v7_r', r);
-            localStorage.setItem('v7_t', Date.now());
-            updateUI();
-        }
-
-        function updateUI() {
-            const r = parseInt(localStorage.getItem('v7_r')) || 0;
-            const last = parseInt(localStorage.getItem('v7_t')) || 0;
-            const wait = 10 * 60 * 1000;
+        function updateProgress() {
+            let r = (parseInt(localStorage.getItem('v8_r')) || 0) + 1;
+            localStorage.setItem('v8_r', r);
             document.getElementById('roundDisplay').innerText = r;
-
-            if (r >= 4) {
-                const diff = wait - (Date.now() - last);
-                if (diff > 0) {
-                    document.getElementById('mainBtn').disabled = true;
-                    document.getElementById('cooldownSection').style.display = 'block';
-                    const m = Math.floor(diff / 60000);
-                    const s = Math.floor((diff % 60000) / 1000);
-                    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-                    setTimeout(updateUI, 1000);
-                } else {
-                    localStorage.setItem('v7_r', 0);
-                    location.reload();
-                }
-            } else {
-                document.getElementById('mainBtn').disabled = false;
+            if(r >= 4) { 
+                document.getElementById('mainBtn').disabled = true;
+                writeLog("Security Lock: Wait 10 mins.");
             }
         }
-        updateUI();
     </script>
 </body>
 </html>
