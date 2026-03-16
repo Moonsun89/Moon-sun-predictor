@@ -10,8 +10,15 @@
         
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5000; }
         
-        .title-header h2 { color: var(--blue); margin: 0; font-size: 20px; text-transform: uppercase; }
-        .title-header span { color: var(--yellow); }
+        /* New Multi-Color Header Styling */
+        .title-container { text-align: center; margin-bottom: 10px; }
+        .main-title { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0; }
+        .sub-title { font-size: 14px; font-weight: bold; letter-spacing: 2px; margin-top: 5px; }
+        
+        .color-blue { color: var(--blue); }
+        .color-yellow { color: var(--yellow); }
+        .color-green { color: var(--green); }
+
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
         .win-rate { font-size: 13px; color: var(--green); font-weight: bold; }
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
@@ -31,12 +38,24 @@
 <body>
 
     <div id="loginScreen">
-        <h2 style="color:var(--blue)">MOON SUN ACCESS</h2>
+        <h2 class="color-blue">MOON SUN ACCESS</h2>
         <input type="password" id="accessKey" placeholder="Enter Access Key">
         <button onclick="checkKey()" style="width:200px">LOGIN</button>
     </div>
 
-    <div class="title-header"><h2>MOON SUN <span>V9.0 FINAL</span></h2></div>
+    <div class="title-container">
+        <h2 class="main-title">
+            <span class="color-blue">MOON</span> 
+            <span class="color-yellow">SUN</span> 
+            <span class="color-green">PREDICTOR V9.0</span>
+        </h2>
+        <div class="sub-title">
+            <span class="color-green">MINES</span> 
+            <span class="color-blue">PREDICTOR</span> 
+            <span class="color-yellow">(1WIN)</span>
+        </div>
+    </div>
+
     <button onclick="toggleLang()" id="langBtn" style="background:#1a2c3a; color:var(--yellow); padding:5px 15px; border-radius:20px; margin:10px; cursor:pointer; font-size:11px; border:1px solid var(--blue);">SWITCH TO ENGLISH</button>
     
     <div class="info-panel">
@@ -65,8 +84,7 @@
 
     <div id="modal">
         <h3 id="mTitle" style="color:var(--yellow)">MAELEKEZO YA USHINDI</h3>
-        <div id="mBody" style="font-size:13px; line-height:1.6; color:#ccc;">
-            </div>
+        <div id="mBody" style="font-size:13px; line-height:1.6; color:#ccc;"></div>
         <button onclick="toggleModal()" id="closeBtn" style="margin-top:20px; padding:10px; background:var(--red); width: 100%;">FUNGA</button>
     </div>
 
@@ -193,7 +211,6 @@
             }, 600);
         }
 
-        // Initialize default view
         window.onload = () => { document.getElementById('mBody').innerHTML = dict['sw'].mBody; };
     </script>
 </body>
