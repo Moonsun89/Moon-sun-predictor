@@ -12,117 +12,117 @@
         :root { --bg: #05080a; --card: #0d1217; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --text: #ffffff; --red: #ff3333; }
         body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; position: relative; min-height: 100vh; }
         
-        /* Dynamic Background Layer */
-        #bgLayer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-size: cover; background-position: center; transition: 0.3s; pointer-events: none; }
+        /* Background Layer yenye Opacity inayoweza kubadilika */
+        #bgLayer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-size: cover; background-position: center; transition: 0.3s; pointer-events: none; opacity: 0.1; }
 
-        /* Professional Controls (Top Left) */
-        .controls-panel { position: absolute; top: 5px; left: 5px; display: flex; flex-direction: column; gap: 5px; z-index: 1000; background: rgba(0,0,0,0.5); padding: 5px; border-radius: 8px; border: 0.5px solid var(--blue); }
-        .row { display: flex; gap: 5px; align-items: center; }
-        .mini-label { font-size: 8px; color: var(--yellow); text-transform: uppercase; }
-        .mini-btn { background: #12181f; border: 0.5px solid var(--blue); color: white; padding: 3px 5px; border-radius: 3px; font-size: 8px; cursor: pointer; }
-        input[type="range"] { width: 60px; height: 3px; }
+        /* Vitufe vya Kushoto Juu (Vidogo kiasi) */
+        .top-controls { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 6px; z-index: 1000; background: rgba(0,0,0,0.4); padding: 5px; border-radius: 8px; border: 0.5px solid var(--blue); }
+        .ctrl-row { display: flex; align-items: center; gap: 5px; }
+        .mini-btn { background: #12181f; border: 0.5px solid var(--blue); color: white; padding: 4px 6px; border-radius: 4px; font-size: 9px; cursor: pointer; }
+        .label { font-size: 8px; color: var(--yellow); font-weight: bold; }
+        input[type="range"] { width: 50px; cursor: pointer; }
 
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5000; }
-        .title-container { text-align: center; margin-bottom: 5px; margin-top: 50px; }
-        .main-title { font-size: 20px; font-weight: 800; text-transform: uppercase; margin: 0; }
+        .title-container { text-align: center; margin-bottom: 10px; margin-top: 45px; }
+        .main-title { font-size: 22px; font-weight: 800; text-transform: uppercase; margin: 0; }
+        .sub-title { font-size: 14px; font-weight: bold; margin-top: 5px; }
         .color-blue { color: var(--blue); } .color-yellow { color: var(--yellow); } .color-green { color: var(--green); }
 
-        .info-panel { background: var(--card); padding: 10px; border-radius: 12px; margin: 10px 0; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; background: #000; padding: 10px; border-radius: 15px; border: 1px solid var(--blue); }
-        .cell { width: 50px; height: 50px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 20px; border: 1px solid #1b262f; }
-        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 10px var(--green); background: rgba(0, 255, 136, 0.1); }
+        .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
+        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; transition: 0.3s; }
+        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); }
         
-        input[type="text"], select { width: 100%; max-width: 310px; padding: 10px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 5px; }
-        button#mainBtn { width: 100%; max-width: 330px; padding: 14px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; }
-        #instBtn { position: fixed; bottom: 15px; right: 15px; background: var(--yellow); color: #000; padding: 8px 12px; border-radius: 5px; font-size: 10px; font-weight: bold; }
+        input[type="text"], select { width: 100%; max-width: 320px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 8px; }
+        button#mainBtn { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        #instBtn { position: fixed; bottom: 20px; right: 20px; background: var(--yellow); color: #000; padding: 10px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold; z-index: 100; }
     </style>
 </head>
 <body>
 
-    <div id="bgLayer" style="background-image: url('https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png'); opacity: 0.1;"></div>
+    <div id="bgLayer" style="background-image: url('https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png');"></div>
 
-    <div class="controls-panel">
-        <div class="row">
-            <span class="mini-label">SND:</span>
-            <button class="mini-btn" id="sndStatus" onclick="toggleMute()">ON</button>
-            <select id="soundPicker" class="mini-btn" onchange="updateSnd()">
+    <div class="top-controls">
+        <div class="ctrl-row">
+            <span class="label">SND:</span>
+            <button class="mini-btn" id="muteBtn" onclick="toggleMute()">ON</button>
+            <select id="soundSelect" class="mini-btn" onchange="loadSnd()">
                 <option value="https://www.soundjay.com/buttons/sounds/button-37a.mp3">S1</option>
                 <option value="https://www.soundjay.com/buttons/sounds/button-09a.mp3">S2</option>
                 <option value="https://www.soundjay.com/buttons/sounds/button-20.mp3">S3</option>
+                <option value="https://www.soundjay.com/buttons/sounds/button-21.mp3">S4</option>
+                <option value="https://www.soundjay.com/buttons/sounds/beep-07a.mp3">S5</option>
             </select>
         </div>
-        <div class="row">
-            <span class="mini-label">IMG:</span>
-            <select id="themePicker" class="mini-btn" onchange="updateTheme()">
-                <option value="https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png">LOGO</option>
-                <option value="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=500">BLUE</option>
-                <option value="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=500">DARK</option>
-                <option value="none">BLACK</option>
-            </select>
+        <div class="ctrl-row">
+            <span class="label">IMG:</span>
+            <button class="mini-btn" onclick="nextTheme()">CHANGE</button>
         </div>
-        <div class="row">
-            <span class="mini-label">VIS:</span>
-            <input type="range" min="0" max="50" value="10" oninput="updateOpacity(this.value)">
+        <div class="ctrl-row">
+            <span class="label">VIS:</span>
+            <input type="range" min="0" max="60" value="10" oninput="adjVis(this.value)">
         </div>
     </div>
 
     <div id="loginScreen">
-        <h3 class="color-blue">ACCESS KEY</h3>
-        <input type="password" id="accessKey" placeholder="...">
-        <button onclick="checkKey()" style="width:120px; padding:8px;">LOGIN</button>
+        <h2 class="color-blue">MOON SUN ACCESS</h2>
+        <input type="password" id="accessKey" placeholder="Enter Access Key">
+        <button onclick="checkKey()" style="width:200px; padding: 12px; background: var(--blue); border: none; color: #fff; font-weight: bold;">LOGIN</button>
     </div>
 
     <div class="title-container">
-        <h2 class="main-title"><span class="color-blue">MOON</span> <span class="color-yellow">SUN</span> <span class="color-green">V9.0</span></h2>
+        <h2 class="main-title"><span class="color-blue">MOON</span> <span class="color-yellow">SUN</span> <span class="color-green">PREDICTOR V9.0</span></h2>
+        <div class="sub-title"><span class="color-green">MINES</span> <span class="color-blue">PREDICTOR</span> <span class="color-yellow">(1WIN)</span></div>
     </div>
 
     <div class="info-panel">
-        <div class="win-rate" style="font-size:12px;">WIN RATE: 96%</div>
-        <div style="font-size:10px;">CYCLE: <span id="roundCounter" style="color:var(--yellow);">0</span> / 4</div>
+        <div class="win-rate">KIWANGO CHA USHINDI: 96%</div>
+        <div>MZUNGUKO: <span id="roundCounter" style="color:var(--yellow);">0</span> / 4</div>
     </div>
 
     <select id="bombSelect">
+        <option value="2">2 BOMBS (96%)</option>
         <option value="3">3 BOMBS (95%)</option>
         <option value="5">5 BOMBS (85%)</option>
     </select>
     
-    <input type="text" id="hashInput" placeholder="Paste Hash...">
-    <input type="text" id="saltInput" placeholder="Paste Salt...">
+    <input type="text" id="hashInput" placeholder="Hash ya Raundi Iliyopita...">
+    <input type="text" id="saltInput" placeholder="Salt ya Raundi Iliyopita...">
 
     <div class="grid" id="grid"></div>
 
     <button id="mainBtn" onclick="processSignal()">PATA SIGNAL 🚀</button>
 
-    <div id="instBtn" onclick="alert('Step 1: Paste Hash/Salt\nStep 2: Get Signal\nStep 3: Win 1Win')">GUIDE</div>
+    <div id="instBtn" onclick="alert('1. Weka Hash/Salt\n2. Pata Signal\n3. Cash Out 1Win!')">MAELEKEZO</div>
 
     <script>
         let isMuted = false;
+        let tIdx = 0;
+        const themes = [
+            'https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png', // Logo yako mpya
+            'https://i.ibb.co/XW8FpYV/bg-premium-1.png', // Premium Dark
+            'https://i.ibb.co/L8T6XyB/bg-premium-2.png', // Tech Blue
+            'none' // Pure Black
+        ];
+
         let sfx = new Audio("https://www.soundjay.com/buttons/sounds/button-37a.mp3");
 
         function checkKey() {
             if(document.getElementById('accessKey').value === "Mr winner123") {
                 document.getElementById('loginScreen').style.display = 'none';
                 if(!isMuted) sfx.play();
-            } else { alert("Wrong Key!"); }
+            } else { alert("Key si Sahihi!"); }
         }
 
         function toggleMute() {
             isMuted = !isMuted;
-            document.getElementById('sndStatus').innerText = isMuted ? "OFF" : "ON";
-            document.getElementById('sndStatus').style.color = isMuted ? "red" : "lime";
+            document.getElementById('muteBtn').innerText = isMuted ? "OFF" : "ON";
+            document.getElementById('muteBtn').style.color = isMuted ? "red" : "lime";
         }
 
-        function updateSnd() { sfx.src = document.getElementById('soundPicker').value; if(!isMuted) sfx.play(); }
-        
-        function updateTheme() {
-            const val = document.getElementById('themePicker').value;
-            const bg = document.getElementById('bgLayer');
-            bg.style.backgroundImage = val === 'none' ? 'none' : `url('${val}')`;
-        }
-
-        function updateOpacity(val) {
-            document.getElementById('bgLayer').style.opacity = val / 100;
-        }
+        function loadSnd() { sfx.src = document.getElementById('soundSelect').value; if(!isMuted) sfx.play(); }
+        function nextTheme() { tIdx = (tIdx + 1) % themes.length; const b = document.getElementById('bgLayer'); b.style.backgroundImage = themes[tIdx] === 'none' ? 'none' : `url('${themes[tIdx]}')`; }
+        function adjVis(v) { document.getElementById('bgLayer').style.opacity = v / 100; }
 
         for (let i = 0; i < 25; i++) {
             const cell = document.createElement('div');
@@ -140,7 +140,7 @@
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
             setTimeout(() => {
-                let safe = [1, 7, 13, 19, 23]; // Elite Analytics
+                let safe = [2, 7, 12, 18]; 
                 safe.forEach(p => { cells[p].innerHTML = '⭐'; cells[p].classList.add('safe'); });
                 document.getElementById('hashInput').value = ""; document.getElementById('saltInput').value = "";
             }, 600);
@@ -148,3 +148,4 @@
     </script>
 </body>
 </html>
+ 
