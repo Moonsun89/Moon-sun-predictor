@@ -9,49 +9,32 @@
     <link rel="apple-touch-icon" href="https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png">
 
     <style>
-        :root { 
-            --bg: #05080a; --card: rgba(13, 18, 23, 0.9); 
-            --blue: #007bff; --green: #00ff88; 
-            --yellow: #ffcc00; --text: #ffffff; --red: #ff3333; 
-        }
+        :root { --bg: #05080a; --card: #0d1217; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --text: #ffffff; --red: #ff3333; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; position: relative; }
         
-        body { 
-            background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; 
-            display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0;
-            min-height: 100vh; position: relative; overflow-x: hidden;
-        }
+        /* Background Layer iliyofifia sana kama ulivyoelekeza */
+        #bgLayer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.08; background-size: cover; background-position: center; background-image: url('https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png'); }
 
-        /* Background Layer iliyofifia */
-        #bgLayer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; opacity: 0.15; /* Hapa ndipo fifisho lilipo */
-            background-size: cover; background-position: center;
-            transition: 0.5s; background-image: url('https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png');
-        }
-
-        /* Vitufe vya Kushoto Juu */
-        .top-controls {
-            position: absolute; top: 10px; left: 10px; display: flex; gap: 5px; z-index: 1000;
-        }
-        .mini-btn {
-            background: rgba(0, 123, 255, 0.2); border: 1px solid var(--blue);
-            color: white; padding: 5px 8px; border-radius: 5px; font-size: 10px;
-            cursor: pointer; text-transform: uppercase;
-        }
+        /* Vitufe Vidogo Kushoto Juu */
+        .top-controls { position: absolute; top: 8px; left: 8px; display: flex; gap: 4px; z-index: 1000; }
+        .mini-btn { background: #12181f; border: 1px solid var(--blue); color: var(--yellow); padding: 4px 6px; border-radius: 4px; font-size: 9px; cursor: pointer; }
 
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5000; }
-        .title-container { text-align: center; margin-top: 40px; }
-        .main-title { font-size: 20px; font-weight: 800; text-transform: uppercase; margin: 0; }
+        .title-container { text-align: center; margin-bottom: 10px; margin-top: 25px; }
+        .main-title { font-size: 22px; font-weight: 800; text-transform: uppercase; margin: 0; }
+        .sub-title { font-size: 14px; font-weight: bold; margin-top: 5px; }
         .color-blue { color: var(--blue); } .color-yellow { color: var(--yellow); } .color-green { color: var(--green); }
+
+        .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
+        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; transition: 0.3s; }
+        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); }
         
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: rgba(0,0,0,0.6); padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 50px; height: 50px; background: rgba(18, 24, 31, 0.8); border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; }
-        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.2); }
-        
-        input, select { width: 100%; max-width: 300px; padding: 10px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 8px; }
-        #mainBtn { width: 100%; max-width: 320px; padding: 15px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; }
-        
-        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; background: var(--card); border: 1px solid var(--blue); border-radius: 10px; padding: 20px; z-index: 2000; }
+        input, select { width: 100%; max-width: 320px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 8px; }
+        button#mainBtn { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        #instBtn { position: fixed; bottom: 20px; right: 20px; background: var(--yellow); color: #000; padding: 10px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold; z-index: 100; }
+        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 15px; padding: 20px; z-index: 2000; overflow-y: auto; }
+        .warning-text { color: var(--red); font-size: 11px; font-weight: bold; margin-bottom: 5px; display: none; text-align: center; }
     </style>
 </head>
 <body>
@@ -59,72 +42,86 @@
     <div id="bgLayer"></div>
 
     <div class="top-controls">
-        <select id="soundPicker" class="mini-btn" onchange="changeSound()">
-            <option value="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3">SOUND 1</option>
-            <option value="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3">SOUND 2</option>
-            <option value="https://assets.mixkit.co/active_storage/sfx/2020/2020-preview.mp3">SOUND 3</option>
-            <option value="https://assets.mixkit.co/active_storage/sfx/2021/2021-preview.mp3">SOUND 4</option>
-            <option value="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3">SOUND 5</option>
+        <select id="soundPicker" class="mini-btn" onchange="changeSnd()">
+            <option value="https://www.soundjay.com/buttons/sounds/button-37a.mp3">SND 1</option>
+            <option value="https://www.soundjay.com/buttons/sounds/button-09a.mp3">SND 2</option>
+            <option value="https://www.soundjay.com/buttons/sounds/button-10.mp3">SND 3</option>
+            <option value="https://www.soundjay.com/buttons/sounds/button-20.mp3">SND 4</option>
+            <option value="https://www.soundjay.com/buttons/sounds/beep-07a.mp3">SND 5</option>
         </select>
-        <button class="mini-btn" onclick="toggleTheme()">THEME</button>
+        <button class="mini-btn" onclick="nextTheme()">THEME</button>
     </div>
 
     <div id="loginScreen">
         <h2 class="color-blue">MOON SUN ACCESS</h2>
         <input type="password" id="accessKey" placeholder="Enter Access Key">
-        <button onclick="checkKey()" style="width:150px; padding:10px;">LOGIN</button>
+        <button onclick="checkKey()" style="width:200px; padding: 12px; background: var(--blue); border: none; color: #fff; font-weight: bold;">LOGIN</button>
     </div>
 
     <div class="title-container">
-        <h2 class="main-title"><span class="color-blue">MOON</span> <span class="color-yellow">SUN</span> <span class="color-green">V9.0</span></h2>
+        <h2 class="main-title"><span class="color-blue">MOON</span> <span class="color-yellow">SUN</span> <span class="color-green">PREDICTOR V9.0</span></h2>
+        <div class="sub-title"><span class="color-green">MINES</span> <span class="color-blue">PREDICTOR</span> <span class="color-yellow">(1WIN)</span></div>
     </div>
 
-    <div class="grid" id="grid"></div>
+    <div class="info-panel">
+        <div class="win-rate">KIWANGO CHA USHINDI: 96%</div>
+        <div>MZUNGUKO: <span id="roundCounter" style="color:var(--yellow);">0</span> / 4</div>
+    </div>
 
+    <div id="warningMsg" class="warning-text">⚠️ ONYO: WEKA HASH NA SALT KWANZA!</div>
+
+    <select id="bombSelect">
+        <option value="2">2 BOMBS (96%)</option>
+        <option value="3">3 BOMBS (95%)</option>
+        <option value="5">5 BOMBS (85%)</option>
+    </select>
+    
     <input type="text" id="hashInput" placeholder="Hash ya Raundi Iliyopita...">
     <input type="text" id="saltInput" placeholder="Salt ya Raundi Iliyopita...">
 
+    <div class="grid" id="grid"></div>
+
     <button id="mainBtn" onclick="processSignal()">PATA SIGNAL 🚀</button>
-    <button onclick="location.reload()" style="background:transparent; color:#555; font-size:10px; border:none; margin-top:5px;">RESET APP</button>
+    <button onclick="location.reload()" style="background:transparent; color:#444; font-size:10px; border:none; margin-top:10px; cursor:pointer;">🔄 AUTO-CLEAR SYSTEM</button>
+
+    <div id="instBtn" onclick="toggleModal()">MAELEKEZO</div>
+
+    <div id="modal">
+        <h3 style="color:var(--yellow)">MAELEKEZO YA USHINDI</h3>
+        <div style="font-size:13px; line-height:1.6; color:#ccc;">
+            1. Hakikisha umeweka Hash na Salt za raundi iliyopita.<br>
+            2. Fuata nyota ⭐ zilizotokea.<br>
+            3. Piga <b>CASH OUT</b> mapema.
+        </div>
+        <button onclick="toggleModal()" style="margin-top:20px; padding:10px; background:var(--red); width: 100%; color: #fff; border: none;">FUNGA</button>
+    </div>
 
     <script>
-        let currentTheme = 0;
+        let tIndex = 0;
         const themes = [
-            'https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png', // Logo yetu
-            'https://wallpaperaccess.com/full/1567831.jpg', // Abstract Blue
-            'https://wallpaperaccess.com/full/396610.jpg',  // Dark Tech
-            'none' // Pure Black
+            'https://i.ibb.co/60D0Y59/CASH-OUT-LOGO.png',
+            'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=1000&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop',
+            'none'
         ];
 
-        let audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
+        let sfx = new Audio("https://www.soundjay.com/buttons/sounds/button-37a.mp3");
 
         function checkKey() {
             if(document.getElementById('accessKey').value === "Mr winner123") {
                 document.getElementById('loginScreen').style.display = 'none';
-                playClick();
-            } else { alert("Key si sahihi!"); }
+                sfx.play();
+            } else { alert("Wrong Key!"); }
         }
 
-        function toggleTheme() {
-            currentTheme = (currentTheme + 1) % themes.length;
+        function nextTheme() {
+            tIndex = (tIndex + 1) % themes.length;
             const bg = document.getElementById('bgLayer');
-            if(themes[currentTheme] === 'none') {
-                bg.style.backgroundImage = 'none';
-                bg.style.backgroundColor = '#05080a';
-            } else {
-                bg.style.backgroundImage = `url('${themes[currentTheme]}')`;
-            }
+            bg.style.backgroundImage = themes[tIndex] === 'none' ? 'none' : `url('${themes[tIndex]}')`;
         }
 
-        function changeSound() {
-            audio.src = document.getElementById('soundPicker').value;
-            playClick();
-        }
-
-        function playClick() {
-            audio.currentTime = 0;
-            audio.play().catch(e => console.log("Sound muted by browser"));
-        }
+        function changeSnd() { sfx.src = document.getElementById('soundPicker').value; sfx.play(); }
+        function toggleModal() { const m = document.getElementById('modal'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; }
 
         for (let i = 0; i < 25; i++) {
             const cell = document.createElement('div');
@@ -135,20 +132,17 @@
         function processSignal() {
             const h = document.getElementById('hashInput').value;
             const s = document.getElementById('saltInput').value;
-            if(!h || !s) return;
+            if(!h || !s) { document.getElementById('warningMsg').style.display = 'block'; return; }
+            document.getElementById('warningMsg').style.display = 'none';
 
-            playClick();
+            sfx.play();
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
             setTimeout(() => {
-                let safe = [2, 6, 12, 18, 22]; // Algorithm ya ushindi
-                safe.forEach(p => { 
-                    cells[p].innerHTML = '⭐'; 
-                    cells[p].classList.add('safe'); 
-                });
-                document.getElementById('hashInput').value = ""; 
-                document.getElementById('saltInput').value = "";
+                let safe = [2, 7, 12, 18]; 
+                safe.forEach(p => { cells[p].innerHTML = '⭐'; cells[p].classList.add('safe'); });
+                document.getElementById('hashInput').value = ""; document.getElementById('saltInput').value = "";
             }, 600);
         }
     </script>
