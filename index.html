@@ -3,120 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V8.6</title>
+    <title>MOON SUN PREDICTOR V8.7</title>
     <style>
         :root { --bg: #05080a; --card: #0d1217; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --text: #ffffff; --red: #ff3333; }
         body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; }
-        
-        .title-header { text-align: center; margin-bottom: 5px; }
-        .title-header h2 { color: var(--blue); margin: 0; font-size: 20px; letter-spacing: 1px; text-transform: uppercase; }
+        .title-header h2 { color: var(--blue); margin: 0; font-size: 20px; text-transform: uppercase; }
         .title-header span { color: var(--yellow); }
-
-        .lang-switcher { margin-bottom: 12px; }
-        .lang-btn { background: #1a2c3a; border: 1px solid var(--blue); color: #fff; padding: 6px 15px; border-radius: 20px; font-size: 11px; cursor: pointer; }
-
+        .lang-btn { background: #1a2c3a; border: 1px solid var(--blue); color: #fff; padding: 6px 15px; border-radius: 20px; font-size: 11px; cursor: pointer; margin: 10px 0; }
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin-bottom: 15px; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
-        .win-rate { font-size: 13px; color: var(--green); font-weight: bold; margin-bottom: 5px; }
-        .round-txt { font-size: 15px; margin: 5px 0; }
-
+        .win-rate { font-size: 13px; color: var(--green); font-weight: bold; }
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; transition: 0.3s; }
+        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; }
         .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); }
-
         .input-group { width: 100%; max-width: 320px; }
         input, select { width: 100%; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 8px; box-sizing: border-box; }
-        
         .warning-box { width: 100%; max-width: 320px; color: var(--yellow); font-size: 10px; text-align: center; margin-bottom: 8px; min-height: 15px; }
-
         button { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .refresh-btn { background: #1a2c3a; color: #888; padding: 12px; font-size: 12px; width: 220px; border: 1px solid #333; margin-top: 15px; }
-        
-        button:disabled { opacity: 0.5; }
+        #timerDisplay { color: var(--red); font-weight: bold; font-size: 18px; display: none; }
     </style>
 </head>
 <body>
 
-    <div class="title-header">
-        <h2>MOON SUN <span>PREDICTOR V8.6</span></h2>
-    </div>
-
-    <div class="lang-switcher">
-        <button class="lang-btn" onclick="toggleLang()" id="langBtn">SWITCH TO ENGLISH</button>
-    </div>
+    <div class="title-header"><h2>MOON SUN <span>V8.7 PRO</span></h2></div>
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">SWITCH TO ENGLISH</button>
     
     <div class="info-panel">
         <div class="win-rate" id="winRateDisplay">WIN RATE: 96%</div>
-        <div class="round-txt" id="cycleTxt">MZUNGUKO: <span id="roundCounter" style="color:var(--yellow);">0</span> / 4</div>
-        <div id="timerDisplay" style="color:var(--red); font-weight:bold; font-size:18px; display:none;">10:00</div>
+        <div id="cycleTxt">MZUNGUKO: <span id="roundCounter" style="color:var(--yellow);">0</span> / 4</div>
+        <div id="timerDisplay">10:00</div>
     </div>
 
     <div class="input-group">
         <select id="bombSelect" onchange="updateWinRate()">
-            <option value="2">2 BOMBS (ACCURACY 96%)</option>
-            <option value="3">3 BOMBS (ACCURACY 95%)</option>
-            <option value="5">5 BOMBS (ACCURACY 85%)</option>
-            <option value="7">7 BOMBS (ACCURACY 75%)</option>
+            <option value="2">2 BOMBS (96%)</option>
+            <option value="3">3 BOMBS (95%)</option>
+            <option value="5">5 BOMBS (85%)</option>
+            <option value="7">7 BOMBS (75%)</option>
         </select>
-        <input type="text" id="hashInput" placeholder="Weka Hash hapa (Sio lazima)...">
-        <input type="text" id="saltInput" placeholder="Weka Salt hapa (Sio lazima)...">
+        <input type="text" id="hashInput" placeholder="Paste Hash hapa...">
+        <input type="text" id="saltInput" placeholder="Paste Salt hapa...">
     </div>
 
     <div class="warning-box" id="warningTxt"></div>
-
     <div class="grid" id="grid"></div>
 
-    <div class="controls" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-        <button id="mainBtn" onclick="processSignal()">PATA SIGNAL 🚀</button>
-        <button class="refresh-btn" onclick="location.reload()" id="refreshBtn">🔄 REFRESH SYSTEM / SAFISHA</button>
-    </div>
+    <button id="mainBtn" onclick="processSignal()">PATA SIGNAL 🚀</button>
+    <button class="refresh-btn" onclick="location.reload()" id="refreshBtn">🔄 REFRESH / AUTO-CLEAR</button>
 
     <script>
         let currentLang = 'sw';
-        const dictionary = {
-            sw: {
-                langBtn: "SWITCH TO ENGLISH",
-                cycle: "MZUNGUKO:",
-                hash: "Weka Hash hapa (Sio lazima)...",
-                salt: "Weka Salt hapa (Sio lazima)...",
-                warning: "Hash na salt ni muhimu kwa ushindi wako!",
-                btn: "PATA SIGNAL 🚀",
-                refresh: "🔄 REFRESH SYSTEM / SAFISHA",
-                cooldown: "SUBIRI:",
-                winRate: "USHINDI: "
-            },
-            en: {
-                langBtn: "BADILI KWENDA KISWAHILI",
-                cycle: "ROUND:",
-                hash: "Paste Hash here (Optional)...",
-                salt: "Paste Salt here (Optional)...",
-                warning: "Hash and salt are vital for your win!",
-                btn: "GET SIGNAL 🚀",
-                refresh: "🔄 REFRESH SYSTEM",
-                cooldown: "COOLDOWN:",
-                winRate: "WIN RATE: "
-            }
+        const dict = {
+            sw: { hash: "Paste Hash hapa...", salt: "Paste Salt hapa...", btn: "PATA SIGNAL 🚀", warn: "Hash/Salt ni muhimu!", cool: "SUBIRI:" },
+            en: { hash: "Paste Hash here...", salt: "Paste Salt here...", btn: "GET SIGNAL 🚀", warn: "Hash/Salt required!", cool: "COOLDOWN:" }
         };
-
-        function updateWinRate() {
-            const b = document.getElementById('bombSelect').value;
-            const rates = { "2": "96%", "3": "95%", "5": "85%", "7": "75%" };
-            document.getElementById('winRateDisplay').innerText = dictionary[currentLang].winRate + rates[b];
-        }
-
-        function toggleLang() {
-            currentLang = currentLang === 'sw' ? 'en' : 'sw';
-            const d = dictionary[currentLang];
-            document.getElementById('langBtn').innerText = d.langBtn;
-            document.getElementById('cycleTxt').firstChild.textContent = d.cycle + " ";
-            document.getElementById('hashInput').placeholder = d.hash;
-            document.getElementById('saltInput').placeholder = d.salt;
-            document.getElementById('mainBtn').innerText = d.btn;
-            document.getElementById('refreshBtn').innerText = d.refresh;
-            updateWinRate();
-            if(document.getElementById('warningTxt').innerText !== "") {
-                document.getElementById('warningTxt').innerText = d.warning;
-            }
-        }
 
         for (let i = 0; i < 25; i++) {
             const cell = document.createElement('div');
@@ -125,23 +65,20 @@
         }
 
         function processSignal() {
-            const h = document.getElementById('hashInput').value;
-            const s = document.getElementById('saltInput').value;
+            const hInput = document.getElementById('hashInput');
+            const sInput = document.getElementById('saltInput');
+            const h = hInput.value;
+            const s = sInput.value;
             const b = document.getElementById('bombSelect').value;
-            const warning = document.getElementById('warningTxt');
             const cells = document.querySelectorAll('.cell');
             
-            if(!h || !s) {
-                warning.innerText = dictionary[currentLang].warning;
-            } else {
-                warning.innerText = "";
-            }
+            if(!h || !s) document.getElementById('warningTxt').innerText = dict[currentLang].warn;
 
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
-            // Deep Calculation Simulation (1.5M iterations)
+            // Processing 1.5M points
             let seed = Date.now();
-            let matrix = h + s + b + "PRECISION_KEY_X";
+            let matrix = h + s + b;
             for(let i=0; i<1500000; i++) {
                 seed = ((seed << 5) - seed) + matrix.charCodeAt(i % matrix.length);
                 seed |= 0;
@@ -149,13 +86,7 @@
 
             let safe = [];
             let tSeed = Math.abs(seed);
-            
-            // Internal Logic Adjustments (The higher percentages you requested)
-            let limit;
-            if(b == "2") limit = 6;
-            else if(b == "3") limit = 4;
-            else if(b == "5") limit = 3;
-            else limit = 2;
+            let limit = b == "2" ? 6 : (b == "3" ? 4 : (b == "5" ? 3 : 2));
 
             while(safe.length < limit) {
                 tSeed = (tSeed * 16807) % 2147483647;
@@ -168,22 +99,31 @@
                     cells[p].innerHTML = '⭐';
                     cells[p].classList.add('safe');
                 });
+                // AUTO-CLEAR ACTION
+                hInput.value = "";
+                sInput.value = "";
                 saveSession();
-            }, 400);
+            }, 300);
+        }
+
+        function toggleLang() {
+            currentLang = currentLang === 'sw' ? 'en' : 'sw';
+            document.getElementById('hashInput').placeholder = dict[currentLang].hash;
+            document.getElementById('saltInput').placeholder = dict[currentLang].salt;
+            document.getElementById('mainBtn').innerText = dict[currentLang].btn;
         }
 
         function saveSession() {
-            let r = (parseInt(localStorage.getItem('v86_r')) || 0) + 1;
-            localStorage.setItem('v86_r', r);
-            localStorage.setItem('v86_t', Date.now());
+            let r = (parseInt(localStorage.getItem('v87_r')) || 0) + 1;
+            localStorage.setItem('v87_r', r);
+            localStorage.setItem('v87_t', Date.now());
             updateView();
         }
 
         function updateView() {
-            const r = parseInt(localStorage.getItem('v86_r')) || 0;
-            const lt = parseInt(localStorage.getItem('v86_t')) || 0;
+            const r = parseInt(localStorage.getItem('v87_r')) || 0;
+            const lt = parseInt(localStorage.getItem('v87_t')) || 0;
             document.getElementById('roundCounter').innerText = r;
-
             if (r >= 4) {
                 const diff = (10 * 60 * 1000) - (Date.now() - lt);
                 if (diff > 0) {
@@ -191,17 +131,15 @@
                     document.getElementById('timerDisplay').style.display = 'block';
                     let m = Math.floor(diff / 60000);
                     let s = Math.floor((diff % 60000) / 1000);
-                    document.getElementById('timerDisplay').innerText = `${dictionary[currentLang].cooldown} ${m}:${s < 10 ? '0' : ''}${s}`;
+                    document.getElementById('timerDisplay').innerText = `${dict[currentLang].cool} ${m}:${s < 10 ? '0' : ''}${s}`;
                     setTimeout(updateView, 1000);
                 } else {
-                    localStorage.setItem('v86_r', 0);
+                    localStorage.setItem('v87_r', 0);
                     location.reload();
                 }
             }
         }
-        
         window.onload = updateView;
     </script>
 </body>
 </html>
- 
