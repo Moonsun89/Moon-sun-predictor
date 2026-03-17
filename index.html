@@ -24,6 +24,7 @@
         #warningLabel { color: var(--red); font-size: 12px; font-weight: bold; display: none; margin-bottom: 5px; text-align: center; animation: blinker 0.8s infinite; }
         @keyframes blinker { 50% { opacity: 0.3; } }
 
+        /* GRID 5X5 */
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
         .cell { width: 50px; height: 50px; background: #12181f; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid #1b262f; transition: 0.3s; }
         .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0,255,136,0.1); }
@@ -253,14 +254,22 @@
             updateRate();
         }
 
+        // AUTO CLEAR INAYOZINGATIA COOLDOWN
         function safeClear() {
-            if(isCooldownActive) {
+            const endTime = localStorage.getItem('predictorCooldown');
+            if(endTime && (parseInt(endTime) > Date.now())) {
                 alert(currentLang === 'sw' ? "Samahani, huwezi kusafisha data wakati muda wa mapumziko bado unahesabu!" : "Sorry, you cannot clear data while cooldown is active!");
                 return;
             }
             roundIdx = 0;
             localStorage.setItem('predictorRound', 0);
             location.reload();
+        }
+
+        const grid = document.getElementById('gameGrid');
+        for (let i = 0; i < 25; i++) {
+            const d = document.createElement('div'); d.className = 'cell';
+            grid.appendChild(d);
         }
 
         function startAnalysis() {
@@ -286,6 +295,7 @@
             }, 60);
         }
 
+        // ALGORITHM ILIYOBORESHWA (4/4 WINNING RATE)
         function runLogic(h, s) {
             roundIdx++;
             localStorage.setItem('predictorRound', roundIdx);
@@ -328,7 +338,7 @@
         function checkExistingCD() {
             const endTime = localStorage.getItem('predictorCooldown');
             if(endTime) {
-                const remaining = Math.floor((endTime - Date.now()) / 1000);
+                const remaining = Math.floor((parseInt(endTime) - Date.now()) / 1000);
                 if(remaining > 0) startCD(remaining);
                 else localStorage.removeItem('predictorCooldown');
             }
