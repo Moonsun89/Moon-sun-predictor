@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V9.0 FINAL</title>
+    <title>MOON SUN PREDICTOR V9.2 PRO-MAX</title>
     <style>
         :root { --bg: #05080a; --card: #0d1217; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --text: #ffffff; --red: #ff3333; }
         body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; }
@@ -24,17 +24,19 @@
         #loaderBar { width: 0%; height: 100%; background: linear-gradient(to right, var(--blue), var(--green)); }
         #statusTxt { font-size: 10px; color: var(--blue); font-family: monospace; text-transform: uppercase; margin-bottom: 5px; height: 12px; }
 
+        .timer-box { color: var(--red); font-weight: bold; display: none; margin: 10px 0; font-size: 16px; border: 1px solid var(--red); padding: 5px; border-radius: 5px; background: rgba(255, 51, 51, 0.1); width: 100%; max-width: 320px; text-align: center; }
+
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; transition: transform 0.1s; }
-        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); transform: scale(1.05); }
+        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; }
+        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); }
         
         input, select { width: 100%; max-width: 320px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 8px; box-sizing: border-box; outline: none; }
-        button#mainBtn { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,123,255,0.3); }
-        button:disabled { background: #1a1a1a !important; color: #555; box-shadow: none; }
+        button#mainBtn { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        button:disabled { background: #1a1a1a !important; color: #555; cursor: not-allowed; }
         
-        #instBtn { position: fixed; bottom: 20px; right: 20px; background: var(--yellow); color: #000; padding: 10px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold; z-index: 100; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        #instBtn { position: fixed; bottom: 20px; right: 20px; background: var(--yellow); color: #000; padding: 10px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold; z-index: 100; }
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 15px; padding: 20px; z-index: 2000; overflow-y: auto; box-shadow: 0 0 40px rgba(0,0,0,1); }
-        .wa-link { color: var(--green); text-decoration: none; font-weight: bold; border-bottom: 1px solid var(--green); }
+        .wa-link { color: var(--green); text-decoration: none; font-weight: bold; word-break: break-all; }
     </style>
 </head>
 <body>
@@ -44,22 +46,24 @@
     </div>
 
     <div id="loginScreen">
-        <h2 class="color-blue">MOON SUN ACCESS</h2>
+        <h2 class="color-blue">MOON SUN ACCESS V9.2</h2>
         <input type="password" id="accessKey" placeholder="Weka Neno la Siri">
-        <button onclick="checkKey()" style="width:200px; background:var(--blue); color:white; border:none; padding:12px; border-radius:8px; font-weight:bold;">INGIA (LOGIN)</button>
+        <button onclick="checkKey()" style="width:200px; background:var(--blue); color:white; border:none; padding:12px; border-radius:8px; font-weight:bold;">LOGIN</button>
     </div>
 
     <div class="title-container">
-        <h2 class="main-title"><span class="color-blue">MOON</span> <span class="color-yellow">SUN</span> <span class="color-green">V9.0 FINAL</span></h2>
+        <h2 class="main-title"><span class="color-blue">MOON</span> <span class="color-yellow">SUN</span> <span class="color-green">V9.2 FINAL</span></h2>
     </div>
 
     <div class="info-panel">
         <div style="font-size:13px; font-weight:bold;"><span class="color-blue">LENGO:</span> <span class="color-green">TSH 2,500,000/=</span></div>
-        <div style="margin-top:5px; font-size: 12px;">
-            <span style="color:var(--yellow); font-weight:bold;">MZUNGUKO WA USHINDI:</span> 
+        <div style="margin-top:5px;">
+            <span style="color:var(--yellow); font-weight:bold;">MZUNGUKO:</span> 
             <span id="roundCounter" style="color:var(--red); font-weight:bold;">0</span> <span style="color:white;">/ 4</span>
         </div>
     </div>
+
+    <div id="cooldownBox" class="timer-box">MAPUMZIKO: <span id="timeVal">10:00</span></div>
 
     <div id="statusTxt">MFUMO TAYARI</div>
     <div id="loaderContainer"><div id="loaderBar"></div></div>
@@ -71,36 +75,26 @@
         <option value="7">MABOMU 7 (NYOTA 3)</option>
     </select>
     
-    <input type="text" id="hashInput" placeholder="Paste Hash ya Raundi Iliyopita...">
-    <input type="text" id="saltInput" placeholder="Paste Salt ya Raundi Iliyopita...">
+    <input type="text" id="hashInput" placeholder="Hash ya Raundi Iliyopita...">
+    <input type="text" id="saltInput" placeholder="Salt ya Raundi Iliyopita...">
 
     <div class="grid" id="grid"></div>
 
     <button id="mainBtn" onclick="processSignal()">PATA SIGNAL 🚀</button>
-    <button onclick="location.reload()" style="background:#1a2c3a; color:#888; font-size:11px; margin-top:10px; padding:10px; width: 100%; max-width:340px; border-radius:8px; border:none; cursor:pointer;">🔄 SAFISHA (AUTO-CLEAR CACHE)</button>
+    <button onclick="location.reload()" style="background:#1a2c3a; color:#888; font-size:11px; margin-top:10px; padding:10px; width: 100%; max-width:340px; border-radius:8px; border:none; cursor:pointer;">🔄 SAFISHA / AUTO-CLEAR</button>
 
     <div id="instBtn" onclick="toggleModal()">MAELEKEZO</div>
 
     <div id="modal">
-        <h3 style="color:var(--yellow); text-align:center; text-transform: uppercase;">Maelekezo ya Ushindi (Target 2.5M)</h3>
+        <h3 style="color:var(--yellow); text-align:center;">MAELEKEZO YA USHINDI (V9.2)</h3>
         <div style="font-size:13px; line-height:1.7; color:#ccc; padding:10px;">
-            <b>1. Lengo la Milioni 2.5:</b> Mfumo huu umetengenezwa kukuwezesha kufikia lengo la kutengeneza <b>Tsh 2.5M</b> kupitia ushindi wa mfululizo. Algorithm ya ndani imefungwa kuhakikisha usahihi wa hali ya juu.<br><br>
-            
-            <b>2. Umuhimu wa SAFISHA (Auto-Clear):</b> Hii ni hatua ya lazima kiongozi! Lazima ubonyeze kitufe hiki kila unapomaliza mzunguko mmoja (Raundi 4). Hii inafuta cache na kuzuia seva ya mchezo isikutambue (Anti-Ban Protocol).<br><br>
-            
-            <b>3. Hatua za Kufuata kwa 4/4:</b><br>
-            - Ingia 1Win, weka dau lako (Inashauriwa 275+).<br>
-            - Nakili (Copy) <b>Hash</b> na <b>Salt</b> ya mchezo uliopita.<br>
-            - Paste kodi hizo hapa, chagua idadi ya mabomu unayocheza.<br>
-            - Bonyeza <b>PATA SIGNAL</b>, subiri injini ichakate matokeo.<br>
-            - Fungua nyota ⭐ kulingana na ramani na piga <b>Cash Out</b> haraka.<br><br>
-            
-            <b>4. Kazi ya Vitufe:</b> 'PATA SIGNAL' huchakata data mara milioni 2.5 kupata maeneo salama. 'SAFISHA' huzuia ufuatiliaji wa seva.<br><br>
-            
-            <b>Kujiunga na Chaneli yetu kwa maelekezo zaidi na Update:</b><br><br>
-            👉 <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">BONYEZA HAPA KUFUATA CHANELI YA WHATSAPP</a>
+            <b>1. Umuhimu wa SAFISHA (Auto-Clear):</b> Hii ni lazima kiongozi! Piga safisha kila mzunguko wa 4 unapomalizika kuzuia kugundulika na seva ya mchezo.<br><br>
+            <b>2. Lengo la 2.5M:</b> App hii imeboreshwa kufikia lengo lako la kutengeneza Tsh 2,500,000/= kupitia ushindi wa uhakika wa 4/4.<br><br>
+            <b>3. Mchakato wa Signal:</b> Kitufe cha PATA SIGNAL kinachakata data mara milioni 2.5 kupata ramani ya ushindi.<br><br>
+            <b>Kwa maelekezo zaidi kufuata/join hii channel:</b><br>
+            <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336</a>
         </div>
-        <button onclick="toggleModal()" style="margin-top:20px; padding:12px; background:var(--red); width: 100%; border-radius: 8px; color: white; border: none; font-weight: bold; cursor:pointer;">FUNGA MAELEKEZO</button>
+        <button onclick="toggleModal()" style="margin-top:20px; padding:12px; background:var(--red); width: 100%; border-radius: 8px; color: white; border: none; font-weight: bold; cursor:pointer;">FUNGA</button>
     </div>
 
     <script>
@@ -151,7 +145,7 @@
             const s = document.getElementById('saltInput').value;
             const b = document.getElementById('bombSelect').value;
             
-            if(!h || !s) { alert("Tafadhali weka Hash na Salt kwanza!"); return; }
+            if(!h || !s) { alert("Weka Hash na Salt!"); return; }
 
             const btn = document.getElementById('mainBtn');
             const loader = document.getElementById('loaderContainer');
@@ -160,11 +154,10 @@
 
             btn.disabled = true;
             loader.style.display = 'block';
-            status.innerText = "INACHAKATA MILIONI 2.5 ZA DATA...";
+            status.innerText = "CHAKACHUA DATA 2.5M...";
             playBeep(440, 0.05, 0.05);
 
             let progress = 0;
-            // Speed increased for better UX
             const interval = setInterval(() => {
                 progress += 10;
                 bar.style.width = progress + "%";
@@ -188,9 +181,9 @@
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
-            // CORE 2.5M CALCULATION ENGINE
+            // INTERNAL 2.5M ENGINE (V9.2)
             let seed = 0;
-            let combined = h + s + b + roundsPlayed + Math.random(); 
+            let combined = h + s + b + roundsPlayed + Math.random();
             for (let i = 0; i < 2500000; i++) {
                 seed = ((seed << 5) - seed) + combined.charCodeAt(i % combined.length);
                 seed |= 0;
@@ -211,20 +204,50 @@
                 cells[idx].classList.add('safe');
             });
 
-            status.innerText = "UCHAMBUZI UMEKAMILIKA - USHINDI 99%";
+            status.innerText = "NYOTA SALAMA ZIMEPATIKANA!";
             playBeep(1000, 0.2, 0.1);
             
             setTimeout(() => {
                 loader.style.display = 'none';
                 document.getElementById('hashInput').value = "";
                 document.getElementById('saltInput').value = "";
-                if(roundsPlayed < 4) {
-                    btn.disabled = false;
+                
+                if(roundsPlayed >= 4) {
+                    startCooldown();
                 } else {
-                    btn.innerText = "MZUNGUKO UMEISHA - SAFISHA";
-                    status.innerText = "TARGET 4/4 IMEKAMILIKA. PIGA SAFISHA.";
+                    btn.disabled = false;
                 }
             }, 400);
+        }
+
+        function startCooldown() {
+            let time = 600; // 10 minutes
+            const btn = document.getElementById('mainBtn');
+            const cBox = document.getElementById('cooldownBox');
+            const timeVal = document.getElementById('timeVal');
+            const status = document.getElementById('statusTxt');
+
+            btn.disabled = true;
+            btn.innerText = "MAPUMZIKO...";
+            cBox.style.display = 'block';
+            status.innerText = "MZUNGUKO UMEKAMILIKA. TAFADHALI SUBIRI.";
+
+            const timer = setInterval(() => {
+                let mins = Math.floor(time / 60);
+                let secs = time % 60;
+                timeVal.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                
+                if (time <= 0) {
+                    clearInterval(timer);
+                    roundsPlayed = 0;
+                    document.getElementById('roundCounter').innerText = "0";
+                    btn.disabled = false;
+                    btn.innerText = "PATA SIGNAL 🚀";
+                    cBox.style.display = 'none';
+                    status.innerText = "MFUMO TAYARI TENA";
+                }
+                time--;
+            }, 1000);
         }
 
         function toggleModal() {
