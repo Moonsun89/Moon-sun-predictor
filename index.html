@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V9.6.1 PRO</title>
+    <title>MOON SUN PREDICTOR V9.6.2 PRO</title>
     <style>
         :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; }
@@ -22,6 +22,10 @@
 
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 90%; max-width: 340px; text-align: center; border: 1px solid #1a2c3a; }
         #cooldownDisplay { color: var(--red); font-size: 15px; font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 6px 18px; border-radius: 20px; animation: blinker 1s infinite; }
+        
+        /* Onyo Styling */
+        #warningLabel { color: var(--red); font-size: 12px; font-weight: bold; display: none; margin-bottom: 5px; text-align: center; animation: blinker 0.8s infinite; }
+        
         @keyframes blinker { 50% { opacity: 0.3; } }
 
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
@@ -55,7 +59,7 @@
     </div>
 
     <div class="top-nav">
-        <button class="btn-mini" onclick="toggleLang()" id="langBtn">LUGHA: SW</button>
+        <button class="btn-mini" onclick="toggleLang()" id="langBtn">LANG: SW</button>
         <button class="btn-mini" id="volBtn" onclick="toggleMute()">SOUND: ON</button>
     </div>
 
@@ -69,6 +73,8 @@
     </div>
 
     <div id="cooldownDisplay">WAIT: 10:00</div>
+
+    <div id="warningLabel">⚠️ ONYO: WEKA HASH NA SALT KWANZA</div>
 
     <select id="bombCount" onchange="updateRate()"></select>
     <input type="text" id="hashIn" placeholder="Hash ya Raundi Iliyopita...">
@@ -88,7 +94,7 @@
     <div id="modal">
         <div id="modalTitle" class="m-header">MAELEKEZO YA KINA</div>
         <div id="modalContent"></div>
-        <button onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">FUNGA / CLOSE</button>
+        <button id="closeBtn" onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">FUNGA</button>
     </div>
 
     <script>
@@ -117,6 +123,9 @@
             sw: {
                 lText: "KIWANGO CHA", rText: " USHINDI: ", round: "MZUNGUKO",
                 btn: "PATA SIGNAL 🚀", instBtn: "MAELEKEZO", bombTxt: "MABOMU", wait: "SUBIRI: ", cdBtn: "MUDA WA KUSUBIRI",
+                mHeader: "MAELEKEZO YA KINA",
+                mClose: "FUNGA",
+                warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
                 mBody: `
                 <div class="m-section">1. KAZI ZA BATANI</div>
                 <div class="m-text">
@@ -141,6 +150,9 @@
             en: {
                 lText: "WINNING", rText: " RATE: ", round: "ROUND",
                 btn: "GET SIGNAL 🚀", instBtn: "INSTRUCTIONS", bombTxt: "BOMBS", wait: "WAIT: ", cdBtn: "COOLDOWN ACTIVE",
+                mHeader: "DETAILED INSTRUCTIONS",
+                mClose: "CLOSE",
+                warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
                 mBody: `
                 <div class="m-section">1. BUTTON FUNCTIONS</div>
                 <div class="m-text">
@@ -184,6 +196,9 @@
             document.getElementById('lText').innerText = t.lText;
             document.getElementById('roundLbl').innerText = t.round;
             document.getElementById('instBtn').innerText = t.instBtn;
+            document.getElementById('modalTitle').innerText = t.mHeader;
+            document.getElementById('closeBtn').innerText = t.mClose;
+            document.getElementById('warningLabel').innerText = t.warn;
             document.getElementById('modalContent').innerHTML = t.mBody;
             
             const select = document.getElementById('bombCount');
@@ -215,8 +230,14 @@
         function startAnalysis() {
             const h = document.getElementById('hashIn').value;
             const s = document.getElementById('saltIn').value;
-            if(!h || !s) { alert("Weka Hash na Salt kwanza!"); return; }
-
+            
+            if(!h || !s) { 
+                document.getElementById('warningLabel').style.display = 'block';
+                playSound(200, 'sawtooth', 0.2);
+                return; 
+            }
+            
+            document.getElementById('warningLabel').style.display = 'none';
             const btn = document.getElementById('mainBtn');
             const bar = document.getElementById('loaderBar');
             btn.disabled = true;
@@ -256,7 +277,6 @@
             playSound(880, 'sine', 0.3);
             document.getElementById('loaderWrap').style.display = 'none';
 
-            // AUTO CLEAR INAFANYA KAZI HAPA
             document.getElementById('hashIn').value = "";
             document.getElementById('saltIn').value = "";
             
