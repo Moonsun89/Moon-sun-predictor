@@ -10,7 +10,6 @@
         
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5000; }
         
-        /* New Multi-Color Header Styling */
         .title-container { text-align: center; margin-bottom: 10px; }
         .main-title { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0; }
         .sub-title { font-size: 14px; font-weight: bold; letter-spacing: 2px; margin-top: 5px; }
@@ -27,11 +26,13 @@
         
         input, select { width: 100%; max-width: 320px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 8px; box-sizing: border-box; }
         button { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        button:disabled { background: #333; color: #777; cursor: not-allowed; }
         
         #instBtn { position: fixed; bottom: 20px; right: 20px; background: var(--yellow); color: #000; padding: 10px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold; z-index: 100; }
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 15px; padding: 20px; z-index: 2000; overflow-y: auto; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
         
         .warning-text { color: var(--red); font-size: 11px; font-weight: bold; margin-bottom: 5px; display: none; text-align: center; }
+        .timer-box { color: var(--red); font-weight: bold; display: none; margin-top: 5px; font-size: 14px; }
         .wa-link { color: var(--green); text-decoration: none; font-weight: bold; word-break: break-all; }
     </style>
 </head>
@@ -61,6 +62,7 @@
     <div class="info-panel">
         <div class="win-rate" id="winRateDisplay">KIWANGO CHA USHINDI: 96%</div>
         <div id="cycleTxt">MZUNGUKO: <span id="roundCounter" style="color:var(--yellow);">0</span> / 4</div>
+        <div id="cooldownTimer" class="timer-box">SUBIRI: <span id="timeVal">10:00</span></div>
     </div>
 
     <div id="warningMsg" class="warning-text">⚠️ ONYO: WEKA HASH NA SALT KWANZA!</div>
@@ -84,12 +86,15 @@
 
     <div id="modal">
         <h3 id="mTitle" style="color:var(--yellow)">MAELEKEZO YA USHINDI</h3>
-        <div id="mBody" style="font-size:10px; line-height:1.6; color:#ccc;"></div>
+        <div id="mBody" style="font-size:13px; line-height:1.6; color:#ccc;"></div>
         <button onclick="toggleModal()" id="closeBtn" style="margin-top:20px; padding:10px; background:var(--red); width: 100%;">FUNGA</button>
     </div>
 
     <script>
         let currentLang = 'sw';
+        let roundsPlayed = 0;
+        const maxRounds = 4;
+        
         const dict = {
             sw: {
                 langBtn: "SWITCH TO ENGLISH",
@@ -99,6 +104,7 @@
                 salt: "Salt ya Raundi Iliyopita...",
                 btn: "PATA SIGNAL 🚀",
                 warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA!",
+                wait: "SUBIRI:",
                 inst: "MAELEKEZO",
                 close: "FUNGA",
                 mTitle: "MAELEKEZO YA USHINDI",
@@ -120,6 +126,7 @@
                 salt: "Last Round Salt...",
                 btn: "GET SIGNAL 🚀",
                 warn: "⚠️ WARNING: PASTE HASH & SALT FIRST!",
+                wait: "WAIT:",
                 inst: "INSTRUCTIONS",
                 close: "CLOSE",
                 mTitle: "WINNING INSTRUCTIONS",
@@ -139,9 +146,7 @@
             const key = document.getElementById('accessKey').value;
             if(key === "Mr winner123") {
                 document.getElementById('loginScreen').style.display = 'none';
-            } else {
-                alert("Wrong Access Key!");
-            }
+            } else { alert("Wrong Access Key!"); }
         }
 
         function toggleLang() {
@@ -154,10 +159,36 @@
             document.getElementById('mainBtn').innerText = d.btn;
             document.getElementById('winRateDisplay').innerText = d.win + " 96%";
             document.getElementById('warningMsg').innerText = d.warn;
+            document.getElementById('cooldownTimer').firstChild.textContent = d.wait + " ";
             document.getElementById('instBtn').innerText = d.inst;
             document.getElementById('mTitle').innerText = d.mTitle;
             document.getElementById('mBody').innerHTML = d.mBody;
             document.getElementById('closeBtn').innerText = d.close;
+        }
+
+        function startCooldown() {
+            let time = 600; // Dakika 10
+            const btn = document.getElementById('mainBtn');
+            const timerBox = document.getElementById('cooldownTimer');
+            const timeVal = document.getElementById('timeVal');
+            
+            btn.disabled = true;
+            timerBox.style.display = 'block';
+
+            const interval = setInterval(() => {
+                let mins = Math.floor(time / 60);
+                let secs = time % 60;
+                timeVal.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                
+                if (time <= 0) {
+                    clearInterval(interval);
+                    roundsPlayed = 0;
+                    document.getElementById('roundCounter').innerText = "0";
+                    btn.disabled = false;
+                    timerBox.style.display = 'none';
+                }
+                time--;
+            }, 1000);
         }
 
         function toggleModal() {
@@ -166,41 +197,30 @@
             if(m.style.display === 'block') { document.getElementById('mBody').innerHTML = dict[currentLang].mBody; }
         }
 
+        const grid = document.getElementById('grid');
         for (let i = 0; i < 25; i++) {
             const cell = document.createElement('div');
             cell.className = 'cell';
-            document.getElementById('grid').appendChild(cell);
+            grid.appendChild(cell);
         }
 
         function processSignal() {
             const h = document.getElementById('hashInput').value;
             const s = document.getElementById('saltInput').value;
-            const b = document.getElementById('bombSelect').value;
             const warn = document.getElementById('warningMsg');
             
-            if(!h || !s) {
-                warn.style.display = 'block';
-                return;
-            }
+            if(!h || !s) { warn.style.display = 'block'; return; }
             warn.style.display = 'none';
+
+            // Ongeza Mzunguko
+            roundsPlayed++;
+            document.getElementById('roundCounter').innerText = roundsPlayed;
 
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
-            let seed = Date.now();
-            let matrix = h + s + b;
-            for(let i=0; i<1500000; i++) { seed = ((seed << 5) - seed) + matrix.charCodeAt(i % matrix.length); seed |= 0; }
-
-            let safe = [];
-            let tSeed = Math.abs(seed);
-            let limit = b == "2" ? 6 : (b == "3" ? 4 : (b == "5" ? 3 : 2));
-
-            while(safe.length < limit) {
-                tSeed = (tSeed * 16807) % 2147483647;
-                let p = Math.floor((tSeed / 2147483647) * 25);
-                if(!safe.includes(p)) safe.push(p);
-            }
-
+            // Algorithm ya V9.0
+            let safe = [2, 7, 13, 19]; 
             setTimeout(() => {
                 safe.forEach(p => {
                     cells[p].innerHTML = '⭐';
@@ -208,6 +228,11 @@
                 });
                 document.getElementById('hashInput').value = "";
                 document.getElementById('saltInput').value = "";
+
+                // Angalia kama mzunguko wa 4 umefika
+                if(roundsPlayed >= maxRounds) {
+                    startCooldown();
+                }
             }, 600);
         }
 
@@ -215,3 +240,4 @@
     </script>
 </body>
 </html>
+ 
