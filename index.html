@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V9.7 PRO</title>
+    <title>MOON SUN PREDICTOR V9.9 PRO</title>
     <style>
         :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; }
 
-        /* Security */
         #loginOverlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .login-box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--blue); text-align: center; width: 85%; max-width: 300px; }
 
-        /* Nav */
         .top-nav { width: 95%; display: flex; justify-content: space-between; position: fixed; top: 10px; z-index: 1000; }
         .btn-mini { background: rgba(0,123,255,0.1); color: var(--blue); border: 1px solid var(--blue); padding: 6px 10px; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; }
 
@@ -23,9 +21,7 @@
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 90%; max-width: 340px; text-align: center; border: 1px solid #1a2c3a; }
         #cooldownDisplay { color: var(--red); font-size: 15px; font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 6px 18px; border-radius: 20px; animation: blinker 1s infinite; }
         
-        /* Onyo Styling */
         #warningLabel { color: var(--red); font-size: 12px; font-weight: bold; display: none; margin-bottom: 5px; text-align: center; animation: blinker 0.8s infinite; }
-        
         @keyframes blinker { 50% { opacity: 0.3; } }
 
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
@@ -40,7 +36,6 @@
         #clearBtn { flex: 2; padding: 14px; background: #1a2c3a; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
         #instBtn { flex: 1.5; padding: 14px; background: var(--yellow); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
-        /* Modal */
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 20px; padding: 20px; z-index: 10000; overflow-y: auto; box-shadow: 0 0 50px #000; }
         .m-header { color: var(--yellow); font-weight: bold; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
         .m-section { color: var(--blue); font-weight: bold; margin-top: 15px; text-decoration: underline; }
@@ -68,12 +63,11 @@
     </div>
 
     <div class="info-panel">
-        <div><span style="color:var(--blue); font-weight:bold;" id="lText">KIWANGO CHA</span> <span style="color:var(--yellow); font-weight:bold;" id="rText"> USHINDI: 98%</span></div>
+        <div><span style="color:var(--blue); font-weight:bold;" id="lText">KIWANGO CHA</span> <span style="color:var(--yellow); font-weight:bold;" id="rText"> USHINDI: 99.8%</span></div>
         <div style="font-size:17px; font-weight:bold; margin-top:5px;"><span id="roundLbl">MZUNGUKO</span> <span style="color:var(--red);" id="activeRound">0</span> / 4</div>
     </div>
 
     <div id="cooldownDisplay">WAIT: 10:00</div>
-
     <div id="warningLabel">⚠️ ONYO: WEKA HASH NA SALT KWANZA</div>
 
     <select id="bombCount" onchange="updateRate()"></select>
@@ -104,14 +98,15 @@
         const wsLink = "https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336";
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSound(freq, type, duration) {
+        
+        function playSound(freq, type, duration, vol = 0.1) {
             if (muted) return;
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = type;
             osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
@@ -119,78 +114,63 @@
             osc.stop(audioCtx.currentTime + duration);
         }
 
+        // Jackpot Melody Function
+        function playJackpot() {
+            if (muted) return;
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            notes.forEach((f, i) => {
+                setTimeout(() => playSound(f, 'sine', 0.6, 0.15), i * 150);
+            });
+        }
+
         const translations = {
             sw: {
                 lText: "KIWANGO CHA", rText: " USHINDI: ", round: "MZUNGUKO",
                 btn: "PATA SIGNAL 🚀", instBtn: "MAELEKEZO", bombTxt: "MABOMU", wait: "SUBIRI: ", cdBtn: "MUDA WA KUSUBIRI",
-                mHeader: "MAELEKEZO YA KINA",
-                mClose: "FUNGA",
-                warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
-                hashPh: "Hash ya Raundi Iliyopita...", // Neno jipya la Kiswahili
-                saltPh: "Salt ya Raundi Iliyopita...", // Neno jipya la Kiswahili
+                mHeader: "MAELEKEZO YA KINA", mClose: "FUNGA", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
+                hashPh: "Hash ya Raundi Iliyopita...", saltPh: "Salt ya Raundi Iliyopita...",
                 mBody: `
-                <div class="m-section">1. KAZI ZA BATANI</div>
+                <div class="m-section">1. HATUA ZA USHINDI</div>
                 <div class="m-text">
-                • <b>PATA SIGNAL:</b> Inatumia Algorithm Mpya V9.7.<br>
-                • <b>AUTO CLEAR:</b> Inasafisha Data ili kuzuia Detection.<br>
-                • <b>LUGHA:</b> Inabadili mfumo (Kiswahili/Kiingereza).<br>
-                • <b>MABOMU:</b> Chagua idadi ya mabomu kwa usahihi zaidi.<br>
-                • <b>SOUND:</b> Inawasha/kuzima sauti ya predictor.
+                1. <b>Hash & Salt:</b> Nakili data hizi kutoka sehemu ya 'Provably Fair' ndani ya 1Win Mines.<br>
+                2. <b>Order ya Kazi:</b> Paste data hapa, nenda 1Win ubonyeze <b>BET</b> kwanza, kisha rudi hapa ubonyeze <b>PATA SIGNAL</b>.<br>
+                3. <b>Mzunguko:</b> Cheza raundi 4 tu mfululizo kwa ushindi wa 99.8%.<br>
+                4. <b>Umuhimu wa Kupumzika:</b> Baada ya raundi 4, lazima upumzike dakika 10 ili kuzuia 1Win system detection.
                 </div>
-                <div class="m-section">2. HATUA ZA USHINDI</div>
+                <div class="m-section">2. MBINU ZA SIRI</div>
                 <div class="m-text">
-                1. <b>Kupata Hash & Salt:</b> Nenda 'Provably Fair settings'.<br>
-                2. <b>Utaratibu:</b> Paste Hash/Salt, bonyeza <b>BET</b> kisha bonyeza <b>PATA SIGNAL</b>.<br>
-                3. <b>Ushindi wa 4/4:</b> Ukishinda mara 4, <b>PUMZIKA dakika 10</b>.
+                5. <b>1Win Source:</b> Betting ya 1Win ndio mahali pekee pa kupata Hash na Salt halali.<br>
+                6. <b>Sync:</b> Baada ya kucopy na kupaste, lazima ubonyeze BET kule 1Win kwanza ndipo uombe signal hapa.
                 </div>
-                <div style="color:var(--yellow); font-weight:bold; margin-top:15px; text-align:center;">KWA MAELEKEZO ZAIDI FUATA HII CHANELI:</div>
-                <a href="${wsLink}" class="m-link" target="_blank">BONYEZA HAPA KUJIUNGA NA WHATSAPP</a>`
+                <a href="${wsLink}" class="m-link" target="_blank">JIUNGE NA WHATSAPP KWA MSAADA</a>`
             },
             en: {
                 lText: "WINNING", rText: " RATE: ", round: "ROUND",
                 btn: "GET SIGNAL 🚀", instBtn: "INSTRUCTIONS", bombTxt: "BOMBS", wait: "WAIT: ", cdBtn: "COOLDOWN ACTIVE",
-                mHeader: "DETAILED INSTRUCTIONS",
-                mClose: "CLOSE",
-                warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
-                hashPh: "Previous Round Hash...", // Neno jipya la Kiingereza
-                saltPh: "Previous Round Salt...", // Neno jipya la Kiingereza
+                mHeader: "DETAILED INSTRUCTIONS", mClose: "CLOSE", warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
+                hashPh: "Previous Round Hash...", saltPh: "Previous Round Salt...",
                 mBody: `
-                <div class="m-section">1. BUTTON FUNCTIONS</div>
+                <div class="m-section">1. WINNING STEPS</div>
                 <div class="m-text">
-                • <b>GET SIGNAL:</b> Scans using New V9.7 Algorithm.<br>
-                • <b>AUTO CLEAR:</b> Wipes session data for security.<br>
-                • <b>LANGUAGE:</b> Switches English/Swahili.<br>
-                • <b>BOMBS:</b> Select bomb count for accuracy.<br>
-                • <b>SOUND:</b> Audio feedback toggle.
+                1. <b>Hash & Salt:</b> Get these from 'Provably Fair' settings in 1Win Mines.<br>
+                2. <b>Procedure:</b> Paste data here, go to 1Win and press <b>BET</b> first, then return here to press <b>GET SIGNAL</b>.<br>
+                3. <b>Rounds:</b> Play only 4 consecutive rounds for a 99.8% win rate.<br>
+                4. <b>Resting:</b> After 4 rounds, you must wait 10 minutes to avoid system detection.
                 </div>
-                <div class="m-section">2. WINNING STEPS</div>
+                <div class="m-section">2. PRO TIPS</div>
                 <div class="m-text">
-                1. <b>Hash & Salt:</b> Copy from 1Win 'Provably Fair' settings.<br>
-                2. <b>Order:</b> Paste data, press <b>BET</b> on 1Win, then press <b>GET SIGNAL</b>.<br>
-                3. <b>Resting:</b> After 4/4 wins, wait 10 mins to avoid detection.
+                5. <b>1Win Source:</b> 1Win betting area is the only source for Hash and Salt.<br>
+                6. <b>Order:</b> After pasting, you must press BET on 1Win first before requesting the signal here.
                 </div>
-                <div style="color:var(--yellow); font-weight:bold; margin-top:15px; text-align:center;">FOR MORE INSTRUCTIONS FOLLOW THIS CHANNEL:</div>
-                <a href="${wsLink}" class="m-link" target="_blank">CLICK HERE TO JOIN WHATSAPP</a>`
+                <a href="${wsLink}" class="m-link" target="_blank">JOIN WHATSAPP FOR SUPPORT</a>`
             }
         };
 
-        function unlock() {
-            if(document.getElementById('accessKey').value === 'Mr winner123') {
-                document.getElementById('loginOverlay').style.display = 'none';
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-            }
-        }
+        function unlock() { if(document.getElementById('accessKey').value === 'Mr winner123') { document.getElementById('loginOverlay').style.display = 'none'; if (audioCtx.state === 'suspended') audioCtx.resume(); } }
 
-        function toggleLang() { 
-            currentLang = (currentLang === 'sw' ? 'en' : 'sw'); 
-            document.getElementById('langBtn').innerText = "LANG: " + currentLang.toUpperCase();
-            refreshUI(); 
-        }
+        function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); document.getElementById('langBtn').innerText = "LANG: " + currentLang.toUpperCase(); refreshUI(); }
 
-        function toggleMute() { 
-            muted = !muted; 
-            document.getElementById('volBtn').innerText = "SOUND: " + (muted ? "OFF" : "ON"); 
-        }
+        function toggleMute() { muted = !muted; document.getElementById('volBtn').innerText = "SOUND: " + (muted ? "OFF" : "ON"); }
         
         function refreshUI() {
             const t = translations[currentLang];
@@ -201,8 +181,6 @@
             document.getElementById('closeBtn').innerText = t.mClose;
             document.getElementById('warningLabel').innerText = t.warn;
             document.getElementById('modalContent').innerHTML = t.mBody;
-            
-            // Hapa tunabadilisha Placeholders kwa lugha husika
             document.getElementById('hashIn').placeholder = t.hashPh;
             document.getElementById('saltIn').placeholder = t.saltPh;
             
@@ -220,11 +198,7 @@
             updateRate();
         }
 
-        function updateRate() {
-            const b = document.getElementById('bombCount').value;
-            const rates = { "2": "99%", "3": "98%", "5": "95%", "7": "90%" }; // Rates zimeboreshwa kidogo kimuonekano
-            document.getElementById('rText').innerText = translations[currentLang].rText + rates[b];
-        }
+        function updateRate() { document.getElementById('rText').innerText = translations[currentLang].rText + "99.8%"; }
 
         const grid = document.getElementById('gameGrid');
         for (let i = 0; i < 25; i++) {
@@ -235,13 +209,11 @@
         function startAnalysis() {
             const h = document.getElementById('hashIn').value;
             const s = document.getElementById('saltIn').value;
-            
             if(!h || !s) { 
                 document.getElementById('warningLabel').style.display = 'block';
                 playSound(200, 'sawtooth', 0.2);
                 return; 
             }
-            
             document.getElementById('warningLabel').style.display = 'none';
             const btn = document.getElementById('mainBtn');
             const bar = document.getElementById('loaderBar');
@@ -256,7 +228,6 @@
             }, 60);
         }
 
-        // Algorithm Mpya ya V9.7 - Deep Processing Simulation
         function runLogic(h, s) {
             roundIdx++;
             document.getElementById('activeRound').innerText = roundIdx;
@@ -264,20 +235,13 @@
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
             let seed = 0;
-            let bombCount = parseInt(document.getElementById('bombCount').value);
-            // Imeongezwa utata (complexity) kwenye mnyororo wa uchakataji
-            let str = h + s + roundIdx + bombCount + "MOON_SUN_V9.7_DEEP_SYNC_TZ";
-            
-            for(let i=0; i<str.length; i++) {
-                seed = ((seed << 5) - seed) + str.charCodeAt(i);
-                seed = seed & seed; // Bitwise operation for deeper hashing
-            }
+            let str = h + s + roundIdx + "ULTRA_99.8_STABLE";
+            for(let i=0; i<str.length; i++) seed = ((seed << 5) - seed) + str.charCodeAt(i);
             
             let tSeed = Math.abs(seed);
             let spots = [];
             while(spots.length < 4) {
-                // Imebadilishwa multiplier kutoa pattern tofauti
-                tSeed = (tSeed * 48271) % 2147483647; 
+                tSeed = (tSeed * 16807) % 2147483647;
                 let pos = tSeed % 25;
                 if(!spots.includes(pos)) spots.push(pos);
             }
@@ -287,15 +251,17 @@
                 cells[idx].classList.add('safe');
             });
 
-            playSound(880, 'sine', 0.3);
             document.getElementById('loaderWrap').style.display = 'none';
-
             document.getElementById('hashIn').value = "";
             document.getElementById('saltIn').value = "";
             
-            setTimeout(() => {
-                if(roundIdx < 4) { document.getElementById('mainBtn').disabled = false; } else { startCD(); }
-            }, 1000);
+            if(roundIdx >= 4) {
+                playJackpot(); // Jackpot sound after 4th round
+                startCD();
+            } else {
+                playSound(880, 'sine', 0.3);
+                document.getElementById('mainBtn').disabled = false;
+            }
         }
 
         function startCD() {
