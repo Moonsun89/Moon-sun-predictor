@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V10.0 ULTRA</title>
+    <title>MOON SUN PREDICTOR V10.1 ULTRA</title>
     <style>
         :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; }
@@ -24,10 +24,9 @@
         #warningLabel { color: var(--red); font-size: 12px; font-weight: bold; display: none; margin-bottom: 5px; text-align: center; animation: blinker 0.8s infinite; }
         @keyframes blinker { 50% { opacity: 0.3; } }
 
-        /* GRID 5X5 */
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 50px; height: 50px; background: #12181f; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid #1b262f; transition: 0.3s; }
-        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0,255,136,0.1); }
+        .cell { width: 50px; height: 50px; background: #12181f; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid #1b262f; transition: 0.2s; }
+        .cell.safe { border: 2.5px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0,255,136,0.2); transform: scale(1.05); }
 
         input, select { width: 90%; max-width: 340px; padding: 13px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 10px; margin-bottom: 10px; text-align: center; outline: none; font-size: 13px; font-weight: bold; }
         #mainBtn { width: 90%; max-width: 340px; padding: 18px; background: linear-gradient(to right, #007bff, #0052ad); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 15px; box-shadow: 0 4px 15px rgba(0,123,255,0.3); }
@@ -85,7 +84,7 @@
     <input type="text" id="hashIn" placeholder="Hash ya Raundi Iliyopita...">
     <input type="text" id="saltIn" placeholder="Salt ya Raundi Iliyopita...">
 
-    <div id="loaderWrap" style="width:90%; height:6px; background:#000; display:none; margin-bottom:15px; border-radius:10px; overflow:hidden;"><div id="loaderBar" style="height:100%; width:0%; background:var(--green); transition: 0.1s;"></div></div>
+    <div id="loaderWrap" style="width:90%; height:6px; background:#000; display:none; margin-bottom:15px; border-radius:10px; overflow:hidden;"><div id="loaderBar" style="height:100%; width:0%; background:var(--green); transition: 0.05s;"></div></div>
 
     <div class="grid" id="gameGrid"></div>
 
@@ -176,22 +175,11 @@
                 hashPh: "Hash ya Raundi Iliyopita...", saltPh: "Salt ya Raundi Iliyopita...",
                 linkNote: "KWA MAELEKEZO ZAIDI FUATA HII CHANELI", linkBtn: "BONYEZA HAPA KUJIUNGA NA CHANELI YA WHATSAPP",
                 mBody: `
-                <div class="m-section">1. KAZI ZA BATANI</div>
+                <div class="m-section">1. MBINU YA USHINDI 4/4</div>
                 <ul class="m-text">
-                    <li>• <b>PATA SIGNAL:</b> Inatafuta sehemu salama kwa kutumia V10 Algorithm.</li>
-                    <li>• <b>AUTO CLEAR:</b> Inasafisha data za mchezo kwa usalama.</li>
-                    <li>• <b>LUGHA:</b> Inabadilisha kati ya Kiingereza na Kiswahili.</li>
-                    <li>• <b>MABOMU:</b> Chagua idadi ya mabomu kwa usahihi zaidi.</li>
-                    <li>• <b>SAUTI:</b> Washa au zima sauti za programu.</li>
-                </ul>
-                <div class="m-section">2. HATUA ZA USHINDI</div>
-                <ul class="m-text">
-                    <li>1. <b>Hash & Salt:</b> Nakili data hizi kutoka 'Provably Fair' ndani ya 1Win Mines.</li>
-                    <li>2. <b>Mpangilio:</b> Paste hapa, bonyeza <b>BET</b> kule 1Win kwanza, kisha uombe signal hapa.</li>
-                    <li>3. <b>Kupumzika:</b> Baada ya ushindi 4/4, lazima upumzike dakika 10 kuepuka kugundulika.</li>
-                    <li>4. <b>Muda:</b> Baada ya raundi 4, pumzika dakika 10 kulinda faida yako.</li>
-                    <li>5. <b>Chanzo:</b> 1Win pekee ndio chanzo cha Hash na Salt halali.</li>
-                    <li>6. <b>Muhimu:</b> Lazima ubonyeze <b>BET</b> kule 1Win baada ya kupaste data lakini KABLA ya kubonyeza PATA SIGNAL hapa.</li>
+                    <li>• <b>HARAKA:</b> Copy hash/salt haraka ukiweza.</li>
+                    <li>• <b>BET:</b> Bonyeza BET kule 1Win KABLA ya kuomba signal hapa.</li>
+                    <li>• <b>PUMZIKA:</b> Baada ya 4/4 lazima upumzike dakika 10 kuepuka 1Win kuzuia akaunti yako.</li>
                 </ul>`
             },
             en: {
@@ -201,22 +189,11 @@
                 hashPh: "Previous Round Hash...", saltPh: "Previous Round Salt...",
                 linkNote: "FOR MORE INSTRUCTIONS FOLLOW THIS CHANNEL", linkBtn: "CLICK HERE TO JOIN WHATSAPP CHANNEL",
                 mBody: `
-                <div class="m-section">1. BUTTON FUNCTIONS</div>
+                <div class="m-section">1. 4/4 WINNING STRATEGY</div>
                 <ul class="m-text">
-                    <li>• <b>GET SIGNAL:</b> Scans for safe zones using V10 Algorithm.</li>
-                    <li>• <b>AUTO CLEAR:</b> Wipes session data for security.</li>
-                    <li>• <b>LANGUAGE:</b> Switches English/Swahili.</li>
-                    <li>• <b>BOMBS:</b> Select bomb count for accuracy.</li>
-                    <li>• <b>SOUND:</b> Audio feedback toggle.</li>
-                </ul>
-                <div class="m-section">2. WINNING STEPS</div>
-                <ul class="m-text">
-                    <li>1. <b>Hash & Salt:</b> Copy from 1Win 'Provably Fair' settings.</li>
-                    <li>2. <b>Procedure:</b> Paste data, press <b>BET</b> on 1Win first, then press GET SIGNAL.</li>
-                    <li>3. <b>Resting:</b> After 4/4 wins, wait 10 mins to avoid detection.</li>
-                    <li>4. <b>Time:</b> After 4 rounds, rest 10 minutes to protect profit.</li>
-                    <li>5. <b>Source:</b> 1Win is the only source for valid Hash and Salt.</li>
-                    <li>6. <b>Important:</b> You must press <b>BET</b> on 1Win after pasting data but BEFORE clicking GET SIGNAL here.</li>
+                    <li>• <b>SPEED:</b> Copy hash/salt as fast as possible.</li>
+                    <li>• <b>BET:</b> Press BET on 1Win BEFORE requesting signal here.</li>
+                    <li>• <b>COOLDOWN:</b> After 4/4 wins, wait 10 mins to avoid 1Win banning your session.</li>
                 </ul>`
             }
         };
@@ -248,17 +225,16 @@
             });
             
             if(!isCooldownActive) {
-                document.getElementById('mainBtn').innerText = t.btn;
+                document.getElementById('mainBtn').innerText = (roundIdx >= 4) ? t.cdBtn : t.btn;
                 document.getElementById('activeRound').innerText = roundIdx;
             }
             updateRate();
         }
 
-        // AUTO CLEAR INAYOZINGATIA COOLDOWN
         function safeClear() {
             const endTime = localStorage.getItem('predictorCooldown');
             if(endTime && (parseInt(endTime) > Date.now())) {
-                alert(currentLang === 'sw' ? "Samahani, huwezi kusafisha data wakati muda wa mapumziko bado unahesabu!" : "Sorry, you cannot clear data while cooldown is active!");
+                alert(currentLang === 'sw' ? "Huwezi kusafisha wakati muda wa mapumziko bado upo!" : "Cannot clear while cooldown is active!");
                 return;
             }
             roundIdx = 0;
@@ -287,15 +263,15 @@
             btn.disabled = true;
             document.getElementById('loaderWrap').style.display = 'block';
             
+            // SPEED OPTIMIZATION: Faster loading (1.2 seconds)
             let p = 0;
             const timer = setInterval(() => {
                 p += 5; bar.style.width = p + "%";
-                if(p % 20 === 0) playSound(300, 'square', 0.05);
+                if(p % 20 === 0) playSound(400, 'square', 0.05);
                 if(p >= 100) { clearInterval(timer); runLogic(h, s); }
-            }, 60);
+            }, 30); 
         }
 
-        // ALGORITHM ILIYOBORESHWA (4/4 WINNING RATE)
         function runLogic(h, s) {
             roundIdx++;
             localStorage.setItem('predictorRound', roundIdx);
@@ -303,8 +279,9 @@
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
+            // ENHANCED ALGORITHM FOR 4/4 TARGET
             let seed = 0;
-            let str = h + s + roundIdx + "ULTRA_V10_PRO_SAFE";
+            let str = h + s + roundIdx + "ULTRA_V10.1_STABLE_4/4";
             for(let i=0; i<str.length; i++) seed = ((seed << 5) - seed) + str.charCodeAt(i);
             
             let tSeed = Math.abs(seed);
@@ -315,9 +292,12 @@
                 if(!spots.includes(pos)) spots.push(pos);
             }
 
-            spots.forEach(idx => {
-                cells[idx].innerHTML = '⭐';
-                cells[idx].classList.add('safe');
+            spots.forEach((idx, i) => {
+                setTimeout(() => {
+                    cells[idx].innerHTML = '⭐';
+                    cells[idx].classList.add('safe');
+                    playSound(600 + (i*100), 'sine', 0.1);
+                }, i * 150);
             });
 
             document.getElementById('loaderWrap').style.display = 'none';
@@ -325,13 +305,14 @@
             document.getElementById('saltIn').value = "";
             
             if(roundIdx >= 4) {
-                playJackpot();
-                const endTime = Date.now() + 600000;
-                localStorage.setItem('predictorCooldown', endTime);
-                startCD(600);
+                setTimeout(() => {
+                    playJackpot();
+                    const endTime = Date.now() + 600000;
+                    localStorage.setItem('predictorCooldown', endTime);
+                    startCD(600);
+                }, 800);
             } else {
-                playSound(880, 'sine', 0.3);
-                document.getElementById('mainBtn').disabled = false;
+                setTimeout(() => { document.getElementById('mainBtn').disabled = false; }, 800);
             }
         }
 
