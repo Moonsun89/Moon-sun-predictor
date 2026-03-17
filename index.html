@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V9.6 PRO</title>
+    <title>MOON SUN PREDICTOR V9.6.1 PRO</title>
     <style>
         :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; }
@@ -97,7 +97,6 @@
         let muted = false;
         const wsLink = "https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336";
 
-        // Mfumo mpya wa Sauti kwa ajili ya Simu (Web Audio API)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(freq, type, duration) {
             if (muted) return;
@@ -121,23 +120,21 @@
                 mBody: `
                 <div class="m-section">1. KAZI ZA BATANI</div>
                 <div class="m-text">
-                • <b>PATA SIGNAL:</b> Inatumia Algorithm ya 4/4 kuchanganua Server ya 1Win na kutoa zones salama.<br>
-                • <b>AUTO CLEAR:</b> Inasafisha Data na Cookies za session ili kuzuia 1Win wasigundue unatumia predictor.<br>
-                • <b>LUGHA:</b> Inabadili mfumo kati ya Kiswahili na Kiingereza.<br>
-                • <b>MABOMU:</b> Unachagua idadi ya mabomu uliyoweka kwenye mchezo ili kuongeza usahihi.<br>
-                • <b>SOUND:</b> Inawasha/kuzima sauti ya uthibitisho wakati signal inatoka.<br>
-                • <b>MAELEKEZO:</b> Hapa ndipo unapopata elimu ya siri ya ushindi.
+                • <b>PATA SIGNAL:</b> Inatumia Algorithm ya 4/4 kutoa zones salama.<br>
+                • <b>AUTO CLEAR:</b> Inasafisha Data ili kuzuia 1Win Detection.<br>
+                • <b>LUGHA:</b> Inabadili mfumo (Kiswahili/Kiingereza).<br>
+                • <b>MABOMU:</b> Chagua idadi ya mabomu kwa usahihi zaidi.<br>
+                • <b>SOUND:</b> Inawasha/kuzima sauti ya predictor.<br>
+                • <b>MAELEKEZO:</b> Elimu ya siri ya ushindi.
                 </div>
-
-                <div class="m-section">2. HATUA ZA USHINDI (VETA STANDARD)</div>
+                <div class="m-section">2. HATUA ZA USHINDI</div>
                 <div class="m-text">
-                1. <b>Kupata Hash & Salt:</b> Kwenye mchezo wa Mines (1Win), nenda sehemu ya 'Provably Fair settings'. Nakili (Copy) Hash na Salt ya raundi iliyopita.<br>
-                2. <b>Umuhimu wa Hash & Salt:</b> Hizi ndizo namba za siri ambazo Server hutumia kupanga mabomu. App yetu inazichambua ili kujua mianya salama.<br>
-                3. <b>Utaratibu:</b> Copy & Paste Hash/Salt kwanza, kisha bonyeza <b>BET</b> kwenye 1Win. Baada ya kubonyeza Bet, ndipo uje hapa ubonyeze <b>PATA SIGNAL</b>.<br>
-                4. <b>Ushindi wa 4/4:</b> Ukishinda raundi 4 mfululizo, App itafunga. <b>PUMZIKA dakika 10</b>.<br>
-                5. <b>Kwa nini upumzike?</b> Ili kupoza Algorithm na kuzuia System ya 1Win isikufuatilie (Detection Protection).
+                1. <b>Kupata Hash & Salt:</b> Nenda 'Provably Fair settings' kwenye 1Win Mines. Nakili Hash na Salt ya raundi iliyopita.<br>
+                2. <b>Umuhimu:</b> Hizi namba huamua mabomu yalipo; App inazichambua.<br>
+                3. <b>Utaratibu:</b> Paste Hash/Salt, bonyeza <b>BET</b> kwanza kwenye 1Win, kisha bonyeza <b>PATA SIGNAL</b> hapa.<br>
+                4. <b>Ushindi wa 4/4:</b> Ukishinda mara 4, <b>PUMZIKA dakika 10</b>.<br>
+                5. <b>Kwa nini upumzike?</b> Ili kuzuia System ya 1Win isikufuatilie.
                 </div>
-
                 <div style="color:var(--yellow); font-weight:bold; margin-top:15px; text-align:center;">KWA MAELEKEZO ZAIDI FUATA HII CHANELI:</div>
                 <a href="${wsLink}" class="m-link" target="_blank">BONYEZA HAPA KUJIUNGA NA WHATSAPP</a>`
             },
@@ -147,23 +144,18 @@
                 mBody: `
                 <div class="m-section">1. BUTTON FUNCTIONS</div>
                 <div class="m-text">
-                • <b>GET SIGNAL:</b> Uses 4/4 Algorithm to scan 1Win server for safe zones.<br>
-                • <b>AUTO CLEAR:</b> Wipes session data & cookies to prevent 1Win detection systems.<br>
-                • <b>LANGUAGE:</b> Switches between English and Swahili.<br>
-                • <b>BOMBS:</b> Select your in-game bomb count for maximum accuracy.<br>
-                • <b>SOUND:</b> Toggles audio feedback for signal confirmation.<br>
-                • <b>INSTRUCTIONS:</b> Where the secret winning knowledge is kept.
+                • <b>GET SIGNAL:</b> Scans for safe zones using 4/4 Algorithm.<br>
+                • <b>AUTO CLEAR:</b> Wipes session data for security.<br>
+                • <b>LANGUAGE:</b> Switches English/Swahili.<br>
+                • <b>BOMBS:</b> Select bomb count for accuracy.<br>
+                • <b>SOUND:</b> Audio feedback toggle.<br>
                 </div>
-
                 <div class="m-section">2. WINNING STEPS</div>
                 <div class="m-text">
-                1. <b>Getting Hash & Salt:</b> Go to 1Win Mines 'Provably Fair settings'. Copy the previous round's Hash and Salt.<br>
-                2. <b>Importance:</b> These unique keys determine bomb placement. Our app decodes them to find stars.<br>
-                3. <b>Order:</b> Copy & Paste Hash/Salt first, then press <b>BET</b> on 1Win. ONLY request signal after betting.<br>
-                4. <b>4/4 Win Limit:</b> After 4 consecutive wins, the app locks. <b>REST for 10 minutes</b>.<br>
-                5. <b>Why rest?</b> To reset the algorithm and stay invisible to 1Win's anti-fraud system.
+                1. <b>Hash & Salt:</b> Copy from 1Win 'Provably Fair' settings.<br>
+                2. <b>Order:</b> Paste data, press <b>BET</b> on 1Win, then press <b>GET SIGNAL</b>.<br>
+                3. <b>Resting:</b> After 4/4 wins, wait 10 mins to avoid detection.
                 </div>
-
                 <div style="color:var(--yellow); font-weight:bold; margin-top:15px; text-align:center;">FOR MORE INSTRUCTIONS FOLLOW THIS CHANNEL:</div>
                 <a href="${wsLink}" class="m-link" target="_blank">CLICK HERE TO JOIN WHATSAPP</a>`
             }
@@ -185,7 +177,6 @@
         function toggleMute() { 
             muted = !muted; 
             document.getElementById('volBtn').innerText = "SOUND: " + (muted ? "OFF" : "ON"); 
-            if(!muted) playSound(600, 'sine', 0.1);
         }
         
         function refreshUI() {
@@ -204,7 +195,6 @@
                 if(n == val) opt.selected = true;
                 select.appendChild(opt);
             });
-
             const btn = document.getElementById('mainBtn');
             btn.innerText = (roundIdx >= 4) ? t.cdBtn : t.btn;
             updateRate();
@@ -235,7 +225,7 @@
             let p = 0;
             const timer = setInterval(() => {
                 p += 5; bar.style.width = p + "%";
-                if(p % 20 === 0) playSound(300, 'square', 0.05); // Sauti ya Loading
+                if(p % 20 === 0) playSound(300, 'square', 0.05);
                 if(p >= 100) { clearInterval(timer); runLogic(h, s); }
             }, 60);
         }
@@ -263,8 +253,12 @@
                 cells[idx].classList.add('safe');
             });
 
-            playSound(880, 'sine', 0.3); // Sauti ya Ushindi (Success Sound)
+            playSound(880, 'sine', 0.3);
             document.getElementById('loaderWrap').style.display = 'none';
+
+            // AUTO CLEAR INAFANYA KAZI HAPA
+            document.getElementById('hashIn').value = "";
+            document.getElementById('saltIn').value = "";
             
             setTimeout(() => {
                 if(roundIdx < 4) { document.getElementById('mainBtn').disabled = false; } else { startCD(); }
@@ -292,7 +286,6 @@
         function toggleModal() {
             const m = document.getElementById('modal');
             m.style.display = (m.style.display === 'block' ? 'none' : 'block');
-            if(m.style.display === 'block') playSound(500, 'sine', 0.1);
         }
 
         window.onload = refreshUI;
