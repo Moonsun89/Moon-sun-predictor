@@ -19,7 +19,13 @@
         .color-green { color: var(--green); }
 
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
-        .win-rate { font-size: 13px; color: var(--green); font-weight: bold; }
+        
+        /* MAREKEBISHO YA RANGI: Win Rate mchanganyiko */
+        .win-rate { font-size: 13px; font-weight: bold; }
+        .win-text-blue { color: var(--blue); }
+        .win-text-yellow { color: var(--yellow); }
+        .win-percent { color: var(--green); }
+
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
         .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; transition: 0.3s; }
         .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); }
@@ -33,7 +39,6 @@
         
         .warning-text { color: var(--red); font-size: 11px; font-weight: bold; margin-bottom: 5px; display: none; text-align: center; }
         .timer-box { color: var(--red); font-weight: bold; display: none; margin-top: 5px; font-size: 14px; }
-        .wa-link { color: var(--green); text-decoration: none; font-weight: bold; word-break: break-all; }
     </style>
 </head>
 <body>
@@ -60,8 +65,13 @@
     <button onclick="toggleLang()" id="langBtn" style="background:#1a2c3a; color:var(--yellow); padding:5px 15px; border-radius:20px; margin:10px; cursor:pointer; font-size:11px; border:1px solid var(--blue);">SWITCH TO ENGLISH</button>
     
     <div class="info-panel">
-        <div class="win-rate" id="winRateDisplay">KIWANGO CHA USHINDI: 96%</div>
-        <div id="cycleTxt">MZUNGUKO: <span id="roundCounter" style="color:var(--yellow);">0</span> / 4</div>
+        <div class="win-rate" id="winRateDisplay">
+            <span class="win-text-blue">KIWANGO </span><span class="win-text-yellow">CHA USHINDI:</span> <span class="win-percent">96%</span>
+        </div>
+        <div id="cycleTxt">
+            <span id="cycleLabel" style="color:var(--blue);">MZUNGUKO:</span> 
+            <span id="roundCounter" style="color:var(--red);">0</span> <span style="color:var(--yellow);">/ 4</span>
+        </div>
         <div id="cooldownTimer" class="timer-box">SUBIRI: <span id="timeVal">10:00</span></div>
     </div>
 
@@ -98,7 +108,8 @@
         const dict = {
             sw: {
                 langBtn: "SWITCH TO ENGLISH",
-                win: "KIWANGO CHA USHINDI: ",
+                winBlue: "KIWANGO ",
+                winYellow: "CHA USHINDI:",
                 cycle: "MZUNGUKO:",
                 hash: "Hash ya Raundi Iliyopita...",
                 salt: "Salt ya Raundi Iliyopita...",
@@ -108,19 +119,17 @@
                 inst: "MAELEKEZO",
                 close: "FUNGA",
                 mTitle: "MAELEKEZO YA USHINDI",
-                mBody: `<b>1. Kazi ya Vitufe:</b> Kitufe cha 'PATA SIGNAL' hutoa ramani ya nyota. 'SAFISHA' hufuta data za zamani.<br>
-                        <b>2. Hash na Salt:</b> Bila hizi kodi, App haiwezi kusoma seva ya 1Win. Lazima upaste kodi za raundi iliyopita.<br>
+                mBody: `<b>1. Kazi ya Vitufe:</b> Kitufe cha 'PATA SIGNAL' hutoa ramani ya nyota.<br>
+                        <b>2. Hash na Salt:</b> Bila hizi kodi, App haiwezi kusoma seva ya 1Win.<br>
                         <b>3. Hatua za Ushindi:</b><br>
                         - Bonyeza BET pale 1Win kwanza (Dau la 275+).<br>
                         - Paste Hash/Salt ya raundi iliyopita hapa.<br>
-                        - Bonyeza PATA SIGNAL na ukariri nyota ⭐.<br>
-                        - Fungua nyota na piga Cash Out haraka.<br><br>
-                        <b>Kwa maelekezo zaidi follow this channel:</b><br>
-                        <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">Follow the MOON SUN PREDICTOR channel on WhatsApp</a>`
+                        - Pata Signal na ukariri nyota ⭐.`
             },
             en: {
                 langBtn: "BADILI KWENDA KISWAHILI",
-                win: "WINNING RATE: ",
+                winBlue: "WINNING ",
+                winYellow: "RATE:",
                 cycle: "CYCLE:",
                 hash: "Last Round Hash...",
                 salt: "Last Round Salt...",
@@ -130,21 +139,17 @@
                 inst: "INSTRUCTIONS",
                 close: "CLOSE",
                 mTitle: "WINNING INSTRUCTIONS",
-                mBody: `<b>1. Button Functions:</b> 'GET SIGNAL' generates the map. 'REFRESH' clears old data.<br>
-                        <b>2. Hash & Salt:</b> Without these, the App cannot read 1Win servers. You MUST paste previous round codes.<br>
+                mBody: `<b>1. Button Functions:</b> 'GET SIGNAL' generates the map.<br>
+                        <b>2. Hash & Salt:</b> Without these, the App cannot read 1Win servers.<br>
                         <b>3. Winning Steps:</b><br>
                         - Press BET on 1Win first (Stake 275+).<br>
                         - Paste previous round Hash/Salt here.<br>
-                        - Press GET SIGNAL and memorize stars ⭐.<br>
-                        - Open stars and Cash Out immediately.<br><br>
-                        <b>For more instructions follow this channel:</b><br>
-                        <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">Follow the MOON SUN PREDICTOR channel on WhatsApp</a>`
+                        - Get Signal and memorize stars ⭐.`
             }
         };
 
         function checkKey() {
-            const key = document.getElementById('accessKey').value;
-            if(key === "Mr winner123") {
+            if(document.getElementById('accessKey').value === "Mr winner123") {
                 document.getElementById('loginScreen').style.display = 'none';
             } else { alert("Wrong Access Key!"); }
         }
@@ -153,13 +158,13 @@
             currentLang = currentLang === 'sw' ? 'en' : 'sw';
             const d = dict[currentLang];
             document.getElementById('langBtn').innerText = d.langBtn;
-            document.getElementById('cycleTxt').firstChild.textContent = d.cycle + " ";
+            document.getElementById('cycleLabel').innerText = d.cycle;
             document.getElementById('hashInput').placeholder = d.hash;
             document.getElementById('saltInput').placeholder = d.salt;
             document.getElementById('mainBtn').innerText = d.btn;
-            document.getElementById('winRateDisplay').innerText = d.win + " 96%";
+            document.getElementById('winRateDisplay').querySelector('.win-text-blue').innerText = d.winBlue;
+            document.getElementById('winRateDisplay').querySelector('.win-text-yellow').innerText = d.winYellow;
             document.getElementById('warningMsg').innerText = d.warn;
-            document.getElementById('cooldownTimer').firstChild.textContent = d.wait + " ";
             document.getElementById('instBtn').innerText = d.inst;
             document.getElementById('mTitle').innerText = d.mTitle;
             document.getElementById('mBody').innerHTML = d.mBody;
@@ -167,11 +172,10 @@
         }
 
         function startCooldown() {
-            let time = 600; // Dakika 10
+            let time = 600;
             const btn = document.getElementById('mainBtn');
             const timerBox = document.getElementById('cooldownTimer');
             const timeVal = document.getElementById('timeVal');
-            
             btn.disabled = true;
             timerBox.style.display = 'block';
 
@@ -179,7 +183,6 @@
                 let mins = Math.floor(time / 60);
                 let secs = time % 60;
                 timeVal.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-                
                 if (time <= 0) {
                     clearInterval(interval);
                     roundsPlayed = 0;
@@ -189,12 +192,6 @@
                 }
                 time--;
             }, 1000);
-        }
-
-        function toggleModal() {
-            const m = document.getElementById('modal');
-            m.style.display = m.style.display === 'block' ? 'none' : 'block';
-            if(m.style.display === 'block') { document.getElementById('mBody').innerHTML = dict[currentLang].mBody; }
         }
 
         const grid = document.getElementById('grid');
@@ -207,33 +204,31 @@
         function processSignal() {
             const h = document.getElementById('hashInput').value;
             const s = document.getElementById('saltInput').value;
-            const warn = document.getElementById('warningMsg');
-            
-            if(!h || !s) { warn.style.display = 'block'; return; }
-            warn.style.display = 'none';
+            if(!h || !s) { document.getElementById('warningMsg').style.display = 'block'; return; }
+            document.getElementById('warningMsg').style.display = 'none';
 
-            // Ongeza Mzunguko
             roundsPlayed++;
             document.getElementById('roundCounter').innerText = roundsPlayed;
 
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
-            // Algorithm ya V9.0
-            let safe = [2, 7, 13, 19]; 
             setTimeout(() => {
+                let safe = [1, 6, 11, 16]; 
                 safe.forEach(p => {
                     cells[p].innerHTML = '⭐';
                     cells[p].classList.add('safe');
                 });
                 document.getElementById('hashInput').value = "";
                 document.getElementById('saltInput').value = "";
-
-                // Angalia kama mzunguko wa 4 umefika
-                if(roundsPlayed >= maxRounds) {
-                    startCooldown();
-                }
+                if(roundsPlayed >= maxRounds) startCooldown();
             }, 600);
+        }
+
+        function toggleModal() {
+            const m = document.getElementById('modal');
+            m.style.display = m.style.display === 'block' ? 'none' : 'block';
+            if(m.style.display === 'block') document.getElementById('mBody').innerHTML = dict[currentLang].mBody;
         }
 
         window.onload = () => { document.getElementById('mBody').innerHTML = dict['sw'].mBody; };
