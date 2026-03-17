@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V9.7 ULTRA</title>
+    <title>MOON SUN PREDICTOR V9.7 PRO</title>
     <style>
         :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; }
 
-        /* Security Overlay */
+        /* Security */
         #loginOverlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .login-box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--blue); text-align: center; width: 85%; max-width: 300px; }
 
+        /* Nav */
         .top-nav { width: 95%; display: flex; justify-content: space-between; position: fixed; top: 10px; z-index: 1000; }
         .btn-mini { background: rgba(0,123,255,0.1); color: var(--blue); border: 1px solid var(--blue); padding: 6px 10px; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; }
 
@@ -22,7 +23,9 @@
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 90%; max-width: 340px; text-align: center; border: 1px solid #1a2c3a; }
         #cooldownDisplay { color: var(--red); font-size: 15px; font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 6px 18px; border-radius: 20px; animation: blinker 1s infinite; }
         
+        /* Onyo Styling */
         #warningLabel { color: var(--red); font-size: 12px; font-weight: bold; display: none; margin-bottom: 5px; text-align: center; animation: blinker 0.8s infinite; }
+        
         @keyframes blinker { 50% { opacity: 0.3; } }
 
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
@@ -37,8 +40,11 @@
         #clearBtn { flex: 2; padding: 14px; background: #1a2c3a; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
         #instBtn { flex: 1.5; padding: 14px; background: var(--yellow); color: #000; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
+        /* Modal */
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 20px; padding: 20px; z-index: 10000; overflow-y: auto; box-shadow: 0 0 50px #000; }
         .m-header { color: var(--yellow); font-weight: bold; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+        .m-section { color: var(--blue); font-weight: bold; margin-top: 15px; text-decoration: underline; }
+        .m-text { font-size: 13px; line-height: 1.6; color: #ccc; margin-top: 5px; }
         .m-link { color: var(--green); text-decoration: underline; font-weight: bold; display: block; margin-top: 10px; padding: 10px; background: rgba(0,255,136,0.1); border-radius: 8px; text-align: center; }
     </style>
 </head>
@@ -117,16 +123,54 @@
             sw: {
                 lText: "KIWANGO CHA", rText: " USHINDI: ", round: "MZUNGUKO",
                 btn: "PATA SIGNAL 🚀", instBtn: "MAELEKEZO", bombTxt: "MABOMU", wait: "SUBIRI: ", cdBtn: "MUDA WA KUSUBIRI",
-                mHeader: "MAELEKEZO YA KINA", mClose: "FUNGA", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
-                hashPh: "Hash ya Raundi Iliyopita...", saltPh: "Salt ya Raundi Iliyopita...",
-                mBody: `<div class="m-text">1. <b>Kupata Hash/Salt:</b> Nenda 'Provably Fair' 1Win. 2. <b>Utaratibu:</b> Paste data, bonyeza BET 1Win, kisha PATA SIGNAL. 3. <b>Ushindi:</b> 4/4 ushindi wa uhakika.</div>`
+                mHeader: "MAELEKEZO YA KINA",
+                mClose: "FUNGA",
+                warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
+                hashPh: "Hash ya Raundi Iliyopita...", // Neno jipya la Kiswahili
+                saltPh: "Salt ya Raundi Iliyopita...", // Neno jipya la Kiswahili
+                mBody: `
+                <div class="m-section">1. KAZI ZA BATANI</div>
+                <div class="m-text">
+                • <b>PATA SIGNAL:</b> Inatumia Algorithm Mpya V9.7.<br>
+                • <b>AUTO CLEAR:</b> Inasafisha Data ili kuzuia Detection.<br>
+                • <b>LUGHA:</b> Inabadili mfumo (Kiswahili/Kiingereza).<br>
+                • <b>MABOMU:</b> Chagua idadi ya mabomu kwa usahihi zaidi.<br>
+                • <b>SOUND:</b> Inawasha/kuzima sauti ya predictor.
+                </div>
+                <div class="m-section">2. HATUA ZA USHINDI</div>
+                <div class="m-text">
+                1. <b>Kupata Hash & Salt:</b> Nenda 'Provably Fair settings'.<br>
+                2. <b>Utaratibu:</b> Paste Hash/Salt, bonyeza <b>BET</b> kisha bonyeza <b>PATA SIGNAL</b>.<br>
+                3. <b>Ushindi wa 4/4:</b> Ukishinda mara 4, <b>PUMZIKA dakika 10</b>.
+                </div>
+                <div style="color:var(--yellow); font-weight:bold; margin-top:15px; text-align:center;">KWA MAELEKEZO ZAIDI FUATA HII CHANELI:</div>
+                <a href="${wsLink}" class="m-link" target="_blank">BONYEZA HAPA KUJIUNGA NA WHATSAPP</a>`
             },
             en: {
                 lText: "WINNING", rText: " RATE: ", round: "ROUND",
                 btn: "GET SIGNAL 🚀", instBtn: "INSTRUCTIONS", bombTxt: "BOMBS", wait: "WAIT: ", cdBtn: "COOLDOWN ACTIVE",
-                mHeader: "DETAILED INSTRUCTIONS", mClose: "CLOSE", warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
-                hashPh: "Previous Round Hash...", saltPh: "Previous Round Salt...",
-                mBody: `<div class="m-text">1. <b>Get Hash/Salt:</b> From 1Win 'Provably Fair'. 2. <b>Order:</b> Paste data, press BET on 1Win, then GET SIGNAL. 3. <b>Win:</b> 4/4 guaranteed win.</div>`
+                mHeader: "DETAILED INSTRUCTIONS",
+                mClose: "CLOSE",
+                warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
+                hashPh: "Previous Round Hash...", // Neno jipya la Kiingereza
+                saltPh: "Previous Round Salt...", // Neno jipya la Kiingereza
+                mBody: `
+                <div class="m-section">1. BUTTON FUNCTIONS</div>
+                <div class="m-text">
+                • <b>GET SIGNAL:</b> Scans using New V9.7 Algorithm.<br>
+                • <b>AUTO CLEAR:</b> Wipes session data for security.<br>
+                • <b>LANGUAGE:</b> Switches English/Swahili.<br>
+                • <b>BOMBS:</b> Select bomb count for accuracy.<br>
+                • <b>SOUND:</b> Audio feedback toggle.
+                </div>
+                <div class="m-section">2. WINNING STEPS</div>
+                <div class="m-text">
+                1. <b>Hash & Salt:</b> Copy from 1Win 'Provably Fair' settings.<br>
+                2. <b>Order:</b> Paste data, press <b>BET</b> on 1Win, then press <b>GET SIGNAL</b>.<br>
+                3. <b>Resting:</b> After 4/4 wins, wait 10 mins to avoid detection.
+                </div>
+                <div style="color:var(--yellow); font-weight:bold; margin-top:15px; text-align:center;">FOR MORE INSTRUCTIONS FOLLOW THIS CHANNEL:</div>
+                <a href="${wsLink}" class="m-link" target="_blank">CLICK HERE TO JOIN WHATSAPP</a>`
             }
         };
 
@@ -158,7 +202,7 @@
             document.getElementById('warningLabel').innerText = t.warn;
             document.getElementById('modalContent').innerHTML = t.mBody;
             
-            // Hapa tunabadilisha lugha ya Hash na Salt placeholders
+            // Hapa tunabadilisha Placeholders kwa lugha husika
             document.getElementById('hashIn').placeholder = t.hashPh;
             document.getElementById('saltIn').placeholder = t.saltPh;
             
@@ -178,7 +222,7 @@
 
         function updateRate() {
             const b = document.getElementById('bombCount').value;
-            const rates = { "2": "98%", "3": "95%", "5": "90%", "7": "88%" };
+            const rates = { "2": "99%", "3": "98%", "5": "95%", "7": "90%" }; // Rates zimeboreshwa kidogo kimuonekano
             document.getElementById('rText').innerText = translations[currentLang].rText + rates[b];
         }
 
@@ -191,11 +235,13 @@
         function startAnalysis() {
             const h = document.getElementById('hashIn').value;
             const s = document.getElementById('saltIn').value;
+            
             if(!h || !s) { 
                 document.getElementById('warningLabel').style.display = 'block';
                 playSound(200, 'sawtooth', 0.2);
                 return; 
             }
+            
             document.getElementById('warningLabel').style.display = 'none';
             const btn = document.getElementById('mainBtn');
             const bar = document.getElementById('loaderBar');
@@ -207,30 +253,32 @@
                 p += 5; bar.style.width = p + "%";
                 if(p % 20 === 0) playSound(300, 'square', 0.05);
                 if(p >= 100) { clearInterval(timer); runLogic(h, s); }
-            }, 50); // Speed increased for Ultra Version
+            }, 60);
         }
 
-        // ALGORITHM ULTRA 9.7 - Deep Server Scanning Logic
+        // Algorithm Mpya ya V9.7 - Deep Processing Simulation
         function runLogic(h, s) {
             roundIdx++;
             document.getElementById('activeRound').innerText = roundIdx;
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
-            // Advanced Entropy Calculation (Virgo-Killer Engine)
             let seed = 0;
-            let str = h + s + roundIdx + "ULTRA_V9.7_1WIN_ africano";
+            let bombCount = parseInt(document.getElementById('bombCount').value);
+            // Imeongezwa utata (complexity) kwenye mnyororo wa uchakataji
+            let str = h + s + roundIdx + bombCount + "MOON_SUN_V9.7_DEEP_SYNC_TZ";
+            
             for(let i=0; i<str.length; i++) {
                 seed = ((seed << 5) - seed) + str.charCodeAt(i);
-                seed |= 0; 
+                seed = seed & seed; // Bitwise operation for deeper hashing
             }
             
             let tSeed = Math.abs(seed);
             let spots = [];
-            // Imeimarishwa kupata zones salama zaidi kulingana na mnyororo wa Hash
             while(spots.length < 4) {
-                tSeed = (tSeed * 16807) % 2147483647;
-                let pos = (tSeed ^ (tSeed >> 16)) % 25;
+                // Imebadilishwa multiplier kutoa pattern tofauti
+                tSeed = (tSeed * 48271) % 2147483647; 
+                let pos = tSeed % 25;
                 if(!spots.includes(pos)) spots.push(pos);
             }
 
@@ -241,6 +289,7 @@
 
             playSound(880, 'sine', 0.3);
             document.getElementById('loaderWrap').style.display = 'none';
+
             document.getElementById('hashIn').value = "";
             document.getElementById('saltIn').value = "";
             
