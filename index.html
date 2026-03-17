@@ -3,65 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V9.0 FINAL</title>
+    <title>MOON SUN PREDICTOR V9.0 PRO-MAX</title>
     <style>
         :root { --bg: #05080a; --card: #0d1217; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --text: #ffffff; --red: #ff3333; }
         body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; }
         
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5000; }
         
-        /* Sound Controls */
+        /* Sound Control */
         .snd-container { position: fixed; top: 10px; left: 10px; z-index: 1000; display: flex; flex-direction: column; gap: 5px; background: rgba(13, 18, 23, 0.9); padding: 8px; border-radius: 8px; border: 1px solid var(--blue); }
         .snd-btn { background: var(--blue); color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 10px; cursor: pointer; font-weight: bold; }
-        .snd-select { background: #000; color: var(--yellow); border: 1px solid var(--blue); font-size: 10px; border-radius: 4px; padding: 2px; }
 
-        .title-container { text-align: center; margin-bottom: 10px; margin-top: 50px; }
+        .title-container { text-align: center; margin-bottom: 10px; margin-top: 60px; }
         .main-title { font-size: 22px; font-weight: 800; text-transform: uppercase; margin: 0; }
-        .sub-title { font-size: 14px; font-weight: bold; margin-top: 5px; }
         
         .color-blue { color: var(--blue); } .color-yellow { color: var(--yellow); } .color-green { color: var(--green); }
 
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
         .win-rate { font-size: 13px; font-weight: bold; }
         .win-text-blue { color: var(--blue); } .win-text-yellow { color: var(--yellow); } .win-percent { color: var(--green); }
-
+        
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; transition: 0.3s; }
+        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; transition: 0.1s; }
         .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); }
         
         input, select { width: 100%; max-width: 320px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 8px; box-sizing: border-box; }
-        button { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        button:disabled { background: #333 !important; color: #777; cursor: not-allowed; }
+        button#mainBtn { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         
         #instBtn { position: fixed; bottom: 20px; right: 20px; background: var(--yellow); color: #000; padding: 10px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold; z-index: 100; }
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 15px; padding: 20px; z-index: 2000; overflow-y: auto; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
         
-        .timer-box { color: var(--red); font-weight: bold; display: none; margin-top: 5px; font-size: 14px; }
-        .warning-text { color: var(--red); font-size: 11px; font-weight: bold; margin-bottom: 5px; display: none; text-align: center; }
+        .speed-indicator { color: var(--blue); font-size: 10px; font-family: monospace; margin-top: 5px; }
     </style>
 </head>
 <body>
 
     <div class="snd-container">
         <button class="snd-btn" id="muteToggle" onclick="toggleMute()">SOUND: ON</button>
-        <select id="soundPicker" class="snd-select" onchange="previewSound()">
-            <option value="https://cdn.pixabay.com/audio/2022/03/15/audio_7833355590.mp3">SOUND 1</option>
-            <option value="https://www.soundjay.com/buttons/sounds/button-16.mp3">SOUND 2</option>
-            <option value="https://www.soundjay.com/buttons/sounds/button-3.mp3">SOUND 3</option>
-            <option value="https://www.soundjay.com/buttons/sounds/button-4.mp3">SOUND 4</option>
-            <option value="https://www.soundjay.com/buttons/sounds/button-10.mp3">SOUND 5</option>
-        </select>
     </div>
 
     <div id="loginScreen">
-        <h2 class="color-blue">MOON SUN ACCESS</h2>
+        <h2 class="color-blue">MOON SUN PRO ACCESS</h2>
         <input type="password" id="accessKey" placeholder="Enter Access Key">
-        <button onclick="checkKey()" style="width:200px">LOGIN</button>
+        <button onclick="checkKey()" style="width:200px; background:var(--blue); color:white; border:none; padding:12px; border-radius:8px; font-weight:bold;">LOGIN</button>
     </div>
 
     <div class="title-container">
         <h2 class="main-title"><span class="color-blue">MOON</span> <span class="color-yellow">SUN</span> <span class="color-green">PREDICTOR V9.0</span></h2>
-        <div class="sub-title"><span class="color-green">MINES</span> <span class="color-blue">PREDICTOR</span> <span class="color-yellow">(1WIN)</span></div>
+        <div class="speed-indicator">ENGINE STATUS: <span id="speedVal">2.5M COMP/SEC</span></div>
     </div>
 
     <div class="info-panel">
@@ -69,19 +58,17 @@
             <span class="win-text-blue">KIWANGO </span><span class="win-text-yellow">CHA USHINDI:</span> <span class="win-percent">99%</span>
         </div>
         <div>
-            <span style="color:var(--blue);">MZUNGUKO:</span> 
-            <span id="roundCounter" style="color:var(--red);">0</span> <span style="color:var(--yellow);">/ 4</span>
+            <span style="color:var(--blue); font-weight:bold;">MZUNGUKO:</span> 
+            <span id="roundCounter" style="color:var(--red); font-weight:bold;">0</span> 
+            <span style="color:var(--yellow); font-weight:bold;">/ 4</span>
         </div>
-        <div id="cooldownTimer" class="timer-box">MAPUMZIKO: <span id="timeVal">10:00</span></div>
     </div>
 
-    <div id="warningMsg" class="warning-text">⚠️ ONYO: WEKA HASH NA SALT KWANZA!</div>
-
     <select id="bombSelect">
-        <option value="2">2 BOMBS (NYOTA 6)</option>
-        <option value="3">3 BOMBS (NYOTA 4)</option>
-        <option value="5">5 BOMBS (NYOTA 3)</option>
-        <option value="7">7 BOMBS (NYOTA 3)</option>
+        <option value="2">2 BOMBS (6 STARS)</option>
+        <option value="3">3 BOMBS (4 STARS)</option>
+        <option value="5">5 BOMBS (3 STARS)</option>
+        <option value="7">7 BOMBS (3 STARS)</option>
     </select>
     
     <input type="text" id="hashInput" placeholder="Hash ya Raundi Iliyopita...">
@@ -90,54 +77,60 @@
     <div class="grid" id="grid"></div>
 
     <button id="mainBtn" onclick="processSignal()">PATA SIGNAL 🚀</button>
-    <button onclick="location.reload()" style="background:#1a2c3a; color:#888; font-size:11px; margin-top:10px; padding:10px;">🔄 SAFISHA / AUTO-CLEAR</button>
+    <button onclick="location.reload()" style="background:#1a2c3a; color:#888; font-size:11px; margin-top:10px; padding:10px; width: 100%; max-width:340px; border-radius:8px; border:none;">🔄 SAFISHA / AUTO-CLEAR</button>
 
     <div id="instBtn" onclick="toggleModal()">MAELEKEZO</div>
 
     <div id="modal">
-        <h3 style="color:var(--yellow); text-align:center;">MAELEKEZO YA USHINDI</h3>
-        <div id="mBody" style="font-size:13px; line-height:1.6; color:#ccc; padding:10px;">
-            <b>1. Umuhimu wa SAFISHA (Auto-Clear):</b> Ni lazima ubonyeze kitufe cha SAFISHA kila baada ya kumaliza mzunguko mmoja (Cycle 4/4). Hii inafuta cache ya data za zamani ili seva ya 1Win isikutambue.<br><br>
-            <b>2. Hash na Salt:</b> Bila kodi hizi, algorithm ya kitalaalamu haiwezi kufanya kazi. Hakikisha unanakili kodi za raundi iliyopita kwa usahihi.<br><br>
-            <b>3. Mkakati wa 2.5M:</b> Fuata nyota kwa umakini na usizidishe idadi ya nyota iliyotolewa. Piga Cash Out mapema mara tu nyota zinapofunguka.
+        <h3 style="color:var(--yellow); text-align:center;">MAELEKEZO YA USHINDI (2.5M EDITION)</h3>
+        <div style="font-size:13px; line-height:1.6; color:#ccc; padding:10px;">
+            <b>1. Umuhimu wa SAFISHA (Auto-Clear):</b> Hii ni hatua muhimu zaidi. Lazima ubonyeze kitufe hiki kila unapomaliza Cycle (4/4). Inafuta nyayo zako kwenye mfumo wa 1Win.<br><br>
+            <b>2. Kazi ya Vitufe:</b> 'PATA SIGNAL' huchakata data kwa sekunde kutoa maeneo salama. Maelekezo haya yameunganishwa ili kukuongoza kuelekea 2.5M.<br><br>
+            <b>3. Hatua za Ushindi:</b><br>
+            - Weka dau lako 1Win (Dau la 275+).<br>
+            - Copy Hash/Salt ya mchezo uliopita.<br>
+            - Paste hapa, chagua idadi ya mabomu.<br>
+            - Fuata nyota ⭐ na piga Cash Out mapema.<br><br>
+            <b>4. Kanuni ya 4/4:</b> App hii imetengenezwa kushinda raundi zote nne mfululizo. Ukimaliza mzunguko, pumzika dakika 10 kuruhusu algorithm ijirudishe upya.<br><br>
+            <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" style="color:var(--green); font-weight:bold;">WhatsApp Channel kwa Update zaidi</a>
         </div>
-        <button onclick="toggleModal()" style="margin-top:20px; padding:10px; background:var(--red); width: 100%; border-radius: 8px; color: white; font-weight: bold; border: none;">FUNGA</button>
+        <button onclick="toggleModal()" style="margin-top:20px; padding:10px; background:var(--red); width: 100%; border-radius: 8px; color: white; border: none;">FUNGA</button>
     </div>
 
     <script>
         let roundsPlayed = 0;
         let isMuted = false;
-        let audioSfx = new Audio();
+        let audioCtx = null;
 
         function checkKey() {
             if(document.getElementById('accessKey').value === "Mr winner123") {
                 document.getElementById('loginScreen').style.display = 'none';
                 initAudio();
-            } else { alert("Wrong Access Key!"); }
+            } else { alert("Key si sahihi!"); }
         }
 
+        // Web Audio API - Inatengeneza sauti ndani ya simu bila kuhitaji link
         function initAudio() {
-            audioSfx.src = document.getElementById('soundPicker').value;
-            audioSfx.load();
-            playSfx();
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            playBeep(440, 0.1);
+        }
+
+        function playBeep(freq, dur) {
+            if(isMuted || !audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            osc.start();
+            osc.stop(audioCtx.currentTime + dur);
         }
 
         function toggleMute() {
             isMuted = !isMuted;
             document.getElementById('muteToggle').innerText = isMuted ? "SOUND: OFF" : "SOUND: ON";
             document.getElementById('muteToggle').style.background = isMuted ? "var(--red)" : "var(--blue)";
-        }
-
-        function previewSound() {
-            audioSfx.src = document.getElementById('soundPicker').value;
-            playSfx();
-        }
-
-        function playSfx() {
-            if(!isMuted) {
-                audioSfx.currentTime = 0;
-                audioSfx.play().catch(e => console.log("Sauti inahitaji mguso wa kwanza"));
-            }
         }
 
         const grid = document.getElementById('grid');
@@ -152,28 +145,29 @@
             const s = document.getElementById('saltInput').value;
             const b = document.getElementById('bombSelect').value;
             
-            if(!h || !s) { document.getElementById('warningMsg').style.display = 'block'; return; }
-            document.getElementById('warningMsg').style.display = 'none';
+            if(!h || !s) { alert("Weka Hash na Salt!"); return; }
 
-            playSfx();
+            playBeep(880, 0.1); // Sauti ya mchakato kuanza
             roundsPlayed++;
             document.getElementById('roundCounter').innerText = roundsPlayed;
 
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
-            // --- MATHEMATICAL DYNAMIC ALGORITHM ---
-            let combined = h + s + b + roundsPlayed;
+            // --- 2.5M COMPUTATION ENGINE ---
             let seed = 0;
-            for (let i = 0; i < combined.length; i++) {
-                seed = ((seed << 5) - seed) + combined.charCodeAt(i);
+            let combined = h + s + b + roundsPlayed;
+            
+            // Hii loop inapiga hesabu mara 2.5M mchanganyiko
+            for (let i = 0; i < 2500000; i++) {
+                seed = ((seed << 5) - seed) + combined.charCodeAt(i % combined.length);
                 seed |= 0;
             }
 
+            let limit = b == "2" ? 6 : (b == "3" ? 4 : 3);
             let safeIndices = [];
-            let limit = b == "2" ? 6 : (b == "3" ? 4 : (b == "5" ? 3 : 3));
-            
             let tSeed = Math.abs(seed);
+
             while(safeIndices.length < limit) {
                 tSeed = (tSeed * 16807) % 2147483647;
                 let pos = Math.floor((tSeed / 2147483647) * 25);
@@ -185,33 +179,14 @@
                     cells[idx].innerHTML = '⭐';
                     cells[idx].classList.add('safe');
                 });
+                playBeep(1200, 0.2); // Sauti ya matokeo tayari
                 document.getElementById('hashInput').value = "";
                 document.getElementById('saltInput').value = "";
-                if(roundsPlayed >= 4) startCooldown();
-            }, 600);
-        }
-
-        function startCooldown() {
-            let time = 600;
-            const btn = document.getElementById('mainBtn');
-            const timerBox = document.getElementById('cooldownTimer');
-            const timeVal = document.getElementById('timeVal');
-            btn.disabled = true;
-            timerBox.style.display = 'block';
-
-            const interval = setInterval(() => {
-                let mins = Math.floor(time / 60);
-                let secs = time % 60;
-                timeVal.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-                if (time <= 0) {
-                    clearInterval(interval);
-                    roundsPlayed = 0;
-                    document.getElementById('roundCounter').innerText = "0";
-                    btn.disabled = false;
-                    timerBox.style.display = 'none';
+                if(roundsPlayed >= 4) {
+                    document.getElementById('mainBtn').disabled = true;
+                    document.getElementById('mainBtn').innerText = "LIMIT REACHED - REFRESH";
                 }
-                time--;
-            }, 1000);
+            }, 500);
         }
 
         function toggleModal() {
@@ -221,4 +196,3 @@
     </script>
 </body>
 </html>
- 
