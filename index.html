@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V9.9 PRO</title>
+    <title>MOON SUN PREDICTOR V10.0 ULTRA</title>
     <style>
         :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; }
@@ -41,9 +41,13 @@
         .m-section { color: var(--blue); font-weight: bold; margin-top: 15px; text-decoration: underline; }
         .m-text { font-size: 13px; line-height: 1.6; color: #ccc; margin-top: 5px; }
         .m-link { color: var(--green); text-decoration: underline; font-weight: bold; display: block; margin-top: 10px; padding: 10px; background: rgba(0,255,136,0.1); border-radius: 8px; text-align: center; }
+        
+        #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10001; }
     </style>
 </head>
 <body>
+
+    <canvas id="confettiCanvas"></canvas>
 
     <div id="loginOverlay">
         <div class="login-box">
@@ -98,7 +102,42 @@
         const wsLink = "https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336";
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        let confetti = [];
+
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
+
+        function createConfetti() {
+            for(let i=0; i<100; i++) {
+                confetti.push({
+                    x: canvas.width/2, y: canvas.height/2,
+                    dir: Math.random()*Math.PI*2,
+                    speed: Math.random()*10+5,
+                    color: `hsl(${Math.random()*360}, 100%, 50%)`,
+                    size: Math.random()*5+2,
+                    life: 1
+                });
+            }
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confetti.forEach((p, i) => {
+                p.x += Math.cos(p.dir) * p.speed;
+                p.y += Math.sin(p.dir) * p.speed + 2;
+                p.life -= 0.01;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                ctx.fill();
+                if(p.life <= 0) confetti.splice(i, 1);
+            });
+            if(confetti.length > 0) requestAnimationFrame(animateConfetti);
+        }
+
         function playSound(freq, type, duration, vol = 0.1) {
             if (muted) return;
             if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -114,13 +153,11 @@
             osc.stop(audioCtx.currentTime + duration);
         }
 
-        // Jackpot Melody Function
         function playJackpot() {
             if (muted) return;
-            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
-            notes.forEach((f, i) => {
-                setTimeout(() => playSound(f, 'sine', 0.6, 0.15), i * 150);
-            });
+            const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+            notes.forEach((f, i) => { setTimeout(() => playSound(f, 'sine', 0.8, 0.2), i * 150); });
+            createConfetti();
         }
 
         const translations = {
@@ -132,15 +169,12 @@
                 mBody: `
                 <div class="m-section">1. HATUA ZA USHINDI</div>
                 <div class="m-text">
-                1. <b>Hash & Salt:</b> Nakili data hizi kutoka sehemu ya 'Provably Fair' ndani ya 1Win Mines.<br>
-                2. <b>Order ya Kazi:</b> Paste data hapa, nenda 1Win ubonyeze <b>BET</b> kwanza, kisha rudi hapa ubonyeze <b>PATA SIGNAL</b>.<br>
-                3. <b>Mzunguko:</b> Cheza raundi 4 tu mfululizo kwa ushindi wa 99.8%.<br>
-                4. <b>Umuhimu wa Kupumzika:</b> Baada ya raundi 4, lazima upumzike dakika 10 ili kuzuia 1Win system detection.
-                </div>
-                <div class="m-section">2. MBINU ZA SIRI</div>
-                <div class="m-text">
-                5. <b>1Win Source:</b> Betting ya 1Win ndio mahali pekee pa kupata Hash na Salt halali.<br>
-                6. <b>Sync:</b> Baada ya kucopy na kupaste, lazima ubonyeze BET kule 1Win kwanza ndipo uombe signal hapa.
+                1. <b>Hash & Salt:</b> Nakili data kutoka sehemu ya 'Provably Fair' ndani ya 1Win Mines.<br>
+                2. <b>Order:</b> Paste hapa, bonyeza <b>BET</b> kule 1Win, kisha uombe signal.<br>
+                3. <b>Mzunguko:</b> Cheza raundi nne (4) tu mfululizo kwa ushindi wa 99.8%.<br>
+                4. <b>Pumziko:</b> Baada ya raundi 4, pumzika dakika 10 kulinda ushindi wako.<br>
+                5. <b>Source:</b> Betting ya 1Win ndio pekee ya kupata Hash na Salt halali.<br>
+                6. <b>Siri:</b> Baada ya kucopy data, lazima ubonyeze <b>BET</b> kule 1Win kwanza kabla ya kubonyeza batani ya PATA SIGNAL hapa.
                 </div>
                 <a href="${wsLink}" class="m-link" target="_blank">JIUNGE NA WHATSAPP KWA MSAADA</a>`
             },
@@ -152,24 +186,19 @@
                 mBody: `
                 <div class="m-section">1. WINNING STEPS</div>
                 <div class="m-text">
-                1. <b>Hash & Salt:</b> Get these from 'Provably Fair' settings in 1Win Mines.<br>
-                2. <b>Procedure:</b> Paste data here, go to 1Win and press <b>BET</b> first, then return here to press <b>GET SIGNAL</b>.<br>
-                3. <b>Rounds:</b> Play only 4 consecutive rounds for a 99.8% win rate.<br>
-                4. <b>Resting:</b> After 4 rounds, you must wait 10 minutes to avoid system detection.
-                </div>
-                <div class="m-section">2. PRO TIPS</div>
-                <div class="m-text">
-                5. <b>1Win Source:</b> 1Win betting area is the only source for Hash and Salt.<br>
-                6. <b>Order:</b> After pasting, you must press BET on 1Win first before requesting the signal here.
+                1. <b>Hash & Salt:</b> Copy from 'Provably Fair' settings in 1Win Mines.<br>
+                2. <b>Procedure:</b> Paste here, press <b>BET</b> on 1Win first, then get signal.<br>
+                3. <b>Rounds:</b> Play 4 consecutive rounds only for 99.8% win rate.<br>
+                4. <b>Rest:</b> After 4 rounds, wait 10 minutes to protect your profit.<br>
+                5. <b>1Win Source:</b> Get your valid Hash and Salt from the 1Win betting area.<br>
+                6. <b>Important:</b> Always press <b>BET</b> on 1Win after pasting data but BEFORE clicking GET SIGNAL here.
                 </div>
                 <a href="${wsLink}" class="m-link" target="_blank">JOIN WHATSAPP FOR SUPPORT</a>`
             }
         };
 
         function unlock() { if(document.getElementById('accessKey').value === 'Mr winner123') { document.getElementById('loginOverlay').style.display = 'none'; if (audioCtx.state === 'suspended') audioCtx.resume(); } }
-
         function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); document.getElementById('langBtn').innerText = "LANG: " + currentLang.toUpperCase(); refreshUI(); }
-
         function toggleMute() { muted = !muted; document.getElementById('volBtn').innerText = "SOUND: " + (muted ? "OFF" : "ON"); }
         
         function refreshUI() {
@@ -235,7 +264,7 @@
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
             let seed = 0;
-            let str = h + s + roundIdx + "ULTRA_99.8_STABLE";
+            let str = h + s + roundIdx + "ULTRA_10.0_SAFE";
             for(let i=0; i<str.length; i++) seed = ((seed << 5) - seed) + str.charCodeAt(i);
             
             let tSeed = Math.abs(seed);
@@ -256,7 +285,7 @@
             document.getElementById('saltIn').value = "";
             
             if(roundIdx >= 4) {
-                playJackpot(); // Jackpot sound after 4th round
+                playJackpot();
                 startCD();
             } else {
                 playSound(880, 'sine', 0.3);
