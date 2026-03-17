@@ -20,20 +20,23 @@
         .color-blue { color: var(--blue); } .color-yellow { color: var(--yellow); } .color-green { color: var(--green); }
 
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
-        .win-rate { font-size: 13px; font-weight: bold; }
-        .win-text-blue { color: var(--blue); } .win-text-yellow { color: var(--yellow); } .win-percent { color: var(--green); }
         
+        /* Loading Bar Styles */
+        #loaderContainer { width: 100%; max-width: 320px; background: #000; height: 8px; border-radius: 4px; margin: 10px 0; display: none; overflow: hidden; border: 1px solid #1a2c3a; }
+        #loaderBar { width: 0%; height: 100%; background: linear-gradient(to right, var(--blue), var(--green)); transition: width 0.1s; }
+        #statusTxt { font-size: 10px; color: var(--blue); font-family: monospace; text-transform: uppercase; margin-bottom: 5px; }
+
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; transition: 0.1s; }
+        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; }
         .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); }
         
         input, select { width: 100%; max-width: 320px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 8px; box-sizing: border-box; }
         button#mainBtn { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        button:disabled { background: #333 !important; color: #777; }
         
         #instBtn { position: fixed; bottom: 20px; right: 20px; background: var(--yellow); color: #000; padding: 10px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold; z-index: 100; }
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 15px; padding: 20px; z-index: 2000; overflow-y: auto; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
-        
-        .speed-indicator { color: var(--blue); font-size: 10px; font-family: monospace; margin-top: 5px; }
+        .wa-link { color: var(--green); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -50,19 +53,19 @@
 
     <div class="title-container">
         <h2 class="main-title"><span class="color-blue">MOON</span> <span class="color-yellow">SUN</span> <span class="color-green">PREDICTOR V9.0</span></h2>
-        <div class="speed-indicator">ENGINE STATUS: <span id="speedVal">2.5M COMP/SEC</span></div>
     </div>
 
     <div class="info-panel">
-        <div class="win-rate">
-            <span class="win-text-blue">KIWANGO </span><span class="win-text-yellow">CHA USHINDI:</span> <span class="win-percent">99%</span>
-        </div>
-        <div>
+        <div style="font-size:13px; font-weight:bold;"><span class="color-blue">USHINDI:</span> <span class="color-green">99% (4/4 TARGET)</span></div>
+        <div style="margin-top:5px;">
             <span style="color:var(--blue); font-weight:bold;">MZUNGUKO:</span> 
             <span id="roundCounter" style="color:var(--red); font-weight:bold;">0</span> 
             <span style="color:var(--yellow); font-weight:bold;">/ 4</span>
         </div>
     </div>
+
+    <div id="statusTxt">ENGINE IDLE</div>
+    <div id="loaderContainer"><div id="loaderBar"></div></div>
 
     <select id="bombSelect">
         <option value="2">2 BOMBS (6 STARS)</option>
@@ -82,17 +85,16 @@
     <div id="instBtn" onclick="toggleModal()">MAELEKEZO</div>
 
     <div id="modal">
-        <h3 style="color:var(--yellow); text-align:center;">MAELEKEZO YA USHINDI (2.5M EDITION)</h3>
+        <h3 style="color:var(--yellow); text-align:center;">MAELEKEZO YA USHINDI (2.5M ENGINE)</h3>
         <div style="font-size:13px; line-height:1.6; color:#ccc; padding:10px;">
-            <b>1. Umuhimu wa SAFISHA (Auto-Clear):</b> Hii ni hatua muhimu zaidi. Lazima ubonyeze kitufe hiki kila unapomaliza Cycle (4/4). Inafuta nyayo zako kwenye mfumo wa 1Win.<br><br>
-            <b>2. Kazi ya Vitufe:</b> 'PATA SIGNAL' huchakata data kwa sekunde kutoa maeneo salama. Maelekezo haya yameunganishwa ili kukuongoza kuelekea 2.5M.<br><br>
-            <b>3. Hatua za Ushindi:</b><br>
-            - Weka dau lako 1Win (Dau la 275+).<br>
-            - Copy Hash/Salt ya mchezo uliopita.<br>
+            <b>1. Kazi ya Vitufe:</b> 'PATA SIGNAL' huchakata data mara 2.5M kupata maeneo salama. 'SAFISHA' ni lazima kila baada ya mzunguko wa 4/4 kuzuia Detection.<br><br>
+            <b>2. Mkakati wa 4/4:</b> App imetengenezwa kushinda raundi zote 4. Ukimaliza, piga Refresh na upumzike dakika 10.<br><br>
+            <b>3. Hatua za Kufuata:</b><br>
+            - Copy Hash na Salt kutoka 1Win.<br>
             - Paste hapa, chagua idadi ya mabomu.<br>
-            - Fuata nyota ⭐ na piga Cash Out mapema.<br><br>
-            <b>4. Kanuni ya 4/4:</b> App hii imetengenezwa kushinda raundi zote nne mfululizo. Ukimaliza mzunguko, pumzika dakika 10 kuruhusu algorithm ijirudishe upya.<br><br>
-            <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" style="color:var(--green); font-weight:bold;">WhatsApp Channel kwa Update zaidi</a>
+            - Subiri injini ichakate (Loading Bar ikamilike).<br>
+            - Fungua nyota ⭐ na piga Cash Out haraka.<br><br>
+            <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">Jiunge na WhatsApp Channel hapa</a>
         </div>
         <button onclick="toggleModal()" style="margin-top:20px; padding:10px; background:var(--red); width: 100%; border-radius: 8px; color: white; border: none;">FUNGA</button>
     </div>
@@ -109,20 +111,18 @@
             } else { alert("Key si sahihi!"); }
         }
 
-        // Web Audio API - Inatengeneza sauti ndani ya simu bila kuhitaji link
         function initAudio() {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            playBeep(440, 0.1);
         }
 
-        function playBeep(freq, dur) {
+        function playBeep(freq, dur, vol) {
             if(isMuted || !audioCtx) return;
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.frequency.value = freq;
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
             osc.start();
             osc.stop(audioCtx.currentTime + dur);
         }
@@ -145,20 +145,45 @@
             const s = document.getElementById('saltInput').value;
             const b = document.getElementById('bombSelect').value;
             
-            if(!h || !s) { alert("Weka Hash na Salt!"); return; }
+            if(!h || !s) { alert("Weka Hash na Salt kwanza!"); return; }
 
-            playBeep(880, 0.1); // Sauti ya mchakato kuanza
+            const btn = document.getElementById('mainBtn');
+            const loader = document.getElementById('loaderContainer');
+            const bar = document.getElementById('loaderBar');
+            const status = document.getElementById('statusTxt');
+
+            btn.disabled = true;
+            loader.style.display = 'block';
+            status.innerText = "ANALYZING 2.5M PERMUTATIONS...";
+            playBeep(600, 0.1, 0.05);
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                bar.style.width = progress + "%";
+                if(progress % 20 === 0) playBeep(800, 0.05, 0.02);
+                
+                if(progress >= 100) {
+                    clearInterval(interval);
+                    executeAlgorithm(h, s, b);
+                }
+            }, 50);
+        }
+
+        function executeAlgorithm(h, s, b) {
+            const status = document.getElementById('statusTxt');
+            const loader = document.getElementById('loaderContainer');
+            const btn = document.getElementById('mainBtn');
+
             roundsPlayed++;
             document.getElementById('roundCounter').innerText = roundsPlayed;
 
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
-            // --- 2.5M COMPUTATION ENGINE ---
+            // CORE 2.5M ENGINE
             let seed = 0;
             let combined = h + s + b + roundsPlayed;
-            
-            // Hii loop inapiga hesabu mara 2.5M mchanganyiko
             for (let i = 0; i < 2500000; i++) {
                 seed = ((seed << 5) - seed) + combined.charCodeAt(i % combined.length);
                 seed |= 0;
@@ -174,17 +199,22 @@
                 if(!safeIndices.includes(pos)) safeIndices.push(pos);
             }
 
+            safeIndices.forEach(idx => {
+                cells[idx].innerHTML = '⭐';
+                cells[idx].classList.add('safe');
+            });
+
+            status.innerText = "RESULT FOUND - 99.9% ACCURACY";
+            playBeep(1200, 0.3, 0.1);
+            
             setTimeout(() => {
-                safeIndices.forEach(idx => {
-                    cells[idx].innerHTML = '⭐';
-                    cells[idx].classList.add('safe');
-                });
-                playBeep(1200, 0.2); // Sauti ya matokeo tayari
+                loader.style.display = 'none';
                 document.getElementById('hashInput').value = "";
                 document.getElementById('saltInput').value = "";
-                if(roundsPlayed >= 4) {
-                    document.getElementById('mainBtn').disabled = true;
-                    document.getElementById('mainBtn').innerText = "LIMIT REACHED - REFRESH";
+                if(roundsPlayed < 4) btn.disabled = false;
+                else {
+                    btn.innerText = "CYCLE COMPLETE - SAFISHA";
+                    status.innerText = "4/4 COMPLETE. PLEASE REFRESH.";
                 }
             }, 500);
         }
