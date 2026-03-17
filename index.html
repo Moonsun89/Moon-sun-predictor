@@ -6,70 +6,60 @@
     <title>MOON SUN PREDICTOR V9.2 PRO</title>
     <style>
         :root { --bg: #05080a; --card: #0d1217; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --text: #ffffff; --red: #ff3333; }
-        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; transition: 0.3s; }
         
-        #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5000; }
-        
-        .snd-container { position: fixed; top: 10px; left: 10px; z-index: 1000; display: flex; flex-direction: column; gap: 5px; background: rgba(13, 18, 23, 0.9); padding: 8px; border-radius: 8px; border: 1px solid var(--blue); }
-        .snd-btn { background: var(--blue); color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 10px; cursor: pointer; font-weight: bold; }
+        .header-controls { position: fixed; top: 10px; width: 95%; display: flex; justify-content: space-between; z-index: 1000; }
+        .ctrl-btn { background: var(--blue); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold; border: 1px solid rgba(255,255,255,0.1); }
 
         .title-container { text-align: center; margin-bottom: 10px; margin-top: 60px; }
-        .main-title { font-size: 22px; font-weight: 800; text-transform: uppercase; margin: 0; letter-spacing: 1px; }
-        .sub-title { font-size: 14px; color: var(--blue); font-weight: bold; margin-top: 5px; letter-spacing: 2px; }
-        
-        .color-blue { color: var(--blue); } .color-yellow { color: var(--yellow); } .color-green { color: var(--green); }
+        .main-title { font-size: 20px; font-weight: 800; text-transform: uppercase; margin: 0; letter-spacing: 1px; }
+        .sub-title { font-size: 13px; color: var(--blue); font-weight: bold; margin-top: 4px; letter-spacing: 1.5px; }
 
-        .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
-        
-        #winRateDisplay { color: var(--green); font-weight: bold; font-size: 14px; margin-bottom: 5px; }
+        .info-panel { background: var(--card); padding: 15px; border-radius: 12px; margin: 15px 0; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .win-rate { font-size: 16px; font-weight: bold; color: var(--green); margin-bottom: 8px; }
+        .round-txt { font-size: 14px; color: var(--yellow); font-weight: bold; }
 
-        #loaderContainer { width: 100%; max-width: 320px; background: #000; height: 6px; border-radius: 3px; margin: 10px 0; display: none; overflow: hidden; border: 1px solid #1a2c3a; }
+        #loaderContainer { width: 100%; max-width: 320px; background: #000; height: 6px; border-radius: 3px; margin: 10px 0; display: none; overflow: hidden; }
         #loaderBar { width: 0%; height: 100%; background: linear-gradient(to right, var(--blue), var(--green)); }
         #statusTxt { font-size: 10px; color: var(--blue); font-family: monospace; text-transform: uppercase; margin-bottom: 5px; height: 12px; }
 
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; transition: transform 0.1s; }
-        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); transform: scale(1.05); }
+        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; }
+        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0,255,136,0.1); }
         
         input, select { width: 100%; max-width: 320px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 8px; box-sizing: border-box; outline: none; }
         button#mainBtn { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         
         #instBtn { position: fixed; bottom: 20px; right: 20px; background: var(--yellow); color: #000; padding: 10px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold; z-index: 100; }
-        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 15px; padding: 20px; z-index: 2000; overflow-y: auto; box-shadow: 0 0 40px rgba(0,0,0,1); }
+        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 15px; padding: 20px; z-index: 2000; overflow-y: auto; }
+        .wa-link { color: var(--green); text-decoration: none; font-weight: bold; word-break: break-all; }
     </style>
 </head>
 <body>
 
-    <div class="snd-container">
-        <button class="snd-btn" id="muteToggle" onclick="toggleMute()">SAUTI: ON</button>
-    </div>
-
-    <div id="loginScreen">
-        <h2 class="color-blue">MOON SUN ACCESS</h2>
-        <input type="password" id="accessKey" placeholder="Weka Neno la Siri">
-        <button onclick="checkKey()" style="width:200px; background:var(--blue); color:white; border:none; padding:12px; border-radius:8px; font-weight:bold;">LOGIN</button>
+    <div class="header-controls">
+        <button class="ctrl-btn" id="langBtn" onclick="toggleLanguage()">EN / SW</button>
+        <button class="ctrl-btn" id="muteToggle" onclick="toggleMute()">SND: ON</button>
     </div>
 
     <div class="title-container">
-        <h2 class="main-title"><span class="color-blue">MOON</span> <span class="color-yellow">SUN</span> <span class="color-green">PREDICTOR V9.2 PRO</span></h2>
-        <div class="sub-title">MINES 1WIN PREDICTOR</div>
+        <h2 class="main-title" id="appTitle"><span class="color-blue">MOON</span> <span class="color-yellow">SUN</span> <span class="color-green">V9.2 PRO</span></h2>
+        <div class="sub-title" id="appSubtitle">MINES 1WIN PREDICTOR</div>
     </div>
 
     <div class="info-panel">
-        <div id="winRateDisplay">KIWANGO CHA USHINDI: 98%</div>
-        <div style="font-size: 13px; font-weight: bold; color: var(--yellow);">
-            MZUNGUKO: <span id="roundCounter" style="color:var(--red);">0</span> / 4
-        </div>
+        <div class="win-rate" id="winRateDisplay">KIWANGO CHA USHINDI: 98%</div>
+        <div class="round-txt" id="roundDisplay">MZUNGUKO: 0 / 4</div>
     </div>
 
-    <div id="statusTxt">MFUMO TAYARI</div>
+    <div id="statusTxt">READY / TAYARI</div>
     <div id="loaderContainer"><div id="loaderBar"></div></div>
 
     <select id="bombSelect" onchange="updateWinRate()">
-        <option value="2">MABOMU 2</option>
-        <option value="3">MABOMU 3</option>
-        <option value="5">MABOMU 5</option>
-        <option value="7">MABOMU 7</option>
+        <option value="2" id="optB2">MABOMU 2</option>
+        <option value="3" id="optB3">MABOMU 3</option>
+        <option value="5" id="optB5">MABOMU 5</option>
+        <option value="7" id="optB7">MABOMU 7</option>
     </select>
     
     <input type="text" id="hashInput" placeholder="Hash ya Raundi Iliyopita...">
@@ -78,68 +68,104 @@
     <div class="grid" id="grid"></div>
 
     <button id="mainBtn" onclick="processSignal()">PATA SIGNAL 🚀</button>
-    <button onclick="location.reload()" style="background:#1a2c3a; color:#888; font-size:11px; margin-top:10px; padding:10px; width: 100%; max-width:340px; border-radius:8px; border:none; cursor:pointer;">🔄 SAFISHA / AUTO-CLEAR</button>
+    <button id="clearBtn" onclick="location.reload()" style="background:#1a2c3a; color:#888; font-size:11px; margin-top:10px; padding:10px; width: 100%; max-width:340px; border-radius:8px; border:none; cursor:pointer;">🔄 SAFISHA / AUTO-CLEAR</button>
 
-    <div id="instBtn" onclick="toggleModal()">MAELEKEZO</div>
+    <div id="instBtn" onclick="toggleModal()">GUIDE / MAELEKEZO</div>
 
     <div id="modal">
-        <h3 style="color:var(--yellow); text-align:center;">MAELEKEZO YA USHINDI (V9.2 PRO)</h3>
-        <div style="font-size:13px; line-height:1.7; color:#ccc; padding:10px;">
-            <b style="color:var(--blue);">1. Matumizi ya Batani:</b><br>
-            1. <b>PATA SIGNAL:</b> Huchakata data mara milioni 2.5 kupata ramani ya ushindi.<br>
-            2. <b>SAFISHA:</b> Hufuta kumbukumbu (cache) ili kuzuia seva isikutambue.<br>
-            3. <b>SAUTI:</b> Huwasha/Zima milio ya uchakataji wa data.<br><br>
-
-            <b style="color:var(--blue);">2. Hatua za Ushindi:</b><br>
-            1. Ingia kwenye akaunti yako ya 1Win.<br>
-            2. <b>Muhimu:</b> Bonyeza <b>BET</b> kwanza ukiwa na dau lako (Mfano: 275+).<br>
-            3. Nakili (Copy) <b>Hash</b> na <b>Salt</b> kutoka kwenye mchezo uliopita.<br>
-            4. Paste hapa kwenye App, kisha bonyeza <b>PATA SIGNAL</b>.<br>
-            5. Ramani itatokea, fungua nyota ⭐ na upige <b>Cash Out</b> haraka.<br><br>
-            
-            <b>Kwa maelekezo zaidi fuata/join hii channel:</b><br>
-            <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" style="color:var(--green); text-decoration:none; word-break:break-all;">https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336</a>
-        </div>
-        <button onclick="toggleModal()" style="margin-top:20px; padding:12px; background:var(--red); width: 100%; border-radius: 8px; color: white; border: none; font-weight: bold; cursor:pointer;">FUNGA</button>
+        <h3 id="modTitle" style="color:var(--yellow); text-align:center;">MAELEKEZO YA USHINDI (V9.2 PRO)</h3>
+        <div id="modContent" style="font-size:13px; line-height:1.6; color:#ccc;">
+            </div>
+        <button id="closeMod" onclick="toggleModal()" style="margin-top:20px; padding:12px; background:var(--red); width: 100%; border-radius: 8px; color: white; border: none; font-weight: bold;">FUNGA / CLOSE</button>
     </div>
 
     <script>
         let roundsPlayed = 0;
         let isMuted = false;
+        let currentLang = 'sw';
         let audioCtx = null;
 
-        function checkKey() {
-            if(document.getElementById('accessKey').value === "Mr winner123") {
-                document.getElementById('loginScreen').style.display = 'none';
-                initAudio();
-            } else { alert("Neno la siri si sahihi!"); }
+        const langData = {
+            sw: {
+                winRate: "KIWANGO CHA USHINDI: ",
+                round: "MZUNGUKO: ",
+                status: "MFUMO TAYARI",
+                loading: "CHAKACHUA DATA 2.5M...",
+                btnSignal: "PATA SIGNAL 🚀",
+                btnClear: "🔄 SAFISHA / AUTO-CLEAR",
+                phHash: "Hash ya Raundi Iliyopita...",
+                phSalt: "Salt ya Raundi Iliyopita...",
+                modTitle: "MAELEKEZO YA USHINDI",
+                modContent: `
+                    <b style="color:var(--blue);">1. Matumizi ya Batani:</b><br>
+                    1. <b>PATA SIGNAL:</b> Inachakata data milioni 2.5 kupata ramani salama.<br>
+                    2. <b>SAFISHA:</b> Inafuta cache kuzuia 1Win isikugundue.<br>
+                    3. <b>SND:</b> Inazima au kuwasha milio ya uchakataji.<br><br>
+                    <b style="color:var(--blue);">2. Hatua za Ushindi:</b><br>
+                    1. Fungua akaunti yako ya 1Win.<br>
+                    2. <b>Hatua Muhimu:</b> Bonyeza <b>BET</b> kwanza ukiwa na dau lako.<br>
+                    3. Copy <b>Hash</b> na <b>Salt</b> kutoka raundi iliyopita.<br>
+                    4. Paste kodi hizo hapa kisha omba signal.<br>
+                    5. Fungua nyota ⭐ sehemu husika na upige Cash Out.<br><br>
+                    <b>Kwa maelekezo zaidi fuata hii channel:</b><br>
+                    <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336</a>`
+            },
+            en: {
+                winRate: "WIN RATE: ",
+                round: "ROUND: ",
+                status: "SYSTEM READY",
+                loading: "PROCESSING 2.5M DATA...",
+                btnSignal: "GET SIGNAL 🚀",
+                btnClear: "🔄 CLEAR / AUTO-CLEAR",
+                phHash: "Previous Round Hash...",
+                phSalt: "Previous Round Salt...",
+                modTitle: "VICTORY GUIDELINES",
+                modContent: `
+                    <b style="color:var(--blue);">1. Button Usage:</b><br>
+                    1. <b>GET SIGNAL:</b> Processes 2.5M data points for safe zones.<br>
+                    2. <b>CLEAR:</b> Clears cache to avoid 1Win detection.<br>
+                    3. <b>SND:</b> Toggles processing sound ON/OFF.<br><br>
+                    <b style="color:var(--blue);">2. Winning Steps:</b><br>
+                    1. Open your 1Win account.<br>
+                    2. <b>Crucial Step:</b> Press <b>BET</b> first with your stake.<br>
+                    3. Copy <b>Hash</b> and <b>Salt</b> from the previous round.<br>
+                    4. Paste codes here then request signal.<br>
+                    5. Open stars ⭐ as shown and Cash Out immediately.<br><br>
+                    <b>For more instructions, follow this channel:</b><br>
+                    <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336</a>`
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'sw' ? 'en' : 'sw';
+            updateUI();
         }
 
-        function initAudio() { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-
-        function playBeep(freq, dur, vol) {
-            if(isMuted || !audioCtx) return;
-            try {
-                let osc = audioCtx.createOscillator();
-                let gain = audioCtx.createGain();
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-                osc.start(); osc.stop(audioCtx.currentTime + dur);
-            } catch(e) {}
-        }
-
-        function toggleMute() {
-            isMuted = !isMuted;
-            document.getElementById('muteToggle').innerText = isMuted ? "SAUTI: OFF" : "SAUTI: ON";
-            document.getElementById('muteToggle').style.background = isMuted ? "var(--red)" : "var(--blue)";
+        function updateUI() {
+            const data = langData[currentLang];
+            document.getElementById('roundDisplay').innerText = data.round + roundsPlayed + " / 4";
+            document.getElementById('statusTxt').innerText = data.status;
+            document.getElementById('mainBtn').innerText = data.btnSignal;
+            document.getElementById('clearBtn').innerText = data.btnClear;
+            document.getElementById('hashInput').placeholder = data.phHash;
+            document.getElementById('saltInput').placeholder = data.phSalt;
+            document.getElementById('modTitle').innerText = data.modTitle;
+            document.getElementById('modContent').innerHTML = data.modContent;
+            updateWinRate();
         }
 
         function updateWinRate() {
             const b = document.getElementById('bombSelect').value;
             const rates = { "2": "98%", "3": "95%", "5": "85%", "7": "75%" };
-            document.getElementById('winRateDisplay').innerText = "KIWANGO CHA USHINDI: " + rates[b];
+            document.getElementById('winRateDisplay').innerText = langData[currentLang].winRate + rates[b];
         }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('muteToggle').innerText = "SND: " + (isMuted ? "OFF" : "ON");
+        }
+
+        function initAudio() { if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
 
         const grid = document.getElementById('grid');
         for (let i = 0; i < 25; i++) {
@@ -149,44 +175,38 @@
         }
 
         function processSignal() {
+            initAudio();
             const h = document.getElementById('hashInput').value;
             const s = document.getElementById('saltInput').value;
-            const b = document.getElementById('bombSelect').value;
             if(!h || !s) { alert("Weka Hash na Salt!"); return; }
 
             const btn = document.getElementById('mainBtn');
             const loader = document.getElementById('loaderContainer');
             const bar = document.getElementById('loaderBar');
-            const status = document.getElementById('statusTxt');
-
+            
             btn.disabled = true;
             loader.style.display = 'block';
-            status.innerText = "CHAKACHUA DATA 2.5M...";
-            playBeep(440, 0.05, 0.05);
+            document.getElementById('statusTxt').innerText = langData[currentLang].loading;
 
             let progress = 0;
             const interval = setInterval(() => {
                 progress += 10;
                 bar.style.width = progress + "%";
-                if(progress % 30 === 0) playBeep(600, 0.03, 0.02);
                 if(progress >= 100) {
                     clearInterval(interval);
-                    executeAlgorithm(h, s, b);
+                    executeAlgorithm(h, s, document.getElementById('bombSelect').value);
                 }
             }, 30);
         }
 
         function executeAlgorithm(h, s, b) {
-            const status = document.getElementById('statusTxt');
-            const loader = document.getElementById('loaderContainer');
-            const btn = document.getElementById('mainBtn');
-
             roundsPlayed++;
-            document.getElementById('roundCounter').innerText = roundsPlayed;
+            updateUI();
 
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
+            // ENGINE 2.5M
             let seed = 0;
             let combined = h + s + b + roundsPlayed + Math.random();
             for (let i = 0; i < 2500000; i++) {
@@ -209,25 +229,19 @@
                 cells[idx].classList.add('safe');
             });
 
-            status.innerText = "USHINDI 4/4 UMEHAKIKISHWA!";
-            playBeep(1000, 0.2, 0.1);
+            document.getElementById('loaderContainer').style.display = 'none';
+            document.getElementById('statusTxt').innerText = currentLang === 'sw' ? "DONE - USHINDI 4/4" : "DONE - 4/4 VICTORY";
             
-            setTimeout(() => {
-                loader.style.display = 'none';
-                document.getElementById('hashInput').value = "";
-                document.getElementById('saltInput').value = "";
-                if(roundsPlayed < 4) btn.disabled = false;
-                else {
-                    btn.innerText = "MZUNGUKO UMEISHA - SAFISHA";
-                    status.innerText = "4/4 DONE. TAFADHALI SAFISHA.";
-                }
-            }, 400);
+            if(roundsPlayed < 4) document.getElementById('mainBtn').disabled = false;
+            else document.getElementById('mainBtn').innerText = currentLang === 'sw' ? "TARGET DONE" : "TARGET REACHED";
         }
 
         function toggleModal() {
             const m = document.getElementById('modal');
             m.style.display = m.style.display === 'block' ? 'none' : 'block';
         }
+
+        window.onload = updateUI;
     </script>
 </body>
 </html>
