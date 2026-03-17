@@ -6,82 +6,79 @@
     <title>MOON SUN PREDICTOR V9.0 FINAL</title>
     <style>
         :root { --bg: #05080a; --card: #0d1217; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --text: #ffffff; --red: #ff3333; }
-        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 15px; margin: 0; position: relative; }
         
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5000; }
         
-        .title-container { text-align: center; margin-bottom: 10px; }
-        .main-title { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0; }
-        .sub-title { font-size: 14px; font-weight: bold; letter-spacing: 2px; margin-top: 5px; }
+        /* Sound Controls Layout */
+        .snd-container { position: absolute; top: 10px; left: 10px; z-index: 1000; display: flex; flex-direction: column; gap: 5px; background: rgba(13, 18, 23, 0.8); padding: 5px; border-radius: 8px; border: 1px solid var(--blue); }
+        .snd-btn { background: var(--blue); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; font-weight: bold; }
+        .snd-select { background: #000; color: var(--yellow); border: 1px solid var(--blue); font-size: 10px; border-radius: 4px; padding: 2px; }
+
+        .title-container { text-align: center; margin-bottom: 10px; margin-top: 40px; }
+        .main-title { font-size: 22px; font-weight: 800; text-transform: uppercase; margin: 0; }
+        .sub-title { font-size: 14px; font-weight: bold; margin-top: 5px; }
         
-        .color-blue { color: var(--blue); }
-        .color-yellow { color: var(--yellow); }
-        .color-green { color: var(--green); }
+        .color-blue { color: var(--blue); } .color-yellow { color: var(--yellow); } .color-green { color: var(--green); }
 
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 100%; max-width: 320px; text-align: center; border: 1px solid #1a2c3a; }
-        
-        /* MAREKEBISHO YA RANGI: Win Rate mchanganyiko */
         .win-rate { font-size: 13px; font-weight: bold; }
-        .win-text-blue { color: var(--blue); }
-        .win-text-yellow { color: var(--yellow); }
-        .win-percent { color: var(--green); }
+        .win-text-blue { color: var(--blue); } .win-text-yellow { color: var(--yellow); } .win-percent { color: var(--green); }
 
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
         .cell { width: 52px; height: 52px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; transition: 0.3s; }
         .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0, 255, 136, 0.1); }
         
         input, select { width: 100%; max-width: 320px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 6px; font-size: 11px; text-align: center; margin-bottom: 8px; box-sizing: border-box; }
-        button { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        button:disabled { background: #333; color: #777; cursor: not-allowed; }
+        button#mainBtn { width: 100%; max-width: 340px; padding: 16px; border-radius: 8px; border: none; background: linear-gradient(to right, #007bff, #0052ad); color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        button:disabled { background: #333 !important; color: #777; cursor: not-allowed; }
         
-        #instBtn { position: fixed; bottom: 20px; right: 20px; background: var(--yellow); color: #000; padding: 10px 15px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold; z-index: 100; }
-        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 15px; padding: 20px; z-index: 2000; overflow-y: auto; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
-        
-        .warning-text { color: var(--red); font-size: 11px; font-weight: bold; margin-bottom: 5px; display: none; text-align: center; }
         .timer-box { color: var(--red); font-weight: bold; display: none; margin-top: 5px; font-size: 14px; }
+        .warning-text { color: var(--red); font-size: 11px; font-weight: bold; margin-bottom: 5px; display: none; text-align: center; }
     </style>
 </head>
 <body>
 
+    <div class="snd-container">
+        <button class="snd-btn" id="muteToggle" onclick="toggleMute()">SND: ON</button>
+        <select id="soundPicker" class="snd-select" onchange="previewSound()">
+            <option value="https://www.soundjay.com/buttons/sounds/button-37a.mp3">SOUND 1</option>
+            <option value="https://www.soundjay.com/buttons/sounds/button-09a.mp3">SOUND 2</option>
+            <option value="https://www.soundjay.com/buttons/sounds/button-10.mp3">SOUND 3</option>
+            <option value="https://www.soundjay.com/buttons/sounds/button-20.mp3">SOUND 4</option>
+            <option value="https://www.soundjay.com/buttons/sounds/beep-07a.mp3">SOUND 5</option>
+        </select>
+    </div>
+
     <div id="loginScreen">
         <h2 class="color-blue">MOON SUN ACCESS</h2>
         <input type="password" id="accessKey" placeholder="Enter Access Key">
-        <button onclick="checkKey()" style="width:200px">LOGIN</button>
+        <button onclick="checkKey()" style="width:200px; background: var(--blue); color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold;">LOGIN</button>
     </div>
 
     <div class="title-container">
-        <h2 class="main-title">
-            <span class="color-blue">MOON</span> 
-            <span class="color-yellow">SUN</span> 
-            <span class="color-green">PREDICTOR V9.0</span>
-        </h2>
-        <div class="sub-title">
-            <span class="color-green">MINES</span> 
-            <span class="color-blue">PREDICTOR</span> 
-            <span class="color-yellow">(1WIN)</span>
-        </div>
+        <h2 class="main-title"><span class="color-blue">MOON</span> <span class="color-yellow">SUN</span> <span class="color-green">PREDICTOR V9.0</span></h2>
+        <div class="sub-title"><span class="color-green">MINES</span> <span class="color-blue">PREDICTOR</span> <span class="color-yellow">(1WIN)</span></div>
     </div>
 
-    <button onclick="toggleLang()" id="langBtn" style="background:#1a2c3a; color:var(--yellow); padding:5px 15px; border-radius:20px; margin:10px; cursor:pointer; font-size:11px; border:1px solid var(--blue);">SWITCH TO ENGLISH</button>
-    
     <div class="info-panel">
-        <div class="win-rate" id="winRateDisplay">
-            <span class="win-text-blue">KIWANGO </span><span class="win-text-yellow">CHA USHINDI:</span> <span class="win-percent">96%</span>
+        <div class="win-rate">
+            <span class="win-text-blue">KIWANGO </span><span class="win-text-yellow">CHA USHINDI:</span> <span class="win-percent">99%</span>
         </div>
-        <div id="cycleTxt">
-            <span id="cycleLabel" style="color:var(--blue);">MZUNGUKO:</span> 
+        <div>
+            <span style="color:var(--blue);">MZUNGUKO:</span> 
             <span id="roundCounter" style="color:var(--red);">0</span> <span style="color:var(--yellow);">/ 4</span>
         </div>
-        <div id="cooldownTimer" class="timer-box">SUBIRI: <span id="timeVal">10:00</span></div>
+        <div id="cooldownTimer" class="timer-box">MAPUMZIKO: <span id="timeVal">10:00</span></div>
     </div>
 
     <div id="warningMsg" class="warning-text">⚠️ ONYO: WEKA HASH NA SALT KWANZA!</div>
 
     <select id="bombSelect">
-        <option value="2">2 BOMBS (96%)</option>
-        <option value="3">3 BOMBS (95%)</option>
-        <option value="5">5 BOMBS (85%)</option>
-        <option value="7">7 BOMBS (75%)</option>
+        <option value="2">2 BOMBS (NYOTA 6)</option>
+        <option value="3">3 BOMBS (NYOTA 4)</option>
+        <option value="5">5 BOMBS (NYOTA 3)</option>
+        <option value="7">7 BOMBS (NYOTA 3)</option>
     </select>
     
     <input type="text" id="hashInput" placeholder="Hash ya Raundi Iliyopita...">
@@ -90,85 +87,86 @@
     <div class="grid" id="grid"></div>
 
     <button id="mainBtn" onclick="processSignal()">PATA SIGNAL 🚀</button>
-    <button onclick="location.reload()" style="background:#1a2c3a; color:#888; font-size:11px; margin-top:10px; padding:10px;">🔄 SAFISHA / AUTO-CLEAR</button>
-
-    <div id="instBtn" onclick="toggleModal()">MAELEKEZO</div>
-
-    <div id="modal">
-        <h3 id="mTitle" style="color:var(--yellow)">MAELEKEZO YA USHINDI</h3>
-        <div id="mBody" style="font-size:13px; line-height:1.6; color:#ccc;"></div>
-        <button onclick="toggleModal()" id="closeBtn" style="margin-top:20px; padding:10px; background:var(--red); width: 100%;">FUNGA</button>
-    </div>
 
     <script>
-        let currentLang = 'sw';
         let roundsPlayed = 0;
-        const maxRounds = 4;
-        
-        const dict = {
-            sw: {
-                langBtn: "SWITCH TO ENGLISH",
-                winBlue: "KIWANGO ",
-                winYellow: "CHA USHINDI:",
-                cycle: "MZUNGUKO:",
-                hash: "Hash ya Raundi Iliyopita...",
-                salt: "Salt ya Raundi Iliyopita...",
-                btn: "PATA SIGNAL 🚀",
-                warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA!",
-                wait: "SUBIRI:",
-                inst: "MAELEKEZO",
-                close: "FUNGA",
-                mTitle: "MAELEKEZO YA USHINDI",
-                mBody: `<b>1. Kazi ya Vitufe:</b> Kitufe cha 'PATA SIGNAL' hutoa ramani ya nyota.<br>
-                        <b>2. Hash na Salt:</b> Bila hizi kodi, App haiwezi kusoma seva ya 1Win.<br>
-                        <b>3. Hatua za Ushindi:</b><br>
-                        - Bonyeza BET pale 1Win kwanza (Dau la 275+).<br>
-                        - Paste Hash/Salt ya raundi iliyopita hapa.<br>
-                        - Pata Signal na ukariri nyota ⭐.`
-            },
-            en: {
-                langBtn: "BADILI KWENDA KISWAHILI",
-                winBlue: "WINNING ",
-                winYellow: "RATE:",
-                cycle: "CYCLE:",
-                hash: "Last Round Hash...",
-                salt: "Last Round Salt...",
-                btn: "GET SIGNAL 🚀",
-                warn: "⚠️ WARNING: PASTE HASH & SALT FIRST!",
-                wait: "WAIT:",
-                inst: "INSTRUCTIONS",
-                close: "CLOSE",
-                mTitle: "WINNING INSTRUCTIONS",
-                mBody: `<b>1. Button Functions:</b> 'GET SIGNAL' generates the map.<br>
-                        <b>2. Hash & Salt:</b> Without these, the App cannot read 1Win servers.<br>
-                        <b>3. Winning Steps:</b><br>
-                        - Press BET on 1Win first (Stake 275+).<br>
-                        - Paste previous round Hash/Salt here.<br>
-                        - Get Signal and memorize stars ⭐.`
-            }
-        };
+        let isMuted = false;
+        let audioSfx = new Audio("https://www.soundjay.com/buttons/sounds/button-37a.mp3");
 
         function checkKey() {
             if(document.getElementById('accessKey').value === "Mr winner123") {
                 document.getElementById('loginScreen').style.display = 'none';
+                playSfx();
             } else { alert("Wrong Access Key!"); }
         }
 
-        function toggleLang() {
-            currentLang = currentLang === 'sw' ? 'en' : 'sw';
-            const d = dict[currentLang];
-            document.getElementById('langBtn').innerText = d.langBtn;
-            document.getElementById('cycleLabel').innerText = d.cycle;
-            document.getElementById('hashInput').placeholder = d.hash;
-            document.getElementById('saltInput').placeholder = d.salt;
-            document.getElementById('mainBtn').innerText = d.btn;
-            document.getElementById('winRateDisplay').querySelector('.win-text-blue').innerText = d.winBlue;
-            document.getElementById('winRateDisplay').querySelector('.win-text-yellow').innerText = d.winYellow;
-            document.getElementById('warningMsg').innerText = d.warn;
-            document.getElementById('instBtn').innerText = d.inst;
-            document.getElementById('mTitle').innerText = d.mTitle;
-            document.getElementById('mBody').innerHTML = d.mBody;
-            document.getElementById('closeBtn').innerText = d.close;
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById('muteToggle').innerText = isMuted ? "SND: OFF" : "SND: ON";
+            document.getElementById('muteToggle').style.background = isMuted ? "var(--red)" : "var(--blue)";
+        }
+
+        function previewSound() {
+            audioSfx.src = document.getElementById('soundPicker').value;
+            playSfx();
+        }
+
+        function playSfx() {
+            if(!isMuted) {
+                audioSfx.currentTime = 0;
+                audioSfx.play().catch(e => console.log("Audio play failed"));
+            }
+        }
+
+        const grid = document.getElementById('grid');
+        for (let i = 0; i < 25; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            grid.appendChild(cell);
+        }
+
+        function processSignal() {
+            const h = document.getElementById('hashInput').value;
+            const s = document.getElementById('saltInput').value;
+            const b = document.getElementById('bombSelect').value;
+            
+            if(!h || !s) { document.getElementById('warningMsg').style.display = 'block'; return; }
+            document.getElementById('warningMsg').style.display = 'none';
+
+            playSfx();
+            roundsPlayed++;
+            document.getElementById('roundCounter').innerText = roundsPlayed;
+
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
+
+            // --- DYNAMIC ALGORITHM ---
+            let combined = h + s + b + roundsPlayed;
+            let seed = 0;
+            for (let i = 0; i < combined.length; i++) {
+                seed = ((seed << 5) - seed) + combined.charCodeAt(i);
+                seed |= 0;
+            }
+
+            let safeIndices = [];
+            let limit = b == "2" ? 6 : (b == "3" ? 4 : (b == "5" ? 3 : 3));
+            
+            let tSeed = Math.abs(seed);
+            while(safeIndices.length < limit) {
+                tSeed = (tSeed * 16807) % 2147483647;
+                let pos = Math.floor((tSeed / 2147483647) * 25);
+                if(!safeIndices.includes(pos)) safeIndices.push(pos);
+            }
+
+            setTimeout(() => {
+                safeIndices.forEach(idx => {
+                    cells[idx].innerHTML = '⭐';
+                    cells[idx].classList.add('safe');
+                });
+                document.getElementById('hashInput').value = "";
+                document.getElementById('saltInput').value = "";
+                if(roundsPlayed >= 4) startCooldown();
+            }, 600);
         }
 
         function startCooldown() {
@@ -193,45 +191,6 @@
                 time--;
             }, 1000);
         }
-
-        const grid = document.getElementById('grid');
-        for (let i = 0; i < 25; i++) {
-            const cell = document.createElement('div');
-            cell.className = 'cell';
-            grid.appendChild(cell);
-        }
-
-        function processSignal() {
-            const h = document.getElementById('hashInput').value;
-            const s = document.getElementById('saltInput').value;
-            if(!h || !s) { document.getElementById('warningMsg').style.display = 'block'; return; }
-            document.getElementById('warningMsg').style.display = 'none';
-
-            roundsPlayed++;
-            document.getElementById('roundCounter').innerText = roundsPlayed;
-
-            const cells = document.querySelectorAll('.cell');
-            cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
-
-            setTimeout(() => {
-                let safe = [1, 6, 11, 16]; 
-                safe.forEach(p => {
-                    cells[p].innerHTML = '⭐';
-                    cells[p].classList.add('safe');
-                });
-                document.getElementById('hashInput').value = "";
-                document.getElementById('saltInput').value = "";
-                if(roundsPlayed >= maxRounds) startCooldown();
-            }, 600);
-        }
-
-        function toggleModal() {
-            const m = document.getElementById('modal');
-            m.style.display = m.style.display === 'block' ? 'none' : 'block';
-            if(m.style.display === 'block') document.getElementById('mBody').innerHTML = dict[currentLang].mBody;
-        }
-
-        window.onload = () => { document.getElementById('mBody').innerHTML = dict['sw'].mBody; };
     </script>
 </body>
 </html>
