@@ -3,56 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V9.5.2 PRO</title>
+    <title>MOON SUN PREDICTOR V9.5 PRO</title>
     <style>
-        :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; --purp: #8e44ad; }
+        :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; }
 
-        /* Access Key Screen */
+        /* Security Overlay */
         #loginOverlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .login-box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--blue); text-align: center; width: 85%; max-width: 300px; }
 
-        /* Top Bar */
+        /* Navigation */
         .top-nav { width: 95%; display: flex; justify-content: space-between; position: fixed; top: 10px; z-index: 1000; }
         .btn-mini { background: rgba(0,123,255,0.1); color: var(--blue); border: 1px solid var(--blue); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; }
 
-        /* Branding */
+        /* Header */
         .header-section { text-align: center; margin-top: 50px; }
-        .app-name { font-size: 22px; font-weight: 900; margin: 0; text-transform: uppercase; }
-        .c-y { color: var(--yellow); } .c-b { color: var(--blue); } .c-g { color: var(--green); }
+        .app-name { font-size: 21px; font-weight: 900; margin: 0; text-transform: uppercase; }
+        .v-text { color: var(--yellow); } .c-y { color: var(--yellow); } .c-b { color: var(--blue); } .c-g { color: var(--green); }
         .sub-title { font-size: 12px; color: var(--blue); letter-spacing: 2px; font-weight: bold; margin-top: 2px; }
 
-        /* Info & Timer */
+        /* Display Panels */
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 90%; max-width: 340px; text-align: center; border: 1px solid #1a2c3a; }
         .win-l-b { color: var(--blue); font-weight: bold; }
         .win-l-y { color: var(--yellow); font-weight: bold; }
         .round-area { font-size: 17px; font-weight: bold; margin-top: 5px; }
         .curr-r { color: var(--red); } .max-r { color: var(--yellow); }
-        #cooldownDisplay { color: var(--red); font-size: 15px; font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 6px 18px; border-radius: 20px; animation: pulse 1s infinite; }
-        @keyframes pulse { 50% { opacity: 0.6; } }
+        #cooldownDisplay { color: var(--red); font-size: 15px; font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 6px 18px; border-radius: 20px; animation: blinker 1s infinite; }
+        @keyframes blinker { 50% { opacity: 0.3; } }
 
-        /* Warning Text */
-        #warningLabel { color: var(--red); font-size: 12px; font-weight: bold; margin-bottom: 8px; display: none; text-align: center; }
+        /* Warning */
+        #warningLabel { color: var(--red); font-size: 11px; font-weight: bold; margin-bottom: 8px; display: none; text-align: center; }
 
-        /* Grid & Logic */
+        /* Grid */
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid #1b262f; }
+        .cell { width: 50px; height: 50px; background: #12181f; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid #1b262f; }
         .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0,255,136,0.1); }
 
-        #analyticsLog { font-size: 10px; color: #555; font-family: monospace; height: 14px; margin-bottom: 5px; text-align: center; width: 90%; overflow: hidden; }
+        /* Analytics Visuals */
+        #analyticsLog { font-size: 10px; color: #555; font-family: monospace; height: 14px; margin-bottom: 5px; text-align: center; width: 90%; }
         #loaderWrap { width: 90%; max-width: 340px; height: 5px; background: #000; border-radius: 3px; display: none; overflow: hidden; margin-bottom: 15px; border: 1px solid #111; }
         #loaderBar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--green)); }
 
-        /* Inputs & Buttons */
+        /* Main Controls */
         input, select { width: 90%; max-width: 340px; padding: 13px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 10px; margin-bottom: 10px; text-align: center; outline: none; font-size: 12px; }
-        #mainBtn { width: 90%; max-width: 340px; padding: 18px; background: linear-gradient(to right, #007bff, #0052ad); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; }
-        
+        #mainBtn { width: 90%; max-width: 340px; padding: 18px; background: linear-gradient(to right, #007bff, #0052ad); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        #mainBtn:disabled { background: #1a2c3a; color: #555; cursor: not-allowed; }
+
         .action-row { display: flex; width: 90%; max-width: 340px; gap: 10px; margin-top: 15px; align-items: center; }
         #clearBtn { flex: 3; padding: 14px; background: #1a2c3a; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        #instBtn { flex: 1.5; padding: 12px; background: linear-gradient(to bottom right, #9b59b6, #e91e63); color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 10px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        #instBtn { flex: 1.5; padding: 12px; background: var(--yellow); color: #000; border: none; border-radius: 10px; font-weight: bold; font-size: 10px; cursor: pointer; }
 
-        /* Modal Instruction Styling */
-        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 88%; max-height: 80%; background: #0d1217; border: 2px solid var(--blue); border-radius: 20px; padding: 25px; z-index: 10000; overflow-y: auto; }
+        /* Modal Content */
+        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 88%; max-height: 80%; background: #0d1217; border: 2px solid var(--blue); border-radius: 20px; padding: 25px; z-index: 10000; overflow-y: auto; box-shadow: 0 0 50px #000; }
         .m-blue { color: var(--blue); font-weight: bold; }
         .m-green { color: var(--green); font-weight: bold; }
     </style>
@@ -62,8 +64,8 @@
     <div id="loginOverlay">
         <div class="login-box">
             <h3 style="color:var(--yellow); margin-top:0;">ACCESS KEY</h3>
-            <input type="password" id="accessKey" placeholder="Enter Mr winner123...">
-            <button onclick="unlock()" style="width:100%; padding:14px; background:var(--blue); color:white; border:none; border-radius:10px; font-weight:bold;">ENTER SYSTEM</button>
+            <input type="password" id="accessKey" placeholder="Enter Key...">
+            <button onclick="unlock()" style="width:100%; padding:14px; background:var(--blue); color:white; border:none; border-radius:10px; font-weight:bold;">LOGIN</button>
         </div>
     </div>
 
@@ -73,7 +75,7 @@
     </div>
 
     <div class="header-section">
-        <h1 class="app-name"><span class="c-y">MOON</span> <span class="c-b">SUN</span> <span class="c-g">PREDICTOR</span> <span class="c-y">V9.5 PRO</span></h1>
+        <h1 class="app-name"><span class="c-y">MOON</span> <span class="c-b">SUN</span> <span class="c-g">PREDICTOR</span> <span class="v-text">V9.5 PRO</span></h1>
         <div class="sub-title">MINES 1WIN ANALYTICS</div>
     </div>
 
@@ -113,7 +115,7 @@
     </div>
 
     <div id="modal">
-        <h3 id="modalTitle" style="color:var(--yellow); text-align:center; text-decoration:underline;">MAELEKEZO</h3>
+        <h3 id="modalTitle" style="color:var(--yellow); text-align:center;">MAELEKEZO</h3>
         <div id="modalContent"></div>
         <button onclick="toggleModal()" style="width:100%; margin-top:20px; padding:12px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">CLOSE / FUNGA</button>
     </div>
@@ -127,7 +129,7 @@
         const translations = {
             sw: {
                 lText: "KIWANGO CHA", rText: " USHINDI: ", round: "MZUNGUKO", warn: "⚠️ ONYO: HAKIKISHA UNAWEKA HASH NA SALT",
-                btn: "PATA SIGNAL 🚀", wait: "SUBIRI: ",
+                btn: "PATA SIGNAL 🚀", wait: "SUBIRI: ", instBtn: "Maelekezo", cdBtn: "MUDA WA KUSUBIRI",
                 mBody: `
                 <div class="m-blue">1. Matumizi ya Batani:</div>
                 1. <b>PATA SIGNAL:</b> Hufanya hesabu 2.5M kupata zones salama.<br>
@@ -137,11 +139,11 @@
                 2. <b>ANZA NA BET:</b> Usiombe signal kama bado haujabonyeza Bet.<br>
                 3. Nakili Hash/Salt ya raundi iliyopita, kisha paste hapa.<br>
                 4. Shinda raundi zote 4/4 kisha subiri cooldown.<br><br>
-                <div class="m-green">Kwa maelekezo zaidi fuata hii chaneli:<br>winpredictor@whatsapp.com</div>`
+                <div class="m-green">Kwa maelekezo zaidi fuata hii chaneli ya WhatsApp:<br>winpredictor@whatsapp.com</div>`
             },
             en: {
                 lText: "WINNING", rText: " RATE: ", round: "ROUND", warn: "⚠️ WARNING: ENSURE HASH AND SALT ARE ENTERED",
-                btn: "GET SIGNAL 🚀", wait: "WAIT: ",
+                btn: "GET SIGNAL 🚀", wait: "WAIT: ", instBtn: "Instructions", cdBtn: "COOLDOWN ACTIVE",
                 mBody: `
                 <div class="m-blue">1. Button Usage:</div>
                 1. <b>GET SIGNAL:</b> Executes 2.5M calculations for accuracy.<br>
@@ -151,7 +153,7 @@
                 2. <b>START WITH BET:</b> Always press Bet before requesting signal.<br>
                 3. Copy/Paste previous Hash & Salt here.<br>
                 4. Complete 4/4 rounds, then wait for cooldown reset.<br><br>
-                <div class="m-green">For more instructions follow this channel:<br>winpredictor@whatsapp.com</div>`
+                <div class="m-green">For more instructions follow this WhatsApp channel:<br>winpredictor@whatsapp.com</div>`
             }
         };
 
@@ -168,9 +170,17 @@
             const t = translations[currentLang];
             document.getElementById('lText').innerText = t.lText;
             document.getElementById('roundLbl').innerText = t.round;
-            document.getElementById('mainBtn').innerText = t.btn;
             document.getElementById('warningLabel').innerText = t.warn;
             document.getElementById('modalContent').innerHTML = t.mBody;
+            document.getElementById('instBtn').innerText = t.instBtn;
+            
+            // Kama mfumo upo kwenye Cooldown, badili maandishi ya kitufe pia
+            const btn = document.getElementById('mainBtn');
+            if(roundIdx >= 4) {
+                btn.innerText = t.cdBtn;
+            } else {
+                btn.innerText = t.btn;
+            }
             updateRate();
         }
 
@@ -187,7 +197,6 @@
             o.frequency.value = f; o.start(); setTimeout(() => o.stop(), d);
         }
 
-        // Init Grid
         const grid = document.getElementById('gameGrid');
         for (let i = 0; i < 25; i++) {
             const d = document.createElement('div'); d.className = 'cell';
@@ -211,20 +220,20 @@
             const timer = setInterval(() => {
                 p += 2;
                 bar.style.width = p + "%";
-                log.innerText = "DATA_SYNC_2.5M_" + Math.random().toString(16).slice(2, 8).toUpperCase() + " >> [" + (p * 25000).toLocaleString() + "]";
+                log.innerText = "ALGO_SYNC_DATA_" + Math.random().toString(16).slice(2, 8).toUpperCase() + " >> [" + (p * 25000).toLocaleString() + "]";
                 if (p % 20 === 0) beep(440, 40);
-                if(p >= 100) { clearInterval(timer); runPredictor(h, s); }
+                if(p >= 100) { clearInterval(timer); runAlgo(h, s); }
             }, 35);
         }
 
-        function runPredictor(h, s) {
+        function runAlgo(h, s) {
             roundIdx++;
             document.getElementById('activeRound').innerText = roundIdx;
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
             let seed = 0;
-            let str = h + s + roundIdx + "1WIN_SECURE";
+            let str = h + s + roundIdx + "ULTRA_V9.5";
             for(let i=0; i<str.length; i++) seed = ((seed << 5) - seed) + str.charCodeAt(i);
             
             const b = parseInt(document.getElementById('bombCount').value);
@@ -243,37 +252,36 @@
                 cells[idx].classList.add('safe');
             });
 
-            beep(900, 250);
+            beep(880, 200);
             document.getElementById('loaderWrap').style.display = 'none';
-            document.getElementById('analyticsLog').innerText = "SUCCESS: 4/4 ACCURACY REACHED";
+            document.getElementById('analyticsLog').innerText = "V9.5 ANALYTICS SUCCESS: 4/4";
 
             setTimeout(() => {
                 document.getElementById('hashIn').value = "";
                 document.getElementById('saltIn').value = "";
-                if(roundIdx < 4) { btnReset(); } else { triggerCooldown(); }
+                if(roundIdx < 4) { document.getElementById('mainBtn').disabled = false; } else { initiateCooldown(); }
             }, 1800);
         }
 
-        function btnReset() { document.getElementById('mainBtn').disabled = false; }
-
-        function triggerCooldown() {
+        function initiateCooldown() {
             const timerEl = document.getElementById('cooldownDisplay');
             const btn = document.getElementById('mainBtn');
-            btn.innerText = "COOLDOWN ACTIVE";
+            
+            btn.innerText = translations[currentLang].cdBtn; // Badili jina kulingana na lugha
             timerEl.style.display = 'block';
 
-            let seconds = 600;
+            let sec = 600;
             const cd = setInterval(() => {
-                let m = Math.floor(seconds / 60); let s = seconds % 60;
+                let m = Math.floor(sec / 60); let s = sec % 60;
                 timerEl.innerText = translations[currentLang].wait + m + ":" + (s < 10 ? "0" : "") + s;
-                if(seconds <= 0) {
+                if(sec <= 0) {
                     clearInterval(cd); roundIdx = 0;
                     document.getElementById('activeRound').innerText = 0;
                     timerEl.style.display = 'none';
                     btn.disabled = false;
                     btn.innerText = translations[currentLang].btn;
                 }
-                seconds--;
+                sec--;
             }, 1000);
         }
 
