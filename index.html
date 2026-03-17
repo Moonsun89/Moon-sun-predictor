@@ -41,7 +41,8 @@
         .m-section { color: var(--blue); font-weight: bold; margin-top: 15px; text-transform: uppercase; font-size: 14px; }
         .m-text { font-size: 12px; line-height: 1.6; color: #ccc; margin-top: 5px; list-style: none; padding: 0; }
         .m-text li { margin-bottom: 5px; }
-        .m-link { color: var(--green); text-decoration: none; font-weight: bold; display: block; margin-top: 15px; padding: 12px; background: rgba(0,255,136,0.1); border-radius: 8px; text-align: center; font-size: 13px; border: 1px dashed var(--green); }
+        .m-link-note { color: var(--yellow); font-size: 11px; font-weight: bold; text-align: center; margin-top: 15px; text-transform: uppercase; }
+        .m-link { color: var(--green); text-decoration: none; font-weight: bold; display: block; margin-top: 5px; padding: 12px; background: rgba(0,255,136,0.1); border-radius: 8px; text-align: center; font-size: 13px; border: 1px dashed var(--green); }
         
         #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10001; }
     </style>
@@ -69,7 +70,11 @@
 
     <div class="info-panel">
         <div><span style="color:var(--blue); font-weight:bold;" id="lText">KIWANGO CHA</span> <span style="color:var(--yellow); font-weight:bold;" id="rText"> USHINDI: 99.8%</span></div>
-        <div style="font-size:17px; font-weight:bold; margin-top:5px;"><span id="roundLbl">MZUNGUKO</span> <span style="color:var(--red);" id="activeRound">0</span> / 4</div>
+        <div style="font-size:17px; font-weight:bold; margin-top:5px;">
+            <span id="roundLbl" style="color:var(--yellow);">MZUNGUKO</span> 
+            <span style="color:var(--red);" id="activeRound">0</span> 
+            <span style="color:var(--yellow);">/ 4</span>
+        </div>
     </div>
 
     <div id="cooldownDisplay">WAIT: 10:00</div>
@@ -86,20 +91,21 @@
     <button id="mainBtn" onclick="startAnalysis()">PATA SIGNAL 🚀</button>
     
     <div class="action-row">
-        <button id="clearBtn" onclick="location.reload()">🔄 AUTO CLEAR</button>
+        <button id="clearBtn" onclick="safeClear()">🔄 AUTO CLEAR</button>
         <button id="instBtn" onclick="toggleModal()">MAELEKEZO</button>
     </div>
 
     <div id="modal">
         <div id="modalTitle" class="m-header">MAELEKEZO YA KINA</div>
         <div id="modalContent"></div>
-        <button id="closeBtn" onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">FUNGA / CLOSE</button>
+        <button id="closeBtn" onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">FUNGA</button>
     </div>
 
     <script>
-        let roundIdx = 0;
+        let roundIdx = parseInt(localStorage.getItem('predictorRound')) || 0;
         let currentLang = 'sw';
         let muted = false;
+        let isCooldownActive = false;
         const wsLink = "https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336";
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -165,33 +171,34 @@
             sw: {
                 lText: "KIWANGO CHA", rText: " USHINDI: ", round: "MZUNGUKO",
                 btn: "PATA SIGNAL 🚀", instBtn: "MAELEKEZO", bombTxt: "MABOMU", wait: "SUBIRI: ", cdBtn: "MUDA WA KUSUBIRI",
-                mHeader: "MAELEKEZO YA KINA", mClose: "FUNGA / CLOSE", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
+                mHeader: "MAELEKEZO YA KINA", mClose: "FUNGA", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
                 hashPh: "Hash ya Raundi Iliyopita...", saltPh: "Salt ya Raundi Iliyopita...",
+                linkNote: "KWA MAELEKEZO ZAIDI FUATA HII CHANELI", linkBtn: "BONYEZA HAPA KUJIUNGA NA CHANELI YA WHATSAPP",
                 mBody: `
-                <div class="m-section">1. KAZI ZA BATANI (BUTTON FUNCTIONS)</div>
+                <div class="m-section">1. KAZI ZA BATANI</div>
                 <ul class="m-text">
-                    <li>• <b>GET SIGNAL:</b> Inatafuta sehemu salama kwa kutumia V10 Algorithm.</li>
+                    <li>• <b>PATA SIGNAL:</b> Inatafuta sehemu salama kwa kutumia V10 Algorithm.</li>
                     <li>• <b>AUTO CLEAR:</b> Inasafisha data za mchezo kwa usalama.</li>
-                    <li>• <b>LANGUAGE:</b> Inabadilisha kati ya Kiingereza na Kiswahili.</li>
-                    <li>• <b>BOMBS:</b> Chagua idadi ya mabomu kwa usahihi zaidi.</li>
-                    <li>• <b>SOUND:</b> Washa au zima sauti za programu.</li>
+                    <li>• <b>LUGHA:</b> Inabadilisha kati ya Kiingereza na Kiswahili.</li>
+                    <li>• <b>MABOMU:</b> Chagua idadi ya mabomu kwa usahihi zaidi.</li>
+                    <li>• <b>SAUTI:</b> Washa au zima sauti za programu.</li>
                 </ul>
-                <div class="m-section">2. HATUA ZA USHINDI (WINNING STEPS)</div>
+                <div class="m-section">2. HATUA ZA USHINDI</div>
                 <ul class="m-text">
                     <li>1. <b>Hash & Salt:</b> Nakili data hizi kutoka 'Provably Fair' ndani ya 1Win Mines.</li>
-                    <li>2. <b>Order:</b> Paste hapa, bonyeza <b>BET</b> kule 1Win kwanza, kisha uombe signal hapa.</li>
-                    <li>3. <b>Resting:</b> Baada ya ushindi 4/4, lazima upumzike dakika 10 kuepuka kugundulika.</li>
-                    <li>4. <b>Rest:</b> Baada ya raundi 4, pumzika dakika 10 kulinda faida yako.</li>
-                    <li>5. <b>Source:</b> 1Win pekee ndio chanzo cha Hash na Salt halali.</li>
-                    <li>6. <b>Important:</b> Lazima ubonyeze <b>BET</b> kule 1Win baada ya kupaste data lakini KABLA ya kubonyeza PATA SIGNAL hapa.</li>
-                </ul>
-                <a href="${wsLink}" class="m-link" target="_blank">CLICK HERE TO JOIN WHATSAPP CHANNEL</a>`
+                    <li>2. <b>Mpangilio:</b> Paste hapa, bonyeza <b>BET</b> kule 1Win kwanza, kisha uombe signal hapa.</li>
+                    <li>3. <b>Kupumzika:</b> Baada ya ushindi 4/4, lazima upumzike dakika 10 kuepuka kugundulika.</li>
+                    <li>4. <b>Muda:</b> Baada ya raundi 4, pumzika dakika 10 kulinda faida yako.</li>
+                    <li>5. <b>Chanzo:</b> 1Win pekee ndio chanzo cha Hash na Salt halali.</li>
+                    <li>6. <b>Muhimu:</b> Lazima ubonyeze <b>BET</b> kule 1Win baada ya kupaste data lakini KABLA ya kubonyeza PATA SIGNAL hapa.</li>
+                </ul>`
             },
             en: {
                 lText: "WINNING", rText: " RATE: ", round: "ROUND",
                 btn: "GET SIGNAL 🚀", instBtn: "INSTRUCTIONS", bombTxt: "BOMBS", wait: "WAIT: ", cdBtn: "COOLDOWN ACTIVE",
-                mHeader: "DETAILED INSTRUCTIONS", mClose: "FUNGA / CLOSE", warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
+                mHeader: "DETAILED INSTRUCTIONS", mClose: "CLOSE", warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
                 hashPh: "Previous Round Hash...", saltPh: "Previous Round Salt...",
+                linkNote: "FOR MORE INSTRUCTIONS FOLLOW THIS CHANNEL", linkBtn: "CLICK HERE TO JOIN WHATSAPP CHANNEL",
                 mBody: `
                 <div class="m-section">1. BUTTON FUNCTIONS</div>
                 <ul class="m-text">
@@ -204,17 +211,16 @@
                 <div class="m-section">2. WINNING STEPS</div>
                 <ul class="m-text">
                     <li>1. <b>Hash & Salt:</b> Copy from 1Win 'Provably Fair' settings.</li>
-                    <li>2. <b>Order:</b> Paste data, press <b>BET</b> on 1Win first, then press GET SIGNAL.</li>
+                    <li>2. <b>Procedure:</b> Paste data, press <b>BET</b> on 1Win first, then press GET SIGNAL.</li>
                     <li>3. <b>Resting:</b> After 4/4 wins, wait 10 mins to avoid detection.</li>
-                    <li>4. <b>Rest:</b> After 4 rounds, rest 10 minutes to protect profit.</li>
+                    <li>4. <b>Time:</b> After 4 rounds, rest 10 minutes to protect profit.</li>
                     <li>5. <b>Source:</b> 1Win is the only source for valid Hash and Salt.</li>
                     <li>6. <b>Important:</b> You must press <b>BET</b> on 1Win after pasting data but BEFORE clicking GET SIGNAL here.</li>
-                </ul>
-                <a href="${wsLink}" class="m-link" target="_blank">CLICK HERE TO JOIN WHATSAPP CHANNEL</a>`
+                </ul>`
             }
         };
 
-        function unlock() { if(document.getElementById('accessKey').value === 'Mr winner123') { document.getElementById('loginOverlay').style.display = 'none'; if (audioCtx.state === 'suspended') audioCtx.resume(); } }
+        function unlock() { if(document.getElementById('accessKey').value === 'Mr winner123') { document.getElementById('loginOverlay').style.display = 'none'; if (audioCtx.state === 'suspended') audioCtx.resume(); checkExistingCD(); } }
         function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); document.getElementById('langBtn').innerText = "LANG: " + currentLang.toUpperCase(); refreshUI(); }
         function toggleMute() { muted = !muted; document.getElementById('volBtn').innerText = "SOUND: " + (muted ? "OFF" : "ON"); }
         
@@ -226,7 +232,7 @@
             document.getElementById('modalTitle').innerText = t.mHeader;
             document.getElementById('closeBtn').innerText = t.mClose;
             document.getElementById('warningLabel').innerText = t.warn;
-            document.getElementById('modalContent').innerHTML = t.mBody;
+            document.getElementById('modalContent').innerHTML = t.mBody + `<div class="m-link-note">${t.linkNote}</div><a href="${wsLink}" class="m-link" target="_blank">${t.linkBtn}</a>`;
             document.getElementById('hashIn').placeholder = t.hashPh;
             document.getElementById('saltIn').placeholder = t.saltPh;
             
@@ -239,20 +245,26 @@
                 if(n == val) opt.selected = true;
                 select.appendChild(opt);
             });
-            const btn = document.getElementById('mainBtn');
-            btn.innerText = (roundIdx >= 4) ? t.cdBtn : t.btn;
+            
+            if(!isCooldownActive) {
+                document.getElementById('mainBtn').innerText = t.btn;
+                document.getElementById('activeRound').innerText = roundIdx;
+            }
             updateRate();
         }
 
-        function updateRate() { document.getElementById('rText').innerText = translations[currentLang].rText + "99.8%"; }
-
-        const grid = document.getElementById('gameGrid');
-        for (let i = 0; i < 25; i++) {
-            const d = document.createElement('div'); d.className = 'cell';
-            grid.appendChild(d);
+        function safeClear() {
+            if(isCooldownActive) {
+                alert(currentLang === 'sw' ? "Samahani, huwezi kusafisha data wakati muda wa mapumziko bado unahesabu!" : "Sorry, you cannot clear data while cooldown is active!");
+                return;
+            }
+            roundIdx = 0;
+            localStorage.setItem('predictorRound', 0);
+            location.reload();
         }
 
         function startAnalysis() {
+            if(isCooldownActive) return;
             const h = document.getElementById('hashIn').value;
             const s = document.getElementById('saltIn').value;
             if(!h || !s) { 
@@ -276,6 +288,7 @@
 
         function runLogic(h, s) {
             roundIdx++;
+            localStorage.setItem('predictorRound', roundIdx);
             document.getElementById('activeRound').innerText = roundIdx;
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
@@ -303,24 +316,40 @@
             
             if(roundIdx >= 4) {
                 playJackpot();
-                startCD();
+                const endTime = Date.now() + 600000;
+                localStorage.setItem('predictorCooldown', endTime);
+                startCD(600);
             } else {
                 playSound(880, 'sine', 0.3);
                 document.getElementById('mainBtn').disabled = false;
             }
         }
 
-        function startCD() {
+        function checkExistingCD() {
+            const endTime = localStorage.getItem('predictorCooldown');
+            if(endTime) {
+                const remaining = Math.floor((endTime - Date.now()) / 1000);
+                if(remaining > 0) startCD(remaining);
+                else localStorage.removeItem('predictorCooldown');
+            }
+        }
+
+        function startCD(sec) {
+            isCooldownActive = true;
             const timerEl = document.getElementById('cooldownDisplay');
             const btn = document.getElementById('mainBtn');
+            btn.disabled = true;
             btn.innerText = translations[currentLang].cdBtn;
             timerEl.style.display = 'block';
-            let sec = 600;
+            
             const cd = setInterval(() => {
                 let m = Math.floor(sec/60); let s = sec%60;
                 timerEl.innerText = translations[currentLang].wait + m + ":" + (s < 10 ? "0" : "") + s;
                 if(sec <= 0) {
                     clearInterval(cd); roundIdx = 0;
+                    isCooldownActive = false;
+                    localStorage.removeItem('predictorRound');
+                    localStorage.removeItem('predictorCooldown');
                     timerEl.style.display = 'none';
                     btn.disabled = false; refreshUI();
                 }
@@ -333,6 +362,7 @@
             m.style.display = (m.style.display === 'block' ? 'none' : 'block');
         }
 
+        function updateRate() { document.getElementById('rText').innerText = translations[currentLang].rText + "99.8%"; }
         window.onload = refreshUI;
     </script>
 </body>
