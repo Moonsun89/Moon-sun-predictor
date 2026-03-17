@@ -60,8 +60,8 @@
     </div>
 
     <div class="top-nav">
-        <button class="btn-mini" onclick="toggleLang()" id="langBtn">LANG: SW</button>
-        <button class="btn-mini" id="volBtn" onclick="toggleMute()">SOUND: ON</button>
+        <button class="btn-mini" onclick="toggleLang()" id="langBtn">LUGHA: SW</button>
+        <button class="btn-mini" id="volBtn" onclick="toggleMute()">SAUTI: ON</button>
     </div>
 
     <div class="header-section">
@@ -98,7 +98,7 @@
     <div id="modal">
         <div id="modalTitle" class="m-header">MAELEKEZO YA KINA</div>
         <div id="modalContent"></div>
-        <button id="closeBtn" onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">FUNGA</button>
+        <button id="closeBtn" onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">FUNGA / CLOSE</button>
     </div>
 
     <script>
@@ -170,41 +170,57 @@
 
         const translations = {
             sw: {
-                lText: "KIWANGO CHA", rText: " USHINDI: ", round: "MZUNGUKO",
+                lang: "LUGHA: SW", sound: "SAUTI: ", lText: "KIWANGO CHA", rText: " USHINDI: ", round: "MZUNGUKO",
                 btn: "PATA SIGNAL 🚀", instBtn: "MAELEKEZO", bombTxt: "MABOMU", wait: "SUBIRI: ", cdBtn: "MUDA WA KUSUBIRI",
-                mHeader: "MAELEKEZO YA KINA", mClose: "FUNGA", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
+                mHeader: "MAELEKEZO YA KINA", mClose: "FUNGA / CLOSE", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
                 hashPh: "Hash ya Raundi Iliyopita...", saltPh: "Salt ya Raundi Iliyopita...",
-                linkNote: "KWA MAELEKEZO ZAIDI FUATA HII CHANELI", linkBtn: "BONYEZA HAPA KUJIUNGA NA CHANELI YA WHATSAPP",
+                linkNote: "KWA MAELEKEZO ZAIDI FUATA HII CHANELI", linkBtn: "BONYEZA HAPA KUJIUNGA NA WHATSAPP CHANNEL",
                 mBody: `
-                <div class="m-section">1. MBINU YA USHINDI 5/5</div>
+                <div class="m-section">1. KAZI ZA BATANI</div>
                 <ul class="m-text">
-                    <li>• <b>BOMU 7:</b> Inatoa nyota 2 tu za usalama.</li>
-                    <li>• <b>BOMU 5:</b> Inatoa nyota 3 tu za usalama.</li>
-                    <li>• <b>HARAKA:</b> Copy na Paste data haraka ndani ya sekunde 20.</li>
+                    <li>• <b>PATA SIGNAL:</b> Inatafuta sehemu salama kwa kutumia V10.5 Ultra.</li>
+                    <li>• <b>AUTO CLEAR:</b> Inasafisha data ya mchezo kwa usalama wako.</li>
+                    <li>• <b>MABOMU:</b> Chagua idadi ya mabomu kwa usahihi zaidi.</li>
+                </ul>
+                <div class="m-section">2. HATUA ZA USHINDI 5/5</div>
+                <ul class="m-text">
+                    <li>• <b>MBINU YA BOMU 7:</b> Programu itatoa nyota 2 pekee kwa usalama.</li>
+                    <li>• <b>MBINU YA BOMU 5:</b> Programu itatoa nyota 3 pekee kwa usalama.</li>
+                    <li>• <b>UTARATIBU:</b> Paste Hash/Salt, bonyeza BET kule 1Win, kisha uombe signal hapa.</li>
+                    <li>• <b>PUMZIKA:</b> Baada ya ushindi wa 5/5, lazima upumzike dakika 10.</li>
                 </ul>`
             },
             en: {
-                lText: "WINNING", rText: " RATE: ", round: "ROUND",
+                lang: "LANG: EN", sound: "SOUND: ", lText: "WINNING", rText: " RATE: ", round: "ROUND",
                 btn: "GET SIGNAL 🚀", instBtn: "INSTRUCTIONS", bombTxt: "BOMBS", wait: "WAIT: ", cdBtn: "COOLDOWN ACTIVE",
-                mHeader: "DETAILED INSTRUCTIONS", mClose: "CLOSE", warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
+                mHeader: "DETAILED INSTRUCTIONS", mClose: "FUNGA / CLOSE", warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
                 hashPh: "Previous Round Hash...", saltPh: "Previous Round Salt...",
                 linkNote: "FOR MORE INSTRUCTIONS FOLLOW THIS CHANNEL", linkBtn: "CLICK HERE TO JOIN WHATSAPP CHANNEL",
                 mBody: `
-                <div class="m-section">1. 5/5 WINNING STRATEGY</div>
+                <div class="m-section">1. BUTTON FUNCTIONS</div>
                 <ul class="m-text">
-                    <li>• <b>7 BOMBS:</b> Provides only 2 safe stars.</li>
-                    <li>• <b>5 BOMBS:</b> Provides only 3 safe stars.</li>
-                    <li>• <b>SPEED:</b> Copy and Paste data within 20 seconds.</li>
+                    <li>• <b>GET SIGNAL:</b> Scans for safe zones using V10.5 Ultra.</li>
+                    <li>• <b>AUTO CLEAR:</b> Wipes session data for your security.</li>
+                    <li>• <b>BOMBS:</b> Select bomb count for better accuracy.</li>
+                </ul>
+                <div class="m-section">2. 5/5 WINNING STEPS</div>
+                <ul class="m-text">
+                    <li>• <b>7 BOMBS STRATEGY:</b> App will provide only 2 safe stars.</li>
+                    <li>• <b>5 BOMBS STRATEGY:</b> App will provide only 3 safe stars.</li>
+                    <li>• <b>ORDER:</b> Paste Hash/Salt, press BET on 1Win, then request signal.</li>
+                    <li>• <b>RESTING:</b> After 5/5 wins, wait 10 minutes to protect profit.</li>
                 </ul>`
             }
         };
 
         function unlock() { if(document.getElementById('accessKey').value === 'Mr winner123') { document.getElementById('loginOverlay').style.display = 'none'; if (audioCtx.state === 'suspended') audioCtx.resume(); checkExistingCD(); } }
-        function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); document.getElementById('langBtn').innerText = "LANG: " + currentLang.toUpperCase(); refreshUI(); }
-        function toggleMute() { muted = !muted; document.getElementById('volBtn').innerText = "SOUND: " + (muted ? "OFF" : "ON"); }
+        function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); refreshUI(); }
+        function toggleMute() { muted = !muted; refreshUI(); }
         
         function refreshUI() {
             const t = translations[currentLang];
+            document.getElementById('langBtn').innerText = t.lang;
+            document.getElementById('volBtn').innerText = t.sound + (muted ? "OFF" : "ON");
             document.getElementById('lText').innerText = t.lText;
             document.getElementById('roundLbl').innerText = t.round;
             document.getElementById('instBtn').innerText = t.instBtn;
@@ -280,7 +296,7 @@
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
             const bombs = parseInt(document.getElementById('bombCount').value);
-            let starCount = 4; // Default
+            let starCount = 4;
             if (bombs === 7) starCount = 2;
             else if (bombs === 5) starCount = 3;
 
@@ -291,7 +307,6 @@
             let spots = [];
             let attempt = 0;
             while(spots.length < starCount && attempt < 100) {
-                // Advanced entropy using sine for better distribution
                 let pseudo = Math.abs(Math.sin(seed + attempt) * 10000);
                 let pos = Math.floor(pseudo % 25);
                 if(!spots.includes(pos)) spots.push(pos);
@@ -341,7 +356,7 @@
             
             const cd = setInterval(() => {
                 let m = Math.floor(sec/60); let s = sec%60;
-                timerEl.innerText = translations[currentLang].wait + m + ":" + (s < 10 ? "0" : "") + s;
+                timerEl.innerText = (currentLang === 'sw' ? "SUBIRI: " : "WAIT: ") + m + ":" + (s < 10 ? "0" : "") + s;
                 if(sec <= 0) {
                     clearInterval(cd); roundIdx = 0;
                     isCooldownActive = false;
