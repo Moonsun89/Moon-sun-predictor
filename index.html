@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V9.5 PRO</title>
+    <title>MOON SUN PREDICTOR V9.5.1 PRO</title>
     <style>
         :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; }
@@ -16,7 +16,7 @@
         .top-nav { width: 95%; display: flex; justify-content: space-between; position: fixed; top: 10px; z-index: 1000; }
         .btn-mini { background: rgba(0,123,255,0.1); color: var(--blue); border: 1px solid var(--blue); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; }
 
-        /* Title Styling */
+        /* Title & Branding */
         .header-section { text-align: center; margin-top: 50px; }
         .app-name { font-size: 20px; font-weight: 900; margin: 0; }
         .c-y { color: var(--yellow); } .c-b { color: var(--blue); } .c-g { color: var(--green); }
@@ -28,6 +28,10 @@
         .win-label-yellow { color: var(--yellow); font-weight: bold; }
         .round-area { font-size: 16px; font-weight: bold; margin-top: 5px; }
         .curr-r { color: var(--red); } .max-r { color: var(--yellow); }
+
+        /* Timer Styling */
+        #cooldownTimer { color: var(--red); font-size: 14px; font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 5px 15px; border-radius: 20px; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.5; } }
 
         /* Warning Text */
         #warningBox { color: var(--red); font-size: 11px; font-weight: bold; margin-bottom: 5px; display: none; text-align: center; }
@@ -44,6 +48,7 @@
         /* Inputs & Main Buttons */
         input, select { width: 90%; max-width: 340px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 8px; margin-bottom: 8px; text-align: center; outline: none; font-size: 12px; }
         #mainBtn { width: 90%; max-width: 340px; padding: 16px; background: linear-gradient(to right, #007bff, #0052ad); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        #mainBtn:disabled { background: #1a2c3a; color: #444; }
 
         .footer-btns { display: flex; width: 90%; max-width: 340px; gap: 8px; margin-top: 10px; align-items: center; }
         #clearBtn { flex: 3; padding: 12px; background: #1a2c3a; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 12px; }
@@ -83,6 +88,7 @@
         </div>
     </div>
 
+    <div id="cooldownTimer">WAIT: 10:00</div>
     <div id="warningBox">⚠️ ONYO: HAKIKISHA UNAWEKA HASH NA SALT</div>
 
     <select id="bombSelect" onchange="updateWinRate()">
@@ -123,37 +129,34 @@
             sw: {
                 winL: "KIWANGO CHA", winR: " USHINDI: ", round: "MZUNGUKO", warn: "⚠️ ONYO: HAKIKISHA UNAWEKA HASH NA SALT",
                 phH: "Hash ya Raundi Iliyopita...", phS: "Salt ya Raundi Iliyopita...",
-                btn: "PATA SIGNAL 🚀", inst: "Instructions",
-                mTitle: "MAELEKEZO YA USHINDI (V9.5)",
+                btn: "PATA SIGNAL 🚀", inst: "Instructions", wait: "SUBIRI: ",
+                mTitle: "Hatua za Ushindi (V9.5 PRO)",
                 mBody: `
                 <b>1. Matumizi ya Batani:</b><br>
                 1. <b>PATA SIGNAL:</b> Inachakata data 2.5M kupata ramani salama.<br>
-                2. <b>AUTO CLEAR:</b> Inafuta data ya mchezo uliopita kiotomatiki.<br>
-                3. <b>SOUND:</b> Inawasha/kuzima sauti ya ushindi.<br><br>
+                2. <b>AUTO CLEAR:</b> Inafuta data ya mchezo uliopita.<br>
+                3. <b>SOUND:</b> Inazima/washa sauti.<br><br>
                 <b>2. Hatua za Ushindi:</b><br>
-                1. Ingia 1Win na ufungue Mines.<br>
-                2. <b>MUHIMU:</b> Bonyeza <b>BET</b> kwanza kabla ya kutumia App.<br>
-                3. Nakili Hash na Salt kutoka raundi iliyopita.<br>
-                4. Paste hapa kisha bonyeza PATA SIGNAL.<br>
-                5. Fungua nyota ⭐ na upige Cash Out haraka.<br><br>
+                1. <b>MUHIMU:</b> Bonyeza <b>BET</b> kwanza kwenye Mines.<br>
+                2. Copy Hash na Salt ya raundi iliyopita.<br>
+                3. Paste hapa, bonyeza PATA SIGNAL.<br>
+                4. Raundi 4 zikiisha, subiri dakika 10 kuanza upya.<br><br>
                 <b>Channel:</b> winpredictor@channel.com`
             },
             en: {
                 winL: "WINNING", winR: " RATE: ", round: "ROUND", warn: "⚠️ WARNING: ENSURE HASH AND SALT ARE ENTERED",
                 phH: "Previous Round Hash...", phS: "Previous Round Salt...",
-                btn: "GET SIGNAL 🚀", inst: "Instructions",
+                btn: "GET SIGNAL 🚀", inst: "Instructions", wait: "WAIT: ",
                 mTitle: "VICTORY GUIDELINES (V9.5)",
                 mBody: `
                 <b>1. Button Usage:</b><br>
-                1. <b>GET SIGNAL:</b> Processes 2.5M data for safe zones.<br>
-                2. <b>AUTO CLEAR:</b> Automatically clears previous session data.<br>
+                1. <b>GET SIGNAL:</b> Processes 2.5M points.<br>
+                2. <b>AUTO CLEAR:</b> Clears previous data session.<br>
                 3. <b>SOUND:</b> Toggles winning sound alerts.<br><br>
                 <b>2. Steps to Win:</b><br>
-                1. Open Mines on 1Win.<br>
-                2. <b>CRUCIAL:</b> Click <b>BET</b> first before using the App.<br>
-                3. Copy Hash and Salt from previous round.<br>
-                4. Paste here and click GET SIGNAL.<br>
-                5. Open stars ⭐ and Cash Out instantly.<br><br>
+                1. <b>CRUCIAL:</b> Click <b>BET</b> first on Mines.<br>
+                2. Copy Hash and Salt from previous round.<br>
+                3. After 4 rounds, wait 10 minutes to reset.<br><br>
                 <b>Channel:</b> winpredictor@channel.com`
             }
         };
@@ -206,13 +209,11 @@
         function process() {
             const h = document.getElementById('hInput').value;
             const s = document.getElementById('sInput').value;
-            const warn = document.getElementById('warningBox');
-
             if(!h || !s) {
-                warn.style.display = 'block';
+                document.getElementById('warningBox').style.display = 'block';
                 return;
             }
-            warn.style.display = 'none';
+            document.getElementById('warningBox').style.display = 'none';
 
             const btn = document.getElementById('mainBtn');
             const loader = document.getElementById('loader');
@@ -226,7 +227,7 @@
             const inter = setInterval(() => {
                 p += 2;
                 bar.style.width = p + "%";
-                math.innerText = "CALC_2.5M_" + Math.random().toString(16).slice(2, 10).toUpperCase() + " [" + (p * 25000).toLocaleString() + "]";
+                math.innerText = "ALGO_2.5M_SYNC_" + Math.random().toString(16).slice(2, 8).toUpperCase() + " >> " + (p * 25000).toLocaleString();
                 if (p % 20 === 0) playBeep(400, 50);
                 if(p >= 100) {
                     clearInterval(inter);
@@ -263,18 +264,42 @@
 
             playBeep(800, 200);
             document.getElementById('loader').style.display = 'none';
-            document.getElementById('mathProcess').innerText = "DATA ANALYTICS SUCCESS: 4/4";
+            document.getElementById('mathProcess').innerText = "DATA ANALYTICS SUCCESS";
 
-            // AUTO CLEAR
             setTimeout(() => {
                 document.getElementById('hInput').value = "";
                 document.getElementById('sInput').value = "";
                 if(round < 4) {
                     document.getElementById('mainBtn').disabled = false;
                 } else {
-                    document.getElementById('mainBtn').innerText = "TARGET REACHED";
+                    startCooldown();
                 }
             }, 1500);
+        }
+
+        function startCooldown() {
+            const timerEl = document.getElementById('cooldownTimer');
+            const btn = document.getElementById('mainBtn');
+            btn.disabled = true;
+            btn.innerText = "COOLDOWN ACTIVE";
+            timerEl.style.display = 'block';
+
+            let timeLeft = 600; // 10 minutes in seconds
+            const timerInter = setInterval(() => {
+                let mins = Math.floor(timeLeft / 60);
+                let secs = timeLeft % 60;
+                timerEl.innerText = data[lang].wait + mins + ":" + (secs < 10 ? "0" : "") + secs;
+                
+                if(timeLeft <= 0) {
+                    clearInterval(timerInter);
+                    round = 0;
+                    document.getElementById('cRound').innerText = 0;
+                    timerEl.style.display = 'none';
+                    btn.disabled = false;
+                    btn.innerText = data[lang].btn;
+                }
+                timeLeft--;
+            }, 1000);
         }
 
         function toggleModal() {
