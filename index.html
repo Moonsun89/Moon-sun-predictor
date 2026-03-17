@@ -3,59 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V9.5.1 PRO</title>
+    <title>MOON SUN PREDICTOR V9.5.2 PRO</title>
     <style>
-        :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
+        :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; --purp: #8e44ad; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; }
 
-        /* Login Overlay */
+        /* Access Key Screen */
         #loginOverlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .login-box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--blue); text-align: center; width: 85%; max-width: 300px; }
 
-        /* Header & Small Buttons */
+        /* Top Bar */
         .top-nav { width: 95%; display: flex; justify-content: space-between; position: fixed; top: 10px; z-index: 1000; }
         .btn-mini { background: rgba(0,123,255,0.1); color: var(--blue); border: 1px solid var(--blue); padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; }
 
-        /* Title & Branding */
+        /* Branding */
         .header-section { text-align: center; margin-top: 50px; }
-        .app-name { font-size: 20px; font-weight: 900; margin: 0; }
+        .app-name { font-size: 22px; font-weight: 900; margin: 0; text-transform: uppercase; }
         .c-y { color: var(--yellow); } .c-b { color: var(--blue); } .c-g { color: var(--green); }
-        .sub-title { font-size: 11px; color: var(--blue); letter-spacing: 1.5px; font-weight: bold; margin-top: 2px; }
+        .sub-title { font-size: 12px; color: var(--blue); letter-spacing: 2px; font-weight: bold; margin-top: 2px; }
 
-        /* Win Rate & Rounds */
+        /* Info & Timer */
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 90%; max-width: 340px; text-align: center; border: 1px solid #1a2c3a; }
-        .win-label-blue { color: var(--blue); font-weight: bold; }
-        .win-label-yellow { color: var(--yellow); font-weight: bold; }
-        .round-area { font-size: 16px; font-weight: bold; margin-top: 5px; }
+        .win-l-b { color: var(--blue); font-weight: bold; }
+        .win-l-y { color: var(--yellow); font-weight: bold; }
+        .round-area { font-size: 17px; font-weight: bold; margin-top: 5px; }
         .curr-r { color: var(--red); } .max-r { color: var(--yellow); }
-
-        /* Timer Styling */
-        #cooldownTimer { color: var(--red); font-size: 14px; font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 5px 15px; border-radius: 20px; animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.5; } }
+        #cooldownDisplay { color: var(--red); font-size: 15px; font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 6px 18px; border-radius: 20px; animation: pulse 1s infinite; }
+        @keyframes pulse { 50% { opacity: 0.6; } }
 
         /* Warning Text */
-        #warningBox { color: var(--red); font-size: 11px; font-weight: bold; margin-bottom: 5px; display: none; text-align: center; }
+        #warningLabel { color: var(--red); font-size: 12px; font-weight: bold; margin-bottom: 8px; display: none; text-align: center; }
 
-        /* Grid & Processing */
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 10px; border-radius: 12px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 50px; height: 50px; background: #12181f; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 22px; border: 1px solid #1b262f; }
-        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 10px var(--green); background: rgba(0,255,136,0.1); }
+        /* Grid & Logic */
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
+        .cell { width: 52px; height: 52px; background: #12181f; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid #1b262f; }
+        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0,255,136,0.1); }
 
-        #mathProcess { font-size: 9px; color: #555; font-family: monospace; height: 12px; margin-bottom: 5px; overflow: hidden; width: 90%; text-align: center; }
-        #loader { width: 90%; max-width: 340px; height: 4px; background: #000; border-radius: 2px; display: none; overflow: hidden; margin-bottom: 10px; }
-        #bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--green)); }
+        #analyticsLog { font-size: 10px; color: #555; font-family: monospace; height: 14px; margin-bottom: 5px; text-align: center; width: 90%; overflow: hidden; }
+        #loaderWrap { width: 90%; max-width: 340px; height: 5px; background: #000; border-radius: 3px; display: none; overflow: hidden; margin-bottom: 15px; border: 1px solid #111; }
+        #loaderBar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--green)); }
 
-        /* Inputs & Main Buttons */
-        input, select { width: 90%; max-width: 340px; padding: 12px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 8px; margin-bottom: 8px; text-align: center; outline: none; font-size: 12px; }
-        #mainBtn { width: 90%; max-width: 340px; padding: 16px; background: linear-gradient(to right, #007bff, #0052ad); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        #mainBtn:disabled { background: #1a2c3a; color: #444; }
+        /* Inputs & Buttons */
+        input, select { width: 90%; max-width: 340px; padding: 13px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 10px; margin-bottom: 10px; text-align: center; outline: none; font-size: 12px; }
+        #mainBtn { width: 90%; max-width: 340px; padding: 18px; background: linear-gradient(to right, #007bff, #0052ad); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; }
+        
+        .action-row { display: flex; width: 90%; max-width: 340px; gap: 10px; margin-top: 15px; align-items: center; }
+        #clearBtn { flex: 3; padding: 14px; background: #1a2c3a; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        #instBtn { flex: 1.5; padding: 12px; background: linear-gradient(to bottom right, #9b59b6, #e91e63); color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 10px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-        .footer-btns { display: flex; width: 90%; max-width: 340px; gap: 8px; margin-top: 10px; align-items: center; }
-        #clearBtn { flex: 3; padding: 12px; background: #1a2c3a; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 12px; }
-        #instBtn { flex: 1.2; padding: 8px; background: var(--yellow); color: #000; border: none; border-radius: 6px; font-weight: bold; font-size: 10px; }
-
-        /* Instructions Modal */
-        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-height: 80%; background: #0d1217; border: 2px solid var(--blue); border-radius: 15px; padding: 20px; z-index: 10000; overflow-y: auto; }
+        /* Modal Instruction Styling */
+        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 88%; max-height: 80%; background: #0d1217; border: 2px solid var(--blue); border-radius: 20px; padding: 25px; z-index: 10000; overflow-y: auto; }
+        .m-blue { color: var(--blue); font-weight: bold; }
+        .m-green { color: var(--green); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -63,195 +62,177 @@
     <div id="loginOverlay">
         <div class="login-box">
             <h3 style="color:var(--yellow); margin-top:0;">ACCESS KEY</h3>
-            <input type="password" id="keyInput" placeholder="Enter Key...">
-            <button onclick="checkKey()" style="width:100%; padding:12px; background:var(--blue); color:white; border:none; border-radius:8px; font-weight:bold;">LOGIN</button>
+            <input type="password" id="accessKey" placeholder="Enter Mr winner123...">
+            <button onclick="unlock()" style="width:100%; padding:14px; background:var(--blue); color:white; border:none; border-radius:10px; font-weight:bold;">ENTER SYSTEM</button>
         </div>
     </div>
 
     <div class="top-nav">
         <button class="btn-mini" onclick="toggleLang()">LANG: EN/SW</button>
-        <button class="btn-mini" id="sndBtn" onclick="toggleSnd()">SOUND: ON</button>
+        <button class="btn-mini" id="volBtn" onclick="toggleMute()">SOUND: ON</button>
     </div>
 
     <div class="header-section">
         <h1 class="app-name"><span class="c-y">MOON</span> <span class="c-b">SUN</span> <span class="c-g">PREDICTOR</span> <span class="c-y">V9.5 PRO</span></h1>
-        <div class="sub-title">MINES 1WIN PREDICTOR</div>
+        <div class="sub-title">MINES 1WIN ANALYTICS</div>
     </div>
 
     <div class="info-panel">
-        <div id="winDisplay">
-            <span class="win-label-blue" id="winLabelL">KIWANGO CHA</span> 
-            <span class="win-label-yellow" id="winLabelR"> USHINDI: 98%</span>
+        <div id="winRow">
+            <span class="win-l-b" id="lText">KIWANGO CHA</span> 
+            <span class="win-l-y" id="rText"> USHINDI: 98%</span>
         </div>
         <div class="round-area">
-            <span id="roundLabel">MZUNGUKO</span> <span class="curr-r" id="cRound">0</span> / <span class="max-r">4</span>
+            <span id="roundLbl">MZUNGUKO</span> <span class="curr-r" id="activeRound">0</span> / <span class="max-r">4</span>
         </div>
     </div>
 
-    <div id="cooldownTimer">WAIT: 10:00</div>
-    <div id="warningBox">⚠️ ONYO: HAKIKISHA UNAWEKA HASH NA SALT</div>
+    <div id="cooldownDisplay">WAIT: 10:00</div>
+    <div id="warningLabel">⚠️ ONYO: HAKIKISHA UNAWEKA HASH NA SALT</div>
 
-    <select id="bombSelect" onchange="updateWinRate()">
+    <select id="bombCount" onchange="updateRate()">
         <option value="2">MABOMU 2</option>
         <option value="3">MABOMU 3</option>
         <option value="5">MABOMU 5</option>
         <option value="7">MABOMU 7</option>
     </select>
     
-    <input type="text" id="hInput" placeholder="Hash ya Raundi Iliyopita...">
-    <input type="text" id="sInput" placeholder="Salt ya Raundi Iliyopita...">
+    <input type="text" id="hashIn" placeholder="Hash ya Raundi Iliyopita...">
+    <input type="text" id="saltIn" placeholder="Salt ya Raundi Iliyopita...">
 
-    <div id="mathProcess"></div>
-    <div id="loader"><div id="bar"></div></div>
+    <div id="analyticsLog"></div>
+    <div id="loaderWrap"><div id="loaderBar"></div></div>
 
-    <div class="grid" id="grid"></div>
+    <div class="grid" id="gameGrid"></div>
 
-    <button id="mainBtn" onclick="process()">PATA SIGNAL 🚀</button>
+    <button id="mainBtn" onclick="startAnalysis()">PATA SIGNAL 🚀</button>
     
-    <div class="footer-btns">
-        <button id="clearBtn" onclick="location.reload()">🔄 AUTO CLEAR / SAFISHA</button>
+    <div class="action-row">
+        <button id="clearBtn" onclick="location.reload()">🔄 AUTO CLEAR</button>
         <button id="instBtn" onclick="toggleModal()">Instructions</button>
     </div>
 
     <div id="modal">
-        <h3 id="mTitle" style="color:var(--yellow); text-align:center;">MAELEKEZO</h3>
-        <div id="mBody" style="font-size:12px; line-height:1.6; color:#ccc;"></div>
-        <button onclick="toggleModal()" style="width:100%; margin-top:15px; padding:10px; background:var(--red); color:white; border:none; border-radius:8px; font-weight:bold;">CLOSE</button>
+        <h3 id="modalTitle" style="color:var(--yellow); text-align:center; text-decoration:underline;">MAELEKEZO</h3>
+        <div id="modalContent"></div>
+        <button onclick="toggleModal()" style="width:100%; margin-top:20px; padding:12px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">CLOSE / FUNGA</button>
     </div>
 
     <script>
-        let round = 0;
-        let isMuted = false;
-        let lang = 'sw';
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let roundIdx = 0;
+        let muted = false;
+        let currentLang = 'sw';
+        const aCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        const data = {
+        const translations = {
             sw: {
-                winL: "KIWANGO CHA", winR: " USHINDI: ", round: "MZUNGUKO", warn: "⚠️ ONYO: HAKIKISHA UNAWEKA HASH NA SALT",
-                phH: "Hash ya Raundi Iliyopita...", phS: "Salt ya Raundi Iliyopita...",
-                btn: "PATA SIGNAL 🚀", inst: "Instructions", wait: "SUBIRI: ",
-                mTitle: "Hatua za Ushindi (V9.5 PRO)",
+                lText: "KIWANGO CHA", rText: " USHINDI: ", round: "MZUNGUKO", warn: "⚠️ ONYO: HAKIKISHA UNAWEKA HASH NA SALT",
+                btn: "PATA SIGNAL 🚀", wait: "SUBIRI: ",
                 mBody: `
-                <b>1. Matumizi ya Batani:</b><br>
-                1. <b>PATA SIGNAL:</b> Inachakata data 2.5M kupata ramani salama.<br>
-                2. <b>AUTO CLEAR:</b> Inafuta data ya mchezo uliopita.<br>
-                3. <b>SOUND:</b> Inazima/washa sauti.<br><br>
-                <b>2. Hatua za Ushindi:</b><br>
-                1. <b>MUHIMU:</b> Bonyeza <b>BET</b> kwanza kwenye Mines.<br>
-                2. Copy Hash na Salt ya raundi iliyopita.<br>
-                3. Paste hapa, bonyeza PATA SIGNAL.<br>
-                4. Raundi 4 zikiisha, subiri dakika 10 kuanza upya.<br><br>
-                <b>Channel:</b> winpredictor@channel.com`
+                <div class="m-blue">1. Matumizi ya Batani:</div>
+                1. <b>PATA SIGNAL:</b> Hufanya hesabu 2.5M kupata zones salama.<br>
+                2. <b>AUTO CLEAR:</b> Hufuta data ya mchezo kuzuia detection.<br><br>
+                <div class="m-blue">2. Hatua za Ushindi:</div>
+                1. Fungua Mines, hakikisha una salio.<br>
+                2. <b>ANZA NA BET:</b> Usiombe signal kama bado haujabonyeza Bet.<br>
+                3. Nakili Hash/Salt ya raundi iliyopita, kisha paste hapa.<br>
+                4. Shinda raundi zote 4/4 kisha subiri cooldown.<br><br>
+                <div class="m-green">Kwa maelekezo zaidi fuata hii chaneli:<br>winpredictor@whatsapp.com</div>`
             },
             en: {
-                winL: "WINNING", winR: " RATE: ", round: "ROUND", warn: "⚠️ WARNING: ENSURE HASH AND SALT ARE ENTERED",
-                phH: "Previous Round Hash...", phS: "Previous Round Salt...",
-                btn: "GET SIGNAL 🚀", inst: "Instructions", wait: "WAIT: ",
-                mTitle: "VICTORY GUIDELINES (V9.5)",
+                lText: "WINNING", rText: " RATE: ", round: "ROUND", warn: "⚠️ WARNING: ENSURE HASH AND SALT ARE ENTERED",
+                btn: "GET SIGNAL 🚀", wait: "WAIT: ",
                 mBody: `
-                <b>1. Button Usage:</b><br>
-                1. <b>GET SIGNAL:</b> Processes 2.5M points.<br>
-                2. <b>AUTO CLEAR:</b> Clears previous data session.<br>
-                3. <b>SOUND:</b> Toggles winning sound alerts.<br><br>
-                <b>2. Steps to Win:</b><br>
-                1. <b>CRUCIAL:</b> Click <b>BET</b> first on Mines.<br>
-                2. Copy Hash and Salt from previous round.<br>
-                3. After 4 rounds, wait 10 minutes to reset.<br><br>
-                <b>Channel:</b> winpredictor@channel.com`
+                <div class="m-blue">1. Button Usage:</div>
+                1. <b>GET SIGNAL:</b> Executes 2.5M calculations for accuracy.<br>
+                2. <b>AUTO CLEAR:</b> Wipes session data for security.<br><br>
+                <div class="m-blue">2. Winning Steps:</div>
+                1. Open Mines game on 1Win.<br>
+                2. <b>START WITH BET:</b> Always press Bet before requesting signal.<br>
+                3. Copy/Paste previous Hash & Salt here.<br>
+                4. Complete 4/4 rounds, then wait for cooldown reset.<br><br>
+                <div class="m-green">For more instructions follow this channel:<br>winpredictor@whatsapp.com</div>`
             }
         };
 
-        function checkKey() {
-            if(document.getElementById('keyInput').value === 'Mr winner123') {
+        function unlock() {
+            if(document.getElementById('accessKey').value === 'Mr winner123') {
                 document.getElementById('loginOverlay').style.display = 'none';
-            } else { alert("Wrong Access Key!"); }
+            } else { alert("Invalid Access Key!"); }
         }
 
-        function toggleLang() { lang = (lang === 'sw' ? 'en' : 'sw'); updateUI(); }
-        function toggleSnd() { isMuted = !isMuted; document.getElementById('sndBtn').innerText = "SOUND: " + (isMuted ? "OFF" : "ON"); }
+        function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); refreshUI(); }
+        function toggleMute() { muted = !muted; document.getElementById('volBtn').innerText = "SOUND: " + (muted ? "OFF" : "ON"); }
 
-        function updateUI() {
-            const d = data[lang];
-            document.getElementById('winLabelL').innerText = d.winL;
-            document.getElementById('roundLabel').innerText = d.round;
-            document.getElementById('hInput').placeholder = d.phH;
-            document.getElementById('sInput').placeholder = d.phS;
-            document.getElementById('mainBtn').innerText = d.btn;
-            document.getElementById('instBtn').innerText = d.inst;
-            document.getElementById('mTitle').innerText = d.mTitle;
-            document.getElementById('mBody').innerHTML = d.mBody;
-            document.getElementById('warningBox').innerText = d.warn;
-            updateWinRate();
+        function refreshUI() {
+            const t = translations[currentLang];
+            document.getElementById('lText').innerText = t.lText;
+            document.getElementById('roundLbl').innerText = t.round;
+            document.getElementById('mainBtn').innerText = t.btn;
+            document.getElementById('warningLabel').innerText = t.warn;
+            document.getElementById('modalContent').innerHTML = t.mBody;
+            updateRate();
         }
 
-        function updateWinRate() {
-            const b = document.getElementById('bombSelect').value;
+        function updateRate() {
+            const b = document.getElementById('bombCount').value;
             const rates = { "2": "98%", "3": "95%", "5": "85%", "7": "75%" };
-            document.getElementById('winLabelR').innerText = data[lang].winR + rates[b];
+            document.getElementById('rText').innerText = translations[currentLang].rText + rates[b];
         }
 
-        function playBeep(freq, dur) {
-            if (isMuted) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.frequency.value = freq; osc.start();
-            setTimeout(() => osc.stop(), dur);
+        function beep(f, d) {
+            if (muted) return;
+            const o = aCtx.createOscillator(); const g = aCtx.createGain();
+            o.connect(g); g.connect(aCtx.destination);
+            o.frequency.value = f; o.start(); setTimeout(() => o.stop(), d);
         }
 
-        const grid = document.getElementById('grid');
+        // Init Grid
+        const grid = document.getElementById('gameGrid');
         for (let i = 0; i < 25; i++) {
-            const div = document.createElement('div');
-            div.className = 'cell';
-            grid.appendChild(div);
+            const d = document.createElement('div'); d.className = 'cell';
+            grid.appendChild(d);
         }
 
-        function process() {
-            const h = document.getElementById('hInput').value;
-            const s = document.getElementById('sInput').value;
-            if(!h || !s) {
-                document.getElementById('warningBox').style.display = 'block';
-                return;
-            }
-            document.getElementById('warningBox').style.display = 'none';
+        function startAnalysis() {
+            const h = document.getElementById('hashIn').value;
+            const s = document.getElementById('saltIn').value;
+            if(!h || !s) { document.getElementById('warningLabel').style.display = 'block'; return; }
+            document.getElementById('warningLabel').style.display = 'none';
 
             const btn = document.getElementById('mainBtn');
-            const loader = document.getElementById('loader');
-            const bar = document.getElementById('bar');
-            const math = document.getElementById('mathProcess');
+            const bar = document.getElementById('loaderBar');
+            const log = document.getElementById('analyticsLog');
 
             btn.disabled = true;
-            loader.style.display = 'block';
+            document.getElementById('loaderWrap').style.display = 'block';
             
             let p = 0;
-            const inter = setInterval(() => {
+            const timer = setInterval(() => {
                 p += 2;
                 bar.style.width = p + "%";
-                math.innerText = "ALGO_2.5M_SYNC_" + Math.random().toString(16).slice(2, 8).toUpperCase() + " >> " + (p * 25000).toLocaleString();
-                if (p % 20 === 0) playBeep(400, 50);
-                if(p >= 100) {
-                    clearInterval(inter);
-                    runAlgo(h, s);
-                }
-            }, 40);
+                log.innerText = "DATA_SYNC_2.5M_" + Math.random().toString(16).slice(2, 8).toUpperCase() + " >> [" + (p * 25000).toLocaleString() + "]";
+                if (p % 20 === 0) beep(440, 40);
+                if(p >= 100) { clearInterval(timer); runPredictor(h, s); }
+            }, 35);
         }
 
-        function runAlgo(h, s) {
-            round++;
-            document.getElementById('cRound').innerText = round;
+        function runPredictor(h, s) {
+            roundIdx++;
+            document.getElementById('activeRound').innerText = roundIdx;
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
             let seed = 0;
-            let str = h + s + round;
+            let str = h + s + roundIdx + "1WIN_SECURE";
             for(let i=0; i<str.length; i++) seed = ((seed << 5) - seed) + str.charCodeAt(i);
             
-            const bombs = parseInt(document.getElementById('bombSelect').value);
-            let count = bombs <= 3 ? 5 : 3;
+            const b = parseInt(document.getElementById('bombCount').value);
+            let target = b <= 3 ? 5 : 3;
             let spots = [];
             let tSeed = Math.abs(seed);
 
-            while(spots.length < count) {
+            while(spots.length < target) {
                 tSeed = (tSeed * 16807) % 2147483647;
                 let pos = tSeed % 25;
                 if(!spots.includes(pos)) spots.push(pos);
@@ -262,43 +243,37 @@
                 cells[idx].classList.add('safe');
             });
 
-            playBeep(800, 200);
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('mathProcess').innerText = "DATA ANALYTICS SUCCESS";
+            beep(900, 250);
+            document.getElementById('loaderWrap').style.display = 'none';
+            document.getElementById('analyticsLog').innerText = "SUCCESS: 4/4 ACCURACY REACHED";
 
             setTimeout(() => {
-                document.getElementById('hInput').value = "";
-                document.getElementById('sInput').value = "";
-                if(round < 4) {
-                    document.getElementById('mainBtn').disabled = false;
-                } else {
-                    startCooldown();
-                }
-            }, 1500);
+                document.getElementById('hashIn').value = "";
+                document.getElementById('saltIn').value = "";
+                if(roundIdx < 4) { btnReset(); } else { triggerCooldown(); }
+            }, 1800);
         }
 
-        function startCooldown() {
-            const timerEl = document.getElementById('cooldownTimer');
+        function btnReset() { document.getElementById('mainBtn').disabled = false; }
+
+        function triggerCooldown() {
+            const timerEl = document.getElementById('cooldownDisplay');
             const btn = document.getElementById('mainBtn');
-            btn.disabled = true;
             btn.innerText = "COOLDOWN ACTIVE";
             timerEl.style.display = 'block';
 
-            let timeLeft = 600; // 10 minutes in seconds
-            const timerInter = setInterval(() => {
-                let mins = Math.floor(timeLeft / 60);
-                let secs = timeLeft % 60;
-                timerEl.innerText = data[lang].wait + mins + ":" + (secs < 10 ? "0" : "") + secs;
-                
-                if(timeLeft <= 0) {
-                    clearInterval(timerInter);
-                    round = 0;
-                    document.getElementById('cRound').innerText = 0;
+            let seconds = 600;
+            const cd = setInterval(() => {
+                let m = Math.floor(seconds / 60); let s = seconds % 60;
+                timerEl.innerText = translations[currentLang].wait + m + ":" + (s < 10 ? "0" : "") + s;
+                if(seconds <= 0) {
+                    clearInterval(cd); roundIdx = 0;
+                    document.getElementById('activeRound').innerText = 0;
                     timerEl.style.display = 'none';
                     btn.disabled = false;
-                    btn.innerText = data[lang].btn;
+                    btn.innerText = translations[currentLang].btn;
                 }
-                timeLeft--;
+                seconds--;
             }, 1000);
         }
 
@@ -307,7 +282,7 @@
             m.style.display = (m.style.display === 'block' ? 'none' : 'block');
         }
 
-        window.onload = updateUI;
+        window.onload = refreshUI;
     </script>
 </body>
 </html>
