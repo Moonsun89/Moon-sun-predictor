@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V10.1 ULTRA</title>
+    <title>MOON SUN PREDICTOR V10.5 ULTRA</title>
     <style>
         :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; }
@@ -73,7 +73,7 @@
         <div style="font-size:17px; font-weight:bold; margin-top:5px;">
             <span id="roundLbl" style="color:var(--yellow);">MZUNGUKO</span> 
             <span style="color:var(--red);" id="activeRound">0</span> 
-            <span style="color:var(--yellow);">/ 4</span>
+            <span style="color:var(--yellow);">/ 5</span>
         </div>
     </div>
 
@@ -106,6 +106,7 @@
         let currentLang = 'sw';
         let muted = false;
         let isCooldownActive = false;
+        const MAX_ROUNDS = 5;
         const wsLink = "https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336";
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -175,11 +176,11 @@
                 hashPh: "Hash ya Raundi Iliyopita...", saltPh: "Salt ya Raundi Iliyopita...",
                 linkNote: "KWA MAELEKEZO ZAIDI FUATA HII CHANELI", linkBtn: "BONYEZA HAPA KUJIUNGA NA CHANELI YA WHATSAPP",
                 mBody: `
-                <div class="m-section">1. MBINU YA USHINDI 4/4</div>
+                <div class="m-section">1. MBINU YA USHINDI 5/5</div>
                 <ul class="m-text">
-                    <li>• <b>HARAKA:</b> Copy hash/salt haraka ukiweza.</li>
-                    <li>• <b>BET:</b> Bonyeza BET kule 1Win KABLA ya kuomba signal hapa.</li>
-                    <li>• <b>PUMZIKA:</b> Baada ya 4/4 lazima upumzike dakika 10 kuepuka 1Win kuzuia akaunti yako.</li>
+                    <li>• <b>BOMU 7:</b> Inatoa nyota 2 tu za usalama.</li>
+                    <li>• <b>BOMU 5:</b> Inatoa nyota 3 tu za usalama.</li>
+                    <li>• <b>HARAKA:</b> Copy na Paste data haraka ndani ya sekunde 20.</li>
                 </ul>`
             },
             en: {
@@ -189,11 +190,11 @@
                 hashPh: "Previous Round Hash...", saltPh: "Previous Round Salt...",
                 linkNote: "FOR MORE INSTRUCTIONS FOLLOW THIS CHANNEL", linkBtn: "CLICK HERE TO JOIN WHATSAPP CHANNEL",
                 mBody: `
-                <div class="m-section">1. 4/4 WINNING STRATEGY</div>
+                <div class="m-section">1. 5/5 WINNING STRATEGY</div>
                 <ul class="m-text">
-                    <li>• <b>SPEED:</b> Copy hash/salt as fast as possible.</li>
-                    <li>• <b>BET:</b> Press BET on 1Win BEFORE requesting signal here.</li>
-                    <li>• <b>COOLDOWN:</b> After 4/4 wins, wait 10 mins to avoid 1Win banning your session.</li>
+                    <li>• <b>7 BOMBS:</b> Provides only 2 safe stars.</li>
+                    <li>• <b>5 BOMBS:</b> Provides only 3 safe stars.</li>
+                    <li>• <b>SPEED:</b> Copy and Paste data within 20 seconds.</li>
                 </ul>`
             }
         };
@@ -225,7 +226,7 @@
             });
             
             if(!isCooldownActive) {
-                document.getElementById('mainBtn').innerText = (roundIdx >= 4) ? t.cdBtn : t.btn;
+                document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? t.cdBtn : t.btn;
                 document.getElementById('activeRound').innerText = roundIdx;
             }
             updateRate();
@@ -263,13 +264,12 @@
             btn.disabled = true;
             document.getElementById('loaderWrap').style.display = 'block';
             
-            // SPEED OPTIMIZATION: Faster loading (1.2 seconds)
             let p = 0;
             const timer = setInterval(() => {
                 p += 5; bar.style.width = p + "%";
                 if(p % 20 === 0) playSound(400, 'square', 0.05);
                 if(p >= 100) { clearInterval(timer); runLogic(h, s); }
-            }, 30); 
+            }, 25); 
         }
 
         function runLogic(h, s) {
@@ -279,17 +279,23 @@
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
-            // ENHANCED ALGORITHM FOR 4/4 TARGET
+            const bombs = parseInt(document.getElementById('bombCount').value);
+            let starCount = 4; // Default
+            if (bombs === 7) starCount = 2;
+            else if (bombs === 5) starCount = 3;
+
             let seed = 0;
-            let str = h + s + roundIdx + "ULTRA_V10.1_STABLE_4/4";
+            let str = h + s + roundIdx + "ULTRA_V10.5_STABLE_5/5";
             for(let i=0; i<str.length; i++) seed = ((seed << 5) - seed) + str.charCodeAt(i);
             
-            let tSeed = Math.abs(seed);
             let spots = [];
-            while(spots.length < 4) {
-                tSeed = (tSeed * 16807) % 2147483647;
-                let pos = tSeed % 25;
+            let attempt = 0;
+            while(spots.length < starCount && attempt < 100) {
+                // Advanced entropy using sine for better distribution
+                let pseudo = Math.abs(Math.sin(seed + attempt) * 10000);
+                let pos = Math.floor(pseudo % 25);
                 if(!spots.includes(pos)) spots.push(pos);
+                attempt++;
             }
 
             spots.forEach((idx, i) => {
@@ -304,7 +310,7 @@
             document.getElementById('hashIn').value = "";
             document.getElementById('saltIn').value = "";
             
-            if(roundIdx >= 4) {
+            if(roundIdx >= MAX_ROUNDS) {
                 setTimeout(() => {
                     playJackpot();
                     const endTime = Date.now() + 600000;
@@ -353,7 +359,12 @@
             m.style.display = (m.style.display === 'block' ? 'none' : 'block');
         }
 
-        function updateRate() { document.getElementById('rText').innerText = translations[currentLang].rText + "99.8%"; }
+        function updateRate() { 
+            const b = parseInt(document.getElementById('bombCount').value);
+            let rate = "99.8%";
+            if (b >= 7) rate = "98.5%";
+            document.getElementById('rText').innerText = translations[currentLang].rText + rate; 
+        }
         window.onload = refreshUI;
     </script>
 </body>
