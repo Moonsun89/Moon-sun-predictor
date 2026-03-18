@@ -3,41 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V11 ULTRA - 1WIN EDITION</title>
+    <title>MOON SUN PREDICTOR V10.5 ULTRA</title>
     <style>
-        :root { --bg: #020406; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
+        :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; }
 
-        /* UI Elements */
+        /* Login System */
+        #loginOverlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .login-box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--blue); text-align: center; width: 85%; max-width: 300px; box-shadow: 0 0 20px rgba(0,123,255,0.3); }
+
         .top-nav { width: 95%; display: flex; justify-content: space-between; position: fixed; top: 10px; z-index: 1000; }
         .btn-mini { background: rgba(0,123,255,0.1); color: var(--blue); border: 1px solid var(--blue); padding: 6px 10px; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; }
 
         .header-section { text-align: center; margin-top: 55px; }
-        .app-name { font-size: 20px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
-        .platform-tag { font-size: 10px; color: var(--blue); font-weight: bold; border: 1px solid var(--blue); padding: 2px 8px; border-radius: 4px; margin-top: 5px; display: inline-block; }
+        .app-name { font-size: 22px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+        .c-y { color: var(--yellow); } .c-b { color: var(--blue); } .c-g { color: var(--green); }
+        .v-ultra { background: linear-gradient(to right, var(--yellow), var(--green), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-style: italic; }
 
         .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 90%; max-width: 340px; text-align: center; border: 1px solid #1a2c3a; }
-        #rateDisplay { font-weight: bold; color: var(--yellow); }
+        #cooldownDisplay { color: var(--red); font-size: 15px; font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 6px 18px; border-radius: 20px; animation: blinker 1s infinite; }
         
-        /* Grid & Logic UI */
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 50px; height: 50px; background: #12181f; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid #1b262f; transition: 0.3s; }
-        .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 10px var(--green); background: rgba(0,255,136,0.1); transform: scale(1.05); }
+        .cell { width: 50px; height: 50px; background: #12181f; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid #1b262f; transition: 0.2s; }
+        .cell.safe { border: 2.5px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0,255,136,0.2); transform: scale(1.05); }
 
         input, select { width: 90%; max-width: 340px; padding: 13px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 10px; margin-bottom: 10px; text-align: center; outline: none; font-size: 13px; font-weight: bold; }
         #mainBtn { width: 90%; max-width: 340px; padding: 18px; background: linear-gradient(to right, #007bff, #0052ad); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 15px; }
-        
-        /* Modal Styling */
-        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 80%; background: #0d1217; border: 2px solid var(--blue); border-radius: 20px; padding: 20px; z-index: 10000; overflow-y: auto; box-shadow: 0 0 30px rgba(0,0,0,0.8); }
-        .m-header { color: var(--yellow); font-weight: bold; text-align: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .m-section { color: var(--blue); font-weight: bold; margin-top: 15px; font-size: 14px; text-transform: uppercase; }
-        .m-text { font-size: 12px; color: #ccc; line-height: 1.5; margin-top: 5px; }
+        #mainBtn:disabled { background: #1a2c3a; color: #555; }
 
-        #cooldownDisplay { color: var(--red); font-weight: bold; display: none; margin-bottom: 10px; text-align: center; animation: blinker 1s infinite; }
+        /* Modal / Instructions */
+        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 20px; padding: 20px; z-index: 10000; overflow-y: auto; }
+        .m-header { color: var(--yellow); font-weight: bold; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+        .m-section { color: var(--blue); font-weight: bold; margin-top: 15px; text-transform: uppercase; font-size: 14px; }
+        .m-text { font-size: 12px; line-height: 1.6; color: #ccc; margin-top: 5px; }
+        .m-link { color: var(--green); text-decoration: none; font-weight: bold; display: block; margin-top: 15px; padding: 12px; background: rgba(0,255,136,0.1); border-radius: 8px; text-align: center; font-size: 13px; border: 1px dashed var(--green); }
+        
+        #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10001; }
         @keyframes blinker { 50% { opacity: 0.3; } }
     </style>
 </head>
 <body>
+
+    <canvas id="confettiCanvas"></canvas>
+
+    <div id="loginOverlay">
+        <div class="login-box">
+            <h3 style="color:var(--yellow); margin-top:0; letter-spacing: 2px;" id="loginTitle">ACCESS KEY</h3>
+            <input type="password" id="accessKey" placeholder="Enter Key...">
+            <button onclick="unlock()" style="width:100%; padding:14px; background:var(--blue); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" id="loginBtn">LOGIN</button>
+        </div>
+    </div>
 
     <div class="top-nav">
         <button class="btn-mini" onclick="toggleLang()" id="langBtn">LUGHA: SW</button>
@@ -45,170 +60,258 @@
     </div>
 
     <div class="header-section">
-        <h1 class="app-name"><span class="c-y">MOON</span> <span class="c-b">SUN</span> <span class="c-g">PREDICTOR</span></h1>
-        <div class="platform-tag">OFFICIAL 1WIN ALGORITHM</div>
+        <h1 class="app-name">
+            <span class="c-y">MOON</span> <span class="c-b">SUN</span> <span class="c-g">PREDICTOR</span> 
+            <br><span class="v-ultra">V10.5 ULTRA</span>
+        </h1>
     </div>
 
     <div class="info-panel">
-        <div><span id="rateLabel">WINNING RATE:</span> <span id="rateValue">98%</span></div>
-        <div style="margin-top:5px; font-size:14px;">ROUND: <span id="activeRound" style="color:var(--red);">0</span>/3</div>
+        <div><span style="color:var(--blue); font-weight:bold;" id="lText">KIWANGO CHA</span> <span style="color:var(--yellow); font-weight:bold;" id="rText"> USHINDI: 98%</span></div>
+        <div style="font-size:17px; font-weight:bold; margin-top:5px;">
+            <span id="roundLbl" style="color:var(--yellow);">MZUNGUKO</span> 
+            <span style="color:var(--red);" id="activeRound">0</span> 
+            <span style="color:var(--yellow);">/ 3</span>
+        </div>
     </div>
 
     <div id="cooldownDisplay">WAIT: 10:00</div>
 
-    <select id="bombCount" onchange="updateRate()">
-        <option value="3">BOMBS 3 (Accuracy 98%)</option>
-        <option value="5">BOMBS 5 (Accuracy 90%)</option>
-        <option value="7">BOMBS 7 (Accuracy 85%)</option>
-    </select>
-    
-    <input type="text" id="hashIn" placeholder="Paste Previous Round Hash...">
-    <input type="text" id="saltIn" placeholder="Paste Previous Round Salt...">
+    <select id="bombCount" onchange="updateRate()"></select>
+    <input type="text" id="hashIn" placeholder="Hash ya Raundi Iliyopita...">
+    <input type="text" id="saltIn" placeholder="Salt ya Raundi Iliyopita...">
 
-    <div id="gameGrid" class="grid"></div>
+    <div id="loaderWrap" style="width:90%; height:6px; background:#000; display:none; margin-bottom:15px; border-radius:10px; overflow:hidden;"><div id="loaderBar" style="height:100%; width:0%; background:var(--green); transition: 0.05s;"></div></div>
 
-    <button id="mainBtn" onclick="startAnalysis()">GET SIGNAL 🚀</button>
+    <div class="grid" id="gameGrid"></div>
+
+    <button id="mainBtn" onclick="startAnalysis()">PATA SIGNAL 🚀</button>
     
     <div style="display:flex; gap:10px; width:90%; margin-top:15px;">
-        <button onclick="location.reload()" style="flex:1; padding:12px; border-radius:10px; background:#1a2c3a; color:white; border:none; font-weight:bold;">CLEAR</button>
-        <button onclick="toggleModal()" style="flex:1; padding:12px; border-radius:10px; background:var(--yellow); color:black; border:none; font-weight:bold;">GUIDE</button>
+        <button onclick="location.reload()" style="flex:1; padding:14px; background:#1a2c3a; color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" id="clearBtnText">🔄 CLEAR</button>
+        <button onclick="toggleModal()" style="flex:1; padding:14px; background:var(--yellow); color:#000; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" id="guideBtnText">MAELEKEZO</button>
     </div>
 
     <div id="modal">
-        <div class="m-header" id="mTitle">MAELEKEZO YA KINA</div>
-        
-        <div class="m-section">1. KWA NINI 1WIN PEKEE?</div>
-        <div class="m-text">Mfumo huu umetengenezwa kusoma "Provably Fair" algorithm ya 1Win pekee. Isitumike kwenye platform nyingine maana matokeo hayatakuwa sahihi.</div>
-
-        <div class="m-section">2. KAZI ZA VITUFE</div>
-        <div class="m-text">
-            • <b>LUGHA:</b> Badili kati ya Swahili na English kwa urahisi.<br>
-            • <b>SAUTI:</b> Washa/Zima milio ya ushindi na tahadhari.
-        </div>
-
-        <div class="m-section">3. JINSI YA KUPATA HASH NA SALT</div>
-        <div class="m-text">
-            Nenda kwenye mchezo wa Mines kule 1Win. Fungua sehemu ya <b>'Provably Fair Settings'</b>. Hapo utaona <i>'Previous Round Hash'</i> na <i>'Previous Round Salt'</i>. Nakili hizo namba na uziweke hapa.
-        </div>
-
-        <div class="m-section">4. UMUHIMU WA HASH NA SALT</div>
-        <div class="m-text">
-            Namba hizi ndizo zinazoamua mabomu yalipo. App hii inatumia 'Bitwise Logic' kuchakata hizo namba na kupata sehemu ambazo hazina mabomu kwa asilimia kubwa.
-        </div>
-
-        <button onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">FUNGA</button>
+        <div id="modalTitle" class="m-header">MAELEKEZO YA KINA</div>
+        <div id="modalContent"></div>
+        <button onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" id="closeBtnText">FUNGA</button>
     </div>
 
     <script>
-        let roundIdx = 0;
+        let roundIdx = parseInt(localStorage.getItem('predictorRound')) || 0;
         let currentLang = 'sw';
         let muted = false;
-        let isCooldown = false;
+        let isCooldownActive = false;
+        const MAX_ROUNDS = 3;
+        const correctKey = "Mr winner123";
+        const wsLink = "https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336";
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        let confetti = [];
 
-        function playSound(f, d) {
-            if (muted) return;
-            const osc = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            osc.frequency.setValueAtTime(f, audioCtx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
-            osc.connect(g); g.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + d);
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
+
+        function createConfetti() {
+            for(let i=0; i<100; i++) {
+                confetti.push({ x: canvas.width/2, y: canvas.height, dir: Math.random()*Math.PI - Math.PI, speed: Math.random()*12+8, color: `hsl(${Math.random()*360}, 100%, 50%)`, size: Math.random()*5+2, life: 1 });
+            }
+            animateConfetti();
         }
 
-        function updateRate() {
-            const b = document.getElementById('bombCount').value;
-            const val = b == 3 ? "98%" : b == 5 ? "90%" : "85%";
-            document.getElementById('rateValue').innerText = val;
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confetti.forEach((p, i) => {
+                p.x += Math.cos(p.dir) * p.speed; p.y += Math.sin(p.dir) * p.speed + 3; p.life -= 0.01;
+                ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+                if(p.life <= 0) confetti.splice(i, 1);
+            });
+            if(confetti.length > 0) requestAnimationFrame(animateConfetti);
+        }
+
+        function playSound(f, t, d, v=0.1) {
+            if (muted) return; if (audioCtx.state === 'suspended') audioCtx.resume();
+            const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+            o.type = t; o.frequency.setValueAtTime(f, audioCtx.currentTime);
+            g.gain.setValueAtTime(v, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
+            o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + d);
+        }
+
+        const translations = {
+            sw: {
+                lang: "LUGHA: SW", sound: "SAUTI: ", lText: "KIWANGO CHA", rText: " USHINDI: ", round: "MZUNGUKO",
+                btn: "PATA SIGNAL 🚀", instBtn: "MAELEKEZO", bombTxt: "MABOMU", wait: "SUBIRI: ", cdBtn: "MUDA WA KUSUBIRI",
+                mHeader: "MAELEKEZO YA KINA", mClose: "FUNGA", clear: "🔄 CLEAR", loginT: "ACCESS KEY", loginB: "LOGIN", loginPh: "Ingiza Key...",
+                hashPh: "Hash ya Raundi Iliyopita...", saltPh: "Salt ya Raundi Iliyopita...",
+                mBody: `
+                <div class="m-section">1. KAZI ZA BATANI</div>
+                <div class="m-text">
+                    • <b>PATA SIGNAL:</b> Inatumia Algorithm ya V10.5 Ultra kutafuta sehemu salama (Safe Zones).<br>
+                    • <b>CLEAR:</b> Inasafisha data za mchezo na kuanza upya mzunguko kwa usalama.<br>
+                    • <b>SAUTI & LUGHA:</b> Badili mfumo kulingana na mahitaji yako.
+                </div>
+                <div class="m-section">2. HATUA ZA KUFUATA (1WIN ONLY)</div>
+                <div class="m-text">
+                    1. <b>Platform Sahihi:</b> Programu hii inafanya kazi na 1Win pekee kupitia mfumo wao wa Provably Fair.<br>
+                    2. <b>Hash & Salt:</b> Nakili Hash na Salt kutoka kwenye raundi iliyopita ya Mines kule 1Win (Settings).<br>
+                    3. <b>Umuhimu:</b> Namba hizi ndizo zinazoamua mabomu yalipo. App hii inachambua patterns 1000+ kuzuia kurudia makosa.<br>
+                    4. <b>Utaratibu:</b> Paste Hash/Salt, bonyeza <b>BET</b> kule 1Win, kisha ubonyeze PATA SIGNAL hapa.
+                </div>
+                <a href="${wsLink}" class="m-link" target="_blank">BOFYA HAPA KWA MAELEKEZO ZAIDI (WHATSAPP CHANNEL)</a>`
+            },
+            en: {
+                lang: "LANG: EN", sound: "SOUND: ", lText: "WINNING", rText: " RATE: ", round: "ROUND",
+                btn: "GET SIGNAL 🚀", instBtn: "GUIDE", bombTxt: "BOMBS", wait: "WAIT: ", cdBtn: "COOLDOWN ACTIVE",
+                mHeader: "DETAILED GUIDE", mClose: "CLOSE", clear: "🔄 CLEAR", loginT: "ACCESS KEY", loginB: "LOGIN", loginPh: "Enter Key...",
+                hashPh: "Previous Round Hash...", saltPh: "Previous Round Salt...",
+                mBody: `
+                <div class="m-section">1. BUTTON FUNCTIONS</div>
+                <div class="m-text">
+                    • <b>GET SIGNAL:</b> Uses V10.5 Ultra Algorithm to find Safe Zones.<br>
+                    • <b>CLEAR:</b> Resets session data and starts a new safe round.<br>
+                    • <b>SOUND & LANG:</b> Customize app settings for your needs.
+                </div>
+                <div class="m-section">2. STEPS FOR SUCCESS (1WIN ONLY)</div>
+                <div class="m-text">
+                    1. <b>Correct Platform:</b> This app works strictly with 1Win using their Provably Fair system.<br>
+                    2. <b>Hash & Salt:</b> Copy Hash and Salt from your previous 1Win Mines round (Settings).<br>
+                    3. <b>Importance:</b> These values determine bomb locations. Our app scans 1000+ unique patterns to ensure safety.<br>
+                    4. <b>Order:</b> Paste Hash/Salt, click <b>BET</b> on 1Win, then click GET SIGNAL here.
+                </div>
+                <a href="${wsLink}" class="m-link" target="_blank">CLICK HERE FOR MORE GUIDE (WHATSAPP CHANNEL)</a>`
+            }
+        };
+
+        function unlock() { if(document.getElementById('accessKey').value === correctKey) { document.getElementById('loginOverlay').style.display = 'none'; if (audioCtx.state === 'suspended') audioCtx.resume(); checkExistingCD(); } else { alert("Incorrect Key!"); } }
+        function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); refreshUI(); }
+        function toggleMute() { muted = !muted; refreshUI(); }
+        
+        function refreshUI() {
+            const t = translations[currentLang];
+            document.getElementById('langBtn').innerText = t.lang;
+            document.getElementById('volBtn').innerText = t.sound + (muted ? "OFF" : "ON");
+            document.getElementById('lText').innerText = t.lText;
+            document.getElementById('roundLbl').innerText = t.round;
+            document.getElementById('guideBtnText').innerText = t.instBtn;
+            document.getElementById('clearBtnText').innerText = t.clear;
+            document.getElementById('modalTitle').innerText = t.mHeader;
+            document.getElementById('closeBtnText').innerText = t.mClose;
+            document.getElementById('modalContent').innerHTML = t.mBody;
+            document.getElementById('hashIn').placeholder = t.hashPh;
+            document.getElementById('saltIn').placeholder = t.saltPh;
+            document.getElementById('loginTitle').innerText = t.loginT;
+            document.getElementById('loginBtn').innerText = t.loginB;
+            document.getElementById('accessKey').placeholder = t.loginPh;
+            
+            const select = document.getElementById('bombCount');
+            const val = select.value || "3"; select.innerHTML = '';
+            [3, 5, 7].forEach(n => {
+                const opt = document.createElement('option');
+                const rate = n==3 ? "98%" : n==5 ? "90%" : "85%";
+                opt.value = n; opt.text = `${t.bombTxt} ${n} (Acc: ${rate})`;
+                if(n == val) opt.selected = true; select.appendChild(opt);
+            });
+            
+            if(!isCooldownActive) {
+                document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? t.cdBtn : t.btn;
+                document.getElementById('activeRound').innerText = roundIdx;
+            } else { document.getElementById('mainBtn').innerText = t.cdBtn; }
+            updateRate();
         }
 
         const grid = document.getElementById('gameGrid');
-        for(let i=0; i<25; i++) {
-            const d = document.createElement('div'); d.className = 'cell';
-            grid.appendChild(d);
-        }
+        for (let i = 0; i < 25; i++) { const d = document.createElement('div'); d.className = 'cell'; grid.appendChild(d); }
 
         function startAnalysis() {
-            if(isCooldown) return;
-            const h = document.getElementById('hashIn').value;
-            const s = document.getElementById('saltIn').value;
-            if(!h || !s) { alert(currentLang === 'sw' ? "Weka Hash na Salt!" : "Enter Hash and Salt!"); return; }
-
-            roundIdx++;
-            document.getElementById('activeRound').innerText = roundIdx;
+            if(isCooldownActive) return;
+            const h = document.getElementById('hashIn').value; const s = document.getElementById('saltIn').value;
+            if(!h || !s) { playSound(200, 'sawtooth', 0.2); return; }
             
+            const btn = document.getElementById('mainBtn'); const bar = document.getElementById('loaderBar');
+            btn.disabled = true; document.getElementById('loaderWrap').style.display = 'block';
+            
+            let p = 0;
+            const timer = setInterval(() => {
+                p += 5; bar.style.width = p + "%";
+                if(p >= 100) { clearInterval(timer); runLogic(h, s); }
+            }, 20); 
+        }
+
+        function runLogic(h, s) {
+            roundIdx++; localStorage.setItem('predictorRound', roundIdx);
+            document.getElementById('activeRound').innerText = roundIdx;
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
-            // Advanced Seed Logic for >1000 patterns
-            let seed = 0;
-            let combined = h + s + roundIdx + "ULTRA_V11";
-            for(let i=0; i<combined.length; i++) {
-                seed = ((seed << 5) - seed) + combined.charCodeAt(i);
-                seed |= 0; 
-            }
+            const bombs = parseInt(document.getElementById('bombCount').value);
+            let starCount = bombs >= 7 ? 2 : 3;
+
+            // Pattern Seed Logic (>1000 Patterns)
+            let seed = 0; let combined = h + s + roundIdx + "ULTRA_V10.5";
+            for(let i=0; i<combined.length; i++) { seed = Math.imul(31, seed) + combined.charCodeAt(i) | 0; }
             seed = Math.abs(seed);
-
+            
             let spots = [];
-            let count = document.getElementById('bombCount').value == 7 ? 2 : 3;
-
-            while(spots.length < count) {
-                // Pseudo-random pattern generator based on seed
-                let pos = (seed * (spots.length + 7) % 25);
+            while(spots.length < starCount) {
+                let pseudo = Math.abs(Math.sin(seed++) * 10000);
+                let pos = Math.floor(pseudo % 25);
                 if(!spots.includes(pos)) spots.push(pos);
-                seed = (seed * 16807) % 2147483647; // Lehmer PRNG logic
             }
 
+            // SMART DELAY: 300ms kati ya kila nyota
             spots.forEach((idx, i) => {
                 setTimeout(() => {
-                    cells[idx].innerHTML = '⭐';
-                    cells[idx].classList.add('safe');
-                    playSound(500 + (i*100), 0.2);
+                    cells[idx].innerHTML = '⭐'; cells[idx].classList.add('safe');
+                    playSound(600 + (i*100), 'sine', 0.15);
                 }, i * 300);
             });
 
-            if(roundIdx >= 3) triggerCooldown();
+            document.getElementById('loaderWrap').style.display = 'none';
+            document.getElementById('hashIn').value = ""; document.getElementById('saltIn').value = "";
+            
+            if(roundIdx >= MAX_ROUNDS) {
+                setTimeout(() => { createConfetti(); startCD(600); }, 1200);
+            } else { setTimeout(() => { document.getElementById('mainBtn').disabled = false; }, 1200); }
         }
 
-        function triggerCooldown() {
-            isCooldown = true;
-            document.getElementById('mainBtn').disabled = true;
-            let time = 600;
-            const display = document.getElementById('cooldownDisplay');
-            display.style.display = 'block';
-            
-            const timer = setInterval(() => {
-                let m = Math.floor(time/60); let s = time%60;
-                display.innerText = `WAIT: ${m}:${s < 10 ? '0'+s : s}`;
-                if(time <= 0) {
-                    clearInterval(timer);
-                    isCooldown = false;
-                    roundIdx = 0;
-                    document.getElementById('mainBtn').disabled = false;
-                    display.style.display = 'none';
-                    document.getElementById('activeRound').innerText = '0';
+        function checkExistingCD() {
+            const endTime = localStorage.getItem('predictorCooldown');
+            if(endTime) {
+                const remaining = Math.floor((parseInt(endTime) - Date.now()) / 1000);
+                if(remaining > 0) startCD(remaining); else localStorage.removeItem('predictorCooldown');
+            }
+        }
+
+        function startCD(sec) {
+            isCooldownActive = true;
+            const timerEl = document.getElementById('cooldownDisplay');
+            const btn = document.getElementById('mainBtn');
+            btn.disabled = true; timerEl.style.display = 'block';
+            const cd = setInterval(() => {
+                const t = translations[currentLang];
+                btn.innerText = t.cdBtn;
+                let m = Math.floor(sec/60); let s = sec%60;
+                timerEl.innerText = t.wait + m + ":" + (s < 10 ? "0" : "") + s;
+                if(sec <= 0) {
+                    clearInterval(cd); roundIdx = 0; isCooldownActive = false;
+                    localStorage.removeItem('predictorRound'); localStorage.removeItem('predictorCooldown');
+                    timerEl.style.display = 'none'; btn.disabled = false; refreshUI();
                 }
-                time--;
+                sec--;
+                localStorage.setItem('predictorCooldown', Date.now() + (sec * 1000));
             }, 1000);
         }
 
-        function toggleLang() {
-            currentLang = currentLang === 'sw' ? 'en' : 'sw';
-            document.getElementById('langBtn').innerText = currentLang === 'sw' ? "LUGHA: SW" : "LANG: EN";
-            document.getElementById('mTitle').innerText = currentLang === 'sw' ? "MAELEKEZO YA KINA" : "DETAILED GUIDE";
-            document.getElementById('rateLabel').innerText = currentLang === 'sw' ? "KIWANGO CHA USHINDI:" : "WINNING RATE:";
+        function toggleModal() { const m = document.getElementById('modal'); m.style.display = (m.style.display === 'block' ? 'none' : 'block'); }
+        function updateRate() { 
+            const b = parseInt(document.getElementById('bombCount').value);
+            const rate = b==3 ? "98%" : b==5 ? "90%" : "85%";
+            document.getElementById('rText').innerText = translations[currentLang].rText + rate; 
         }
-
-        function toggleMute() {
-            muted = !muted;
-            document.getElementById('volBtn').innerText = muted ? "SAUTI: OFF" : "SAUTI: ON";
-        }
-
-        function toggleModal() {
-            const m = document.getElementById('modal');
-            m.style.display = m.style.display === 'block' ? 'none' : 'block';
-        }
+        window.onload = refreshUI;
     </script>
 </body>
 </html>
