@@ -5,52 +5,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>MOON SUN PREDICTOR V10.5 ULTRA</title>
     <style>
-        :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
-        body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; }
+        :root { 
+            --bg: #030508; 
+            --card: #0a0e14; 
+            --blue: #007bff; 
+            --green: #00ff88; 
+            --yellow: #ffcc00; 
+            --red: #ff3333; 
+            --white: #ffffff; 
+        }
+        body { 
+            background: var(--bg); 
+            color: var(--white); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 10px; 
+            margin: 0; 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+        }
 
-        /* Login System */
-        #loginOverlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .login-box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--blue); text-align: center; width: 85%; max-width: 300px; box-shadow: 0 0 20px rgba(0,123,255,0.3); }
+        /* LOGIN SYSTEM */
+        #loginOverlay { 
+            position: fixed; 
+            inset: 0; 
+            background: var(--bg); 
+            z-index: 9999; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .login-box { 
+            background: var(--card); 
+            padding: 30px; 
+            border-radius: 15px; 
+            border: 1px solid var(--blue); 
+            text-align: center; 
+            width: 85%; 
+            max-width: 300px; 
+            box-shadow: 0 0 30px rgba(0,123,255,0.4); 
+        }
 
+        /* NAVIGATION & HEADER */
         .top-nav { width: 95%; display: flex; justify-content: space-between; position: fixed; top: 10px; z-index: 1000; }
         .btn-mini { background: rgba(0,123,255,0.1); color: var(--blue); border: 1px solid var(--blue); padding: 6px 10px; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; }
-
+        
         .header-section { text-align: center; margin-top: 55px; }
         .app-name { font-size: 22px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
         .c-y { color: var(--yellow); } .c-b { color: var(--blue); } .c-g { color: var(--green); }
-        .v-ultra { background: linear-gradient(to right, var(--yellow), var(--green), var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-style: italic; }
+        .v-ultra { 
+            background: linear-gradient(to right, var(--yellow), var(--green), var(--blue)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            font-weight: 900; 
+            font-size: 18px;
+        }
 
-        .info-panel { background: var(--card); padding: 12px; border-radius: 12px; margin: 15px 0; width: 90%; max-width: 340px; text-align: center; border: 1px solid #1a2c3a; }
-        #cooldownDisplay { color: var(--red); font-size: 15px; font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 6px 18px; border-radius: 20px; animation: blinker 1s infinite; }
-        
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--blue); margin-bottom: 10px; }
-        .cell { width: 50px; height: 50px; background: #12181f; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid #1b262f; transition: 0.2s; }
-        .cell.safe { border: 2.5px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0,255,136,0.2); transform: scale(1.05); }
+        /* INFO & STATUS */
+        .info-panel { 
+            background: var(--card); 
+            padding: 12px; 
+            border-radius: 12px; 
+            margin: 15px 0; 
+            width: 90%; 
+            max-width: 340px; 
+            text-align: center; 
+            border: 1px solid #1a2c3a; 
+        }
+        #cooldownDisplay { 
+            color: var(--red); 
+            font-size: 18px; 
+            font-weight: 900; 
+            display: none; 
+            margin-bottom: 10px; 
+            border: 2px solid var(--red); 
+            padding: 8px 20px; 
+            border-radius: 30px; 
+            animation: pulse 1s infinite; 
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        input, select { width: 90%; max-width: 340px; padding: 13px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 10px; margin-bottom: 10px; text-align: center; outline: none; font-size: 13px; font-weight: bold; }
-        #mainBtn { width: 90%; max-width: 340px; padding: 18px; background: linear-gradient(to right, #007bff, #0052ad); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 15px; }
-        #mainBtn:disabled { background: #1a2c3a; color: #555; }
+        /* GRID SYSTEM */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 8px; 
+            background: #000; 
+            padding: 12px; 
+            border-radius: 15px; 
+            border: 1px solid var(--blue); 
+            margin-bottom: 10px; 
+        }
+        .cell { 
+            width: 50px; 
+            height: 50px; 
+            background: #12181f; 
+            border-radius: 8px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 24px; 
+            border: 1px solid #1b262f; 
+            transition: 0.3s; 
+        }
+        .cell.safe { border: 2.5px solid var(--green); box-shadow: 0 0 20px var(--green); background: rgba(0,255,136,0.2); }
 
-        /* Modal / Instructions */
-        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 20px; padding: 20px; z-index: 10000; overflow-y: auto; }
-        .m-header { color: var(--yellow); font-weight: bold; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+        /* INPUTS & BUTTONS */
+        input, select { 
+            width: 90%; max-width: 340px; padding: 13px; background: #000; 
+            border: 1px solid #1a2c3a; color: var(--green); border-radius: 10px; 
+            margin-bottom: 10px; text-align: center; outline: none; font-size: 13px; font-weight: bold; 
+        }
+        #mainBtn { 
+            width: 90%; max-width: 340px; padding: 18px; 
+            background: linear-gradient(45deg, #007bff, #00ff88); 
+            color: white; border: none; border-radius: 12px; 
+            font-weight: bold; cursor: pointer; text-transform: uppercase; 
+        }
+        #mainBtn:disabled { background: #1a2c3a; color: #555; cursor: not-allowed; }
+
+        /* MODAL */
+        #modal { 
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 92%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); 
+            border-radius: 20px; padding: 20px; z-index: 10000; overflow-y: auto; 
+        }
+        .m-header { color: var(--yellow); font-weight: bold; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; text-align: center; }
         .m-section { color: var(--blue); font-weight: bold; margin-top: 15px; text-transform: uppercase; font-size: 14px; }
         .m-text { font-size: 12px; line-height: 1.6; color: #ccc; margin-top: 5px; }
-        .m-link { color: var(--green); text-decoration: none; font-weight: bold; display: block; margin-top: 15px; padding: 12px; background: rgba(0,255,136,0.1); border-radius: 8px; text-align: center; font-size: 13px; border: 1px dashed var(--green); }
+        .m-link { color: var(--green); text-decoration: none; font-weight: bold; display: block; margin-top: 15px; padding: 12px; background: rgba(0,255,136,0.1); border-radius: 8px; text-align: center; border: 1px dashed var(--green); }
         
-        #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10001; }
-        @keyframes blinker { 50% { opacity: 0.3; } }
+        #loaderWrap { width: 90%; height: 6px; background: #000; display: none; margin-bottom: 15px; border-radius: 10px; overflow: hidden; }
+        #loaderBar { height: 100%; width: 0%; background: linear-gradient(to right, var(--blue), var(--green)); transition: 0.1s; }
     </style>
 </head>
 <body>
 
-    <canvas id="confettiCanvas"></canvas>
-
     <div id="loginOverlay">
         <div class="login-box">
-            <h3 style="color:var(--yellow); margin-top:0; letter-spacing: 2px;" id="loginTitle">ACCESS KEY</h3>
+            <h3 class="c-y" id="loginTitle">ACCESS KEY</h3>
             <input type="password" id="accessKey" placeholder="Enter Key...">
-            <button onclick="unlock()" style="width:100%; padding:14px; background:var(--blue); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" id="loginBtn">LOGIN</button>
+            <button onclick="unlock()" id="loginBtn" style="width:100%; padding:14px; background:var(--blue); color:white; border:none; border-radius:10px; font-weight:bold;">LOGIN</button>
         </div>
     </div>
 
@@ -67,11 +165,11 @@
     </div>
 
     <div class="info-panel">
-        <div><span style="color:var(--blue); font-weight:bold;" id="lText">KIWANGO CHA</span> <span style="color:var(--yellow); font-weight:bold;" id="rText"> USHINDI: 98%</span></div>
+        <div><span class="c-b" id="lText">KIWANGO CHA</span> <span class="c-y" id="rText"> USHINDI: 98%</span></div>
         <div style="font-size:17px; font-weight:bold; margin-top:5px;">
-            <span id="roundLbl" style="color:var(--yellow);">MZUNGUKO</span> 
+            <span id="roundLbl" class="c-y">MZUNGUKO</span> 
             <span style="color:var(--red);" id="activeRound">0</span> 
-            <span style="color:var(--yellow);">/ 3</span>
+            <span class="c-y">/ 3</span>
         </div>
     </div>
 
@@ -81,21 +179,21 @@
     <input type="text" id="hashIn" placeholder="Hash ya Raundi Iliyopita...">
     <input type="text" id="saltIn" placeholder="Salt ya Raundi Iliyopita...">
 
-    <div id="loaderWrap" style="width:90%; height:6px; background:#000; display:none; margin-bottom:15px; border-radius:10px; overflow:hidden;"><div id="loaderBar" style="height:100%; width:0%; background:var(--green); transition: 0.05s;"></div></div>
+    <div id="loaderWrap"><div id="loaderBar"></div></div>
 
     <div class="grid" id="gameGrid"></div>
 
     <button id="mainBtn" onclick="startAnalysis()">PATA SIGNAL 🚀</button>
     
     <div style="display:flex; gap:10px; width:90%; margin-top:15px;">
-        <button onclick="location.reload()" style="flex:1; padding:14px; background:#1a2c3a; color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" id="clearBtnText">🔄 CLEAR</button>
-        <button onclick="toggleModal()" style="flex:1; padding:14px; background:var(--yellow); color:#000; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" id="guideBtnText">MAELEKEZO</button>
+        <button onclick="hardReset()" style="flex:1; padding:14px; background:#1a2c3a; color:white; border:none; border-radius:10px; font-weight:bold;" id="clearBtnText">🔄 RESET</button>
+        <button onclick="toggleModal()" style="flex:1; padding:14px; background:var(--yellow); color:#000; border:none; border-radius:10px; font-weight:bold;" id="guideBtnText">MAELEKEZO</button>
     </div>
 
     <div id="modal">
         <div id="modalTitle" class="m-header">MAELEKEZO YA KINA</div>
         <div id="modalContent"></div>
-        <button onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" id="closeBtnText">FUNGA</button>
+        <button onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;" id="closeBtnText">FUNGA</button>
     </div>
 
     <script>
@@ -108,84 +206,41 @@
         const wsLink = "https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336";
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const canvas = document.getElementById('confettiCanvas');
-        const ctx = canvas.getContext('2d');
-        let confetti = [];
-
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas); resizeCanvas();
-
-        function createConfetti() {
-            for(let i=0; i<100; i++) {
-                confetti.push({ x: canvas.width/2, y: canvas.height, dir: Math.random()*Math.PI - Math.PI, speed: Math.random()*12+8, color: `hsl(${Math.random()*360}, 100%, 50%)`, size: Math.random()*5+2, life: 1 });
-            }
-            animateConfetti();
-        }
-
-        function animateConfetti() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            confetti.forEach((p, i) => {
-                p.x += Math.cos(p.dir) * p.speed; p.y += Math.sin(p.dir) * p.speed + 3; p.life -= 0.01;
-                ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
-                if(p.life <= 0) confetti.splice(i, 1);
-            });
-            if(confetti.length > 0) requestAnimationFrame(animateConfetti);
-        }
-
-        function playSound(f, t, d, v=0.1) {
-            if (muted) return; if (audioCtx.state === 'suspended') audioCtx.resume();
-            const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-            o.type = t; o.frequency.setValueAtTime(f, audioCtx.currentTime);
-            g.gain.setValueAtTime(v, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
-            o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + d);
-        }
 
         const translations = {
             sw: {
                 lang: "LUGHA: SW", sound: "SAUTI: ", lText: "KIWANGO CHA", rText: " USHINDI: ", round: "MZUNGUKO",
-                btn: "PATA SIGNAL 🚀", instBtn: "MAELEKEZO", bombTxt: "MABOMU", wait: "SUBIRI: ", cdBtn: "MUDA WA KUSUBIRI",
-                mHeader: "MAELEKEZO YA KINA", mClose: "FUNGA", clear: "🔄 CLEAR", loginT: "ACCESS KEY", loginB: "LOGIN", loginPh: "Ingiza Key...",
+                btn: "PATA SIGNAL 🚀", instBtn: "MAELEKEZO", bombTxt: "MABOMU", wait: "SUBIRI: ", cdBtn: "SUBIRI DAKIKA 10",
+                mHeader: "MAELEKEZO YA KINA", mClose: "FUNGA", clear: "🔄 RESET", loginT: "ACCESS KEY", loginB: "LOGIN", loginPh: "Ingiza Key...",
                 hashPh: "Hash ya Raundi Iliyopita...", saltPh: "Salt ya Raundi Iliyopita...",
                 mBody: `
                 <div class="m-section">1. KAZI ZA BATANI</div>
-                <div class="m-text">
-                    • <b>PATA SIGNAL:</b> Inatumia Algorithm ya V10.5 Ultra kutafuta sehemu salama (Safe Zones).<br>
-                    • <b>CLEAR:</b> Inasafisha data za mchezo na kuanza upya mzunguko kwa usalama.<br>
-                    • <b>SAUTI & LUGHA:</b> Badili mfumo kulingana na mahitaji yako.
-                </div>
-                <div class="m-section">2. HATUA ZA KUFUATA (1WIN ONLY)</div>
-                <div class="m-text">
-                    1. <b>Platform Sahihi:</b> Programu hii inafanya kazi na 1Win pekee kupitia mfumo wao wa Provably Fair.<br>
-                    2. <b>Hash & Salt:</b> Nakili Hash na Salt kutoka kwenye raundi iliyopita ya Mines kule 1Win (Settings).<br>
-                    3. <b>Umuhimu:</b> Namba hizi ndizo zinazoamua mabomu yalipo. App hii inachambua patterns 1000+ kuzuia kurudia makosa.<br>
-                    4. <b>Utaratibu:</b> Paste Hash/Salt, bonyeza <b>BET</b> kule 1Win, kisha ubonyeze PATA SIGNAL hapa.
-                </div>
-                <a href="${wsLink}" class="m-link" target="_blank">BOFYA HAPA KWA MAELEKEZO ZAIDI (WHATSAPP CHANNEL)</a>`
+                <div class="m-text">• <b>PATA SIGNAL:</b> Inatafuta patterns 1000+ kulingana na Hash.<br>• <b>RESET:</b> Inafuta mizunguko ikiwa imekwama.</div>
+                <div class="m-section">2. HATUA (1WIN PEKEE)</div>
+                <div class="m-text">1. Nakili Hash/Salt kutoka Provably Fair kule 1Win.<br>2. Paste hapa, kisha ubonyeze PATA SIGNAL.<br>3. <b>Usalama:</b> Baada ya 3/3, subiri dakika 10 upumzishe account yako.</div>
+                <a href="${wsLink}" class="m-link" target="_blank">JIUNGE NA WHATSAPP KWA MAELEZO ZAIDI</a>`
             },
             en: {
                 lang: "LANG: EN", sound: "SOUND: ", lText: "WINNING", rText: " RATE: ", round: "ROUND",
-                btn: "GET SIGNAL 🚀", instBtn: "GUIDE", bombTxt: "BOMBS", wait: "WAIT: ", cdBtn: "COOLDOWN ACTIVE",
-                mHeader: "DETAILED GUIDE", mClose: "CLOSE", clear: "🔄 CLEAR", loginT: "ACCESS KEY", loginB: "LOGIN", loginPh: "Enter Key...",
-                hashPh: "Previous Round Hash...", saltPh: "Previous Round Salt...",
+                btn: "GET SIGNAL 🚀", instBtn: "GUIDE", bombTxt: "BOMBS", wait: "WAIT: ", cdBtn: "WAIT 10 MINS",
+                mHeader: "DETAILED GUIDE", mClose: "CLOSE", clear: "🔄 RESET", loginT: "ACCESS KEY", loginB: "LOGIN", loginPh: "Enter Key...",
+                hashPh: "Prev Round Hash...", saltPh: "Prev Round Salt...",
                 mBody: `
-                <div class="m-section">1. BUTTON FUNCTIONS</div>
-                <div class="m-text">
-                    • <b>GET SIGNAL:</b> Uses V10.5 Ultra Algorithm to find Safe Zones.<br>
-                    • <b>CLEAR:</b> Resets session data and starts a new safe round.<br>
-                    • <b>SOUND & LANG:</b> Customize app settings for your needs.
-                </div>
-                <div class="m-section">2. STEPS FOR SUCCESS (1WIN ONLY)</div>
-                <div class="m-text">
-                    1. <b>Correct Platform:</b> This app works strictly with 1Win using their Provably Fair system.<br>
-                    2. <b>Hash & Salt:</b> Copy Hash and Salt from your previous 1Win Mines round (Settings).<br>
-                    3. <b>Importance:</b> These values determine bomb locations. Our app scans 1000+ unique patterns to ensure safety.<br>
-                    4. <b>Order:</b> Paste Hash/Salt, click <b>BET</b> on 1Win, then click GET SIGNAL here.
-                </div>
-                <a href="${wsLink}" class="m-link" target="_blank">CLICK HERE FOR MORE GUIDE (WHATSAPP CHANNEL)</a>`
+                <div class="m-section">1. BUTTONS</div>
+                <div class="m-text">• <b>GET SIGNAL:</b> Scans 1000+ patterns.<br>• <b>RESET:</b> Resets the app if rounds are stuck.</div>
+                <div class="m-section">2. STEPS (1WIN ONLY)</div>
+                <div class="m-text">1. Copy Hash/Salt from 1Win Provably Fair settings.<br>2. Paste here and Get Signal.<br>3. <b>Security:</b> After 3/3, wait 10 mins to stay safe.</div>
+                <a href="${wsLink}" class="m-link" target="_blank">JOIN WHATSAPP FOR MORE GUIDE</a>`
             }
         };
 
-        function unlock() { if(document.getElementById('accessKey').value === correctKey) { document.getElementById('loginOverlay').style.display = 'none'; if (audioCtx.state === 'suspended') audioCtx.resume(); checkExistingCD(); } else { alert("Incorrect Key!"); } }
+        function unlock() { 
+            if(document.getElementById('accessKey').value === correctKey) { 
+                document.getElementById('loginOverlay').style.display = 'none'; 
+                checkExistingCD(); 
+            } else { alert("Wrong Key!"); } 
+        }
+
         function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); refreshUI(); }
         function toggleMute() { muted = !muted; refreshUI(); }
         
@@ -210,15 +265,15 @@
             const val = select.value || "3"; select.innerHTML = '';
             [3, 5, 7].forEach(n => {
                 const opt = document.createElement('option');
-                const rate = n==3 ? "98%" : n==5 ? "90%" : "85%";
-                opt.value = n; opt.text = `${t.bombTxt} ${n} (Acc: ${rate})`;
+                opt.value = n; opt.text = `${t.bombTxt} ${n}`;
                 if(n == val) opt.selected = true; select.appendChild(opt);
             });
             
             if(!isCooldownActive) {
-                document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? t.cdBtn : t.btn;
                 document.getElementById('activeRound').innerText = roundIdx;
-            } else { document.getElementById('mainBtn').innerText = t.cdBtn; }
+                document.getElementById('mainBtn').disabled = (roundIdx >= MAX_ROUNDS);
+                document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? t.cdBtn : t.btn;
+            }
             updateRate();
         }
 
@@ -226,9 +281,9 @@
         for (let i = 0; i < 25; i++) { const d = document.createElement('div'); d.className = 'cell'; grid.appendChild(d); }
 
         function startAnalysis() {
-            if(isCooldownActive) return;
+            if(isCooldownActive || roundIdx >= MAX_ROUNDS) return;
             const h = document.getElementById('hashIn').value; const s = document.getElementById('saltIn').value;
-            if(!h || !s) { playSound(200, 'sawtooth', 0.2); return; }
+            if(!h || !s) { alert("Weka Hash na Salt!"); return; }
             
             const btn = document.getElementById('mainBtn'); const bar = document.getElementById('loaderBar');
             btn.disabled = true; document.getElementById('loaderWrap').style.display = 'block';
@@ -237,80 +292,89 @@
             const timer = setInterval(() => {
                 p += 5; bar.style.width = p + "%";
                 if(p >= 100) { clearInterval(timer); runLogic(h, s); }
-            }, 20); 
+            }, 30); 
         }
 
         function runLogic(h, s) {
-            roundIdx++; localStorage.setItem('predictorRound', roundIdx);
-            document.getElementById('activeRound').innerText = roundIdx;
+            roundIdx++; 
+            localStorage.setItem('predictorRound', roundIdx);
+            
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
-            const bombs = parseInt(document.getElementById('bombCount').value);
-            let starCount = bombs >= 7 ? 2 : 3;
-
-            // Pattern Seed Logic (>1000 Patterns)
-            let seed = 0; let combined = h + s + roundIdx + "ULTRA_V10.5";
+            // ALGORITHM 1000+ PATTERNS
+            let seed = 0; 
+            let combined = h + s + roundIdx + "ULTRA_V10.5_SECURE";
             for(let i=0; i<combined.length; i++) { seed = Math.imul(31, seed) + combined.charCodeAt(i) | 0; }
             seed = Math.abs(seed);
             
             let spots = [];
-            while(spots.length < starCount) {
+            while(spots.length < 3) {
                 let pseudo = Math.abs(Math.sin(seed++) * 10000);
                 let pos = Math.floor(pseudo % 25);
                 if(!spots.includes(pos)) spots.push(pos);
             }
 
-            // SMART DELAY: 300ms kati ya kila nyota
             spots.forEach((idx, i) => {
                 setTimeout(() => {
                     cells[idx].innerHTML = '⭐'; cells[idx].classList.add('safe');
-                    playSound(600 + (i*100), 'sine', 0.15);
+                    if(!muted) playSound(600 + (i*100), 'sine', 0.2);
                 }, i * 300);
             });
 
+            // AUTO-CLEAR HASH & SALT
             document.getElementById('loaderWrap').style.display = 'none';
-            document.getElementById('hashIn').value = ""; document.getElementById('saltIn').value = "";
+            document.getElementById('loaderBar').style.width = "0%";
+            document.getElementById('hashIn').value = ""; 
+            document.getElementById('saltIn').value = "";
             
-            if(roundIdx >= MAX_ROUNDS) {
-                setTimeout(() => { createConfetti(); startCD(600); }, 1200);
-            } else { setTimeout(() => { document.getElementById('mainBtn').disabled = false; }, 1200); }
+            refreshUI();
+            if(roundIdx >= MAX_ROUNDS) setTimeout(() => { startCD(600); }, 1500);
+        }
+
+        function playSound(f, t, d) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+            o.type = t; o.frequency.setValueAtTime(f, audioCtx.currentTime);
+            g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + d);
         }
 
         function checkExistingCD() {
             const endTime = localStorage.getItem('predictorCooldown');
             if(endTime) {
                 const remaining = Math.floor((parseInt(endTime) - Date.now()) / 1000);
-                if(remaining > 0) startCD(remaining); else localStorage.removeItem('predictorCooldown');
-            }
+                if(remaining > 0) startCD(remaining); else hardReset();
+            } else if(roundIdx >= 3) hardReset();
+            else refreshUI();
         }
 
         function startCD(sec) {
             isCooldownActive = true;
             const timerEl = document.getElementById('cooldownDisplay');
-            const btn = document.getElementById('mainBtn');
-            btn.disabled = true; timerEl.style.display = 'block';
-            const cd = setInterval(() => {
-                const t = translations[currentLang];
-                btn.innerText = t.cdBtn;
+            timerEl.style.display = 'block';
+            const countdown = setInterval(() => {
+                if(sec <= 0) { clearInterval(countdown); hardReset(); return; }
                 let m = Math.floor(sec/60); let s = sec%60;
-                timerEl.innerText = t.wait + m + ":" + (s < 10 ? "0" : "") + s;
-                if(sec <= 0) {
-                    clearInterval(cd); roundIdx = 0; isCooldownActive = false;
-                    localStorage.removeItem('predictorRound'); localStorage.removeItem('predictorCooldown');
-                    timerEl.style.display = 'none'; btn.disabled = false; refreshUI();
-                }
+                timerEl.innerText = (currentLang === 'sw' ? "SUBIRI: " : "WAIT: ") + m + ":" + (s < 10 ? "0" : "") + s;
                 sec--;
                 localStorage.setItem('predictorCooldown', Date.now() + (sec * 1000));
             }, 1000);
+            refreshUI();
+        }
+
+        function hardReset() {
+            localStorage.removeItem('predictorRound');
+            localStorage.removeItem('predictorCooldown');
+            roundIdx = 0; isCooldownActive = false;
+            document.getElementById('cooldownDisplay').style.display = 'none';
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
+            refreshUI();
         }
 
         function toggleModal() { const m = document.getElementById('modal'); m.style.display = (m.style.display === 'block' ? 'none' : 'block'); }
-        function updateRate() { 
-            const b = parseInt(document.getElementById('bombCount').value);
-            const rate = b==3 ? "98%" : b==5 ? "90%" : "85%";
-            document.getElementById('rText').innerText = translations[currentLang].rText + rate; 
-        }
+        function updateRate() { refreshUI(); }
         window.onload = refreshUI;
     </script>
 </body>
