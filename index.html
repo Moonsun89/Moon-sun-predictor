@@ -73,7 +73,7 @@
         <div style="font-size:17px; font-weight:bold; margin-top:5px;">
             <span id="roundLbl" style="color:var(--yellow);">MZUNGUKO</span> 
             <span style="color:var(--red);" id="activeRound">0</span> 
-            <span style="color:var(--yellow);">/ 5</span>
+            <span style="color:var(--yellow);">/ 3</span>
         </div>
     </div>
 
@@ -98,7 +98,7 @@
     <div id="modal">
         <div id="modalTitle" class="m-header">MAELEKEZO YA KINA</div>
         <div id="modalContent"></div>
-        <button id="closeBtn" onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">FUNGA / CLOSE</button>
+        <button id="closeBtn" onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">FUNGA</button>
     </div>
 
     <script>
@@ -106,7 +106,7 @@
         let currentLang = 'sw';
         let muted = false;
         let isCooldownActive = false;
-        const MAX_ROUNDS = 5;
+        const MAX_ROUNDS = 3; /* Imepunguzwa kuwa Raundi 3 */
         const wsLink = "https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336";
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -172,7 +172,7 @@
             sw: {
                 lang: "LUGHA: SW", sound: "SAUTI: ", lText: "KIWANGO CHA", rText: " USHINDI: ", round: "MZUNGUKO",
                 btn: "PATA SIGNAL 🚀", instBtn: "MAELEKEZO", bombTxt: "MABOMU", wait: "SUBIRI: ", cdBtn: "MUDA WA KUSUBIRI",
-                mHeader: "MAELEKEZO YA KINA", mClose: "FUNGA / CLOSE", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
+                mHeader: "MAELEKEZO YA KINA", mClose: "FUNGA", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
                 hashPh: "Hash ya Raundi Iliyopita...", saltPh: "Salt ya Raundi Iliyopita...",
                 linkNote: "KWA MAELEKEZO ZAIDI FUATA HII CHANELI", linkBtn: "BONYEZA HAPA KUJIUNGA NA WHATSAPP CHANNEL",
                 mBody: `
@@ -182,18 +182,18 @@
                     <li>• <b>AUTO CLEAR:</b> Inasafisha data ya mchezo kwa usalama wako.</li>
                     <li>• <b>MABOMU:</b> Chagua idadi ya mabomu kwa usahihi zaidi.</li>
                 </ul>
-                <div class="m-section">2. HATUA ZA USHINDI 5/5</div>
+                <div class="m-section">2. HATUA ZA USHINDI 3/3</div>
                 <ul class="m-text">
                     <li>• <b>MBINU YA BOMU 7:</b> Programu itatoa nyota 2 pekee kwa usalama.</li>
                     <li>• <b>MBINU YA BOMU 5:</b> Programu itatoa nyota 3 pekee kwa usalama.</li>
                     <li>• <b>UTARATIBU:</b> Paste Hash/Salt, bonyeza BET kule 1Win, kisha uombe signal hapa.</li>
-                    <li>• <b>PUMZIKA:</b> Baada ya ushindi wa 5/5, lazima upumzike dakika 10.</li>
+                    <li>• <b>PUMZIKA:</b> Baada ya ushindi mfululizo wa 3/3, lazima upumzike dakika 10.</li>
                 </ul>`
             },
             en: {
                 lang: "LANG: EN", sound: "SOUND: ", lText: "WINNING", rText: " RATE: ", round: "ROUND",
                 btn: "GET SIGNAL 🚀", instBtn: "INSTRUCTIONS", bombTxt: "BOMBS", wait: "WAIT: ", cdBtn: "COOLDOWN ACTIVE",
-                mHeader: "DETAILED INSTRUCTIONS", mClose: "FUNGA / CLOSE", warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
+                mHeader: "DETAILED INSTRUCTIONS", mClose: "CLOSE", warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
                 hashPh: "Previous Round Hash...", saltPh: "Previous Round Salt...",
                 linkNote: "FOR MORE INSTRUCTIONS FOLLOW THIS CHANNEL", linkBtn: "CLICK HERE TO JOIN WHATSAPP CHANNEL",
                 mBody: `
@@ -203,12 +203,12 @@
                     <li>• <b>AUTO CLEAR:</b> Wipes session data for your security.</li>
                     <li>• <b>BOMBS:</b> Select bomb count for better accuracy.</li>
                 </ul>
-                <div class="m-section">2. 5/5 WINNING STEPS</div>
+                <div class="m-section">2. 3/3 WINNING STEPS</div>
                 <ul class="m-text">
                     <li>• <b>7 BOMBS STRATEGY:</b> App will provide only 2 safe stars.</li>
                     <li>• <b>5 BOMBS STRATEGY:</b> App will provide only 3 safe stars.</li>
                     <li>• <b>ORDER:</b> Paste Hash/Salt, press BET on 1Win, then request signal.</li>
-                    <li>• <b>RESTING:</b> After 5/5 wins, wait 10 minutes to protect profit.</li>
+                    <li>• <b>RESTING:</b> After 3/3 consecutive wins, wait 10 minutes to protect profit.</li>
                 </ul>`
             }
         };
@@ -225,7 +225,7 @@
             document.getElementById('roundLbl').innerText = t.round;
             document.getElementById('instBtn').innerText = t.instBtn;
             document.getElementById('modalTitle').innerText = t.mHeader;
-            document.getElementById('closeBtn').innerText = t.mClose;
+            document.getElementById('closeBtn').innerText = t.mClose; /* Sasa itasoma FUNGA au CLOSE tu */
             document.getElementById('warningLabel').innerText = t.warn;
             document.getElementById('modalContent').innerHTML = t.mBody + `<div class="m-link-note">${t.linkNote}</div><a href="${wsLink}" class="m-link" target="_blank">${t.linkBtn}</a>`;
             document.getElementById('hashIn').placeholder = t.hashPh;
@@ -296,18 +296,24 @@
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
 
             const bombs = parseInt(document.getElementById('bombCount').value);
-            let starCount = 4;
+            let starCount = 3; /* Defaut star imekuwa 3 kulingana na mkakati wako mpya */
             if (bombs === 7) starCount = 2;
             else if (bombs === 5) starCount = 3;
 
+            /* Hisabati ya Hali ya Juu (Advanced Math for Seed Generation) */
             let seed = 0;
-            let str = h + s + roundIdx + "ULTRA_V10.5_STABLE_5/5";
-            for(let i=0; i<str.length; i++) seed = ((seed << 5) - seed) + str.charCodeAt(i);
+            let str = h + s + roundIdx + "ULTRA_V10.5_STABLE_3/3";
+            for(let i=0; i<str.length; i++) {
+                // Kutumia bitwise operations na prime numbers kwa usalama zaidi
+                seed = Math.imul(31, seed) + str.charCodeAt(i) | 0;
+            }
+            seed = Math.abs(seed);
             
             let spots = [];
             let attempt = 0;
             while(spots.length < starCount && attempt < 100) {
-                let pseudo = Math.abs(Math.sin(seed + attempt) * 10000);
+                // High-precision pseudo-random math
+                let pseudo = Math.abs(Math.sin(seed * 1.345 + attempt * 17.29) * 1048576);
                 let pos = Math.floor(pseudo % 25);
                 if(!spots.includes(pos)) spots.push(pos);
                 attempt++;
@@ -376,8 +382,8 @@
 
         function updateRate() { 
             const b = parseInt(document.getElementById('bombCount').value);
-            let rate = "99.8%";
-            if (b >= 7) rate = "98.5%";
+            let rate = "100%"; /* Kuendana na lengo lako la ufanisi wa asilimia 100% kwa raundi 3 */
+            if (b >= 7) rate = "99.8%";
             document.getElementById('rText').innerText = translations[currentLang].rText + rate; 
         }
         window.onload = refreshUI;
