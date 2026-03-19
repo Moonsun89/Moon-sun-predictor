@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="sw">
 <head>
     <meta charset="UTF-8">
@@ -46,10 +46,9 @@
 
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 20px; padding: 20px; z-index: 10000; overflow-y: auto; box-shadow: 0 0 50px #000; }
         .m-header { color: var(--yellow); font-weight: bold; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
-        .m-section { color: var(--green); font-weight: bold; margin-top: 18px; text-transform: uppercase; font-size: 13px; border-left: 3px solid var(--blue); padding-left: 8px; }
-        .m-text { font-size: 12px; line-height: 1.6; color: #ccc; margin-top: 8px; padding-left: 15px; }
-        .m-text li { margin-bottom: 5px; }
-        .wa-link { display: block; margin-top: 15px; padding: 10px; background: #25d366; color: #000; text-align: center; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 11px; }
+        .m-section { color: var(--green); font-weight: bold; margin-top: 15px; text-transform: uppercase; font-size: 13px; border-left: 3px solid var(--blue); padding-left: 8px; }
+        .m-text { font-size: 12px; line-height: 1.6; color: #ccc; margin-top: 8px; padding-left: 15px; list-style: square; }
+        .wa-link { display: block; margin-top: 15px; padding: 12px; background: #25d366; color: #000; text-align: center; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 13px; border: 2px solid #fff; }
     </style>
 </head>
 <body>
@@ -109,7 +108,7 @@
     </div>
 
     <div id="modal">
-        <div id="modalTitle" class="m-header">MWONGOZO WA USHINDI</div>
+        <div id="modalTitle" class="m-header">MAELEKEZO YA USHINDI</div>
         <div id="modalContent"></div>
         <button id="closeBtn" onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">NIMELEWA / CLOSE</button>
     </div>
@@ -129,32 +128,21 @@
             sw: {
                 lang: "LUGHA: SW", sound: "SAUTI: ", lText: "USALAMA:", secureText: " UHAKIKA", round: "MZUNGUKO",
                 btn: "PATA SIGNAL 🚀", instBtn: "💡 MAELEKEZO", wait: "PUMZIKA: ", cdBtn: "MAPUMZIKO (MIN 10)",
-                mHeader: "MWONGOZO WA USHINDI V12.0", mClose: "NIMELEWA", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
+                mHeader: "MAELEKEZO YA USHINDI V12.0", mClose: "NIMELEWA", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
                 reg: "JISAJILI NA 1WIN HAPA (BONUS 500%)", hashPh: "Paste Hash Hapa...", saltPh: "Paste Salt Hapa...",
                 bombs: ["💣 MABOMU 2", "💣 MABOMU 3", "💣 MABOMU 5", "💣 MABOMU 7"],
                 mBody: `
-                    <div class="m-section">1. MATUMIZI YA BATANI</div>
+                    <div class="m-section">1. JISAJILI NA PROMO CODE</div>
                     <ul class="m-text">
-                        <li><b>PATA SIGNAL:</b> Inachakata data na kutoa nyota 3 salama.</li>
-                        <li><b>AUTO CLEAR:</b> Inasafisha gridi lakini HAIFUTI raundi zako (unabaki pale ulipoishia).</li>
-                        <li><b>MABOMU SELECT:</b> Chagua idadi ya mabomu unayocheza kule 1Win.</li>
+                        <li>Bonyeza kitufe cha dhahabu na utumie Promo Code <b>MOON26</b>. Hii ni lazima ili kutoa matokeo sahihi 100%.</li>
                     </ul>
-                    <div class="m-section">2. HATUA ZA KUPATA MATOKEO</div>
+                    <div class="m-section">2. HATUA ZA KUPATA SIGNAL</div>
                     <ul class="m-text">
-                        <li>Fungua mchezo wa <b>Mines</b> ndani ya 1Win.</li>
-                        <li>Cheza raundi moja (hata ya dau dogo) kisha ipoteze au iishe.</li>
-                        <li>Chini ya mchezo, bonyeza sehemu ya <b>'Provably Fair'</b>.</li>
-                        <li>Copy <b>'Next Round Hash'</b> na <b>'Last Round Salt'</b>.</li>
-                        <li>Paste hapa kwenye App na ubonyeze Pata Signal.</li>
-                    </ul>
-                    <div class="m-section">3. JISAJILI NA PROMO CODE</div>
-                    <ul class="m-text">
-                        <li>Ni LAZIMA kutumia Promo Code: <b>MOON26</b> wakati wa kujisajili 1Win.</li>
-                        <li><b>Umuhimu:</b> Hii inaunganisha akaunti yako na mfumo wetu wa seva (Sync) ili kutoa matokeo sahihi 100%. Bila hii, App itatoa signal feki.</li>
+                        <li>Fungua Mines, copy <b>'Next Round Hash'</b> na <b>'Last Round Salt'</b> kisha uweke hapa.</li>
                     </ul>
                     <hr style="border:0.5px solid #333; margin-top:15px;">
-                    <p style="font-size:10px; color:var(--yellow); text-align:center;">Kwa maelekezo zaidi fuata hii chaneli:</p>
-                    <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">FOLLOW MOON SUN PREDICTOR WHATSAPP</a>
+                    <p style="font-size:11px; color:var(--yellow); text-align:center;">Kwa maelekezo zaidi fuata hii chaneli:</p>
+                    <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">FOLLOW THE MOON SUN PREDICTOR CHANNEL ON WHATSAPP</a>
                 `
             },
             en: {
@@ -164,27 +152,17 @@
                 reg: "REGISTER ON 1WIN HERE (500% BONUS)", hashPh: "Paste Hash Here...", saltPh: "Paste Salt Here...",
                 bombs: ["💣 2 BOMBS", "💣 3 BOMBS", "💣 5 BOMBS", "💣 7 BOMBS"],
                 mBody: `
-                    <div class="m-section">1. BUTTON USAGE</div>
+                    <div class="m-section">1. REGISTER WITH PROMO CODE</div>
                     <ul class="m-text">
-                        <li><b>GET SIGNAL:</b> Processes data to show 3 safe stars.</li>
-                        <li><b>AUTO CLEAR:</b> Clears the grid but DOES NOT reset your rounds.</li>
-                        <li><b>BOMBS SELECT:</b> Choose the number of bombs you are playing in 1Win.</li>
+                        <li>Use Promo Code <b>MOON26</b> during registration to sync your account with our server.</li>
                     </ul>
-                    <div class="m-section">2. STEPS TO GET RESULTS</div>
+                    <div class="m-section">2. HOW TO GET SIGNAL</div>
                     <ul class="m-text">
-                        <li>Open <b>Mines</b> game inside 1Win.</li>
-                        <li>Finish one round, then scroll down to <b>'Provably Fair'</b>.</li>
-                        <li>Copy <b>'Next Round Hash'</b> and <b>'Last Round Salt'</b>.</li>
-                        <li>Paste them here in the App and click Get Signal.</li>
-                    </ul>
-                    <div class="m-section">3. REGISTER WITH PROMO CODE</div>
-                    <ul class="m-text">
-                        <li>You MUST use Promo Code: <b>MOON26</b> during registration.</li>
-                        <li><b>Importance:</b> This syncs your account with our server. Without it, the app will provide inaccurate signals.</li>
+                        <li>Open Mines, copy <b>'Next Round Hash'</b> and <b>'Last Round Salt'</b> then paste them here.</li>
                     </ul>
                     <hr style="border:0.5px solid #333; margin-top:15px;">
-                    <p style="font-size:10px; color:var(--yellow); text-align:center;">For more instructions, follow this channel:</p>
-                    <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">FOLLOW MOON SUN PREDICTOR WHATSAPP</a>
+                    <p style="font-size:11px; color:var(--yellow); text-align:center;">For more instructions follow this channel:</p>
+                    <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">FOLLOW THE MOON SUN PREDICTOR CHANNEL ON WHATSAPP</a>
                 `
             }
         };
@@ -196,7 +174,6 @@
             const b = document.getElementById('bombSelect').value;
             let rate = b === "2" ? "98%" : b === "3" ? "95%" : b === "5" ? "90%" : "85%";
             document.getElementById('rText').innerText = " " + rate + translations[currentLang].secureText;
-            document.getElementById('rText').style.color = b === "7" ? "var(--red)" : b === "5" ? "var(--yellow)" : "var(--green)";
         }
         function refreshUI() {
             const t = translations[currentLang];
@@ -253,4 +230,3 @@
     </script>
 </body>
 </html>
-          
