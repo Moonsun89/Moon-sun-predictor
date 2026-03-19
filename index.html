@@ -3,238 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>MOON SUN PREDICTOR V12.5 | ULTRA FULLSCREEN</title>
+    <title>MOON SUN V12.5 | FINAL PRO</title>
     <style>
-        :root { --bg: #010203; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --dark-green: #0a1f14; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; }
-        
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root { --bg: #010203; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
-            background: var(--bg); 
-            color: var(--white); 
-            font-family: 'Segoe UI', Roboto, sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: space-between; /* Inatandaza vitu juu mpaka chini */
-            padding: 10px 5px; 
-            margin: 0; 
-            height: 100vh; /* Inajaza skrini nzima */
-            overflow: hidden; 
+            background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif;
+            display: flex; flex-direction: column; align-items: center; 
+            justify-content: space-between; height: 100vh; padding: 10px 5px; overflow: hidden;
         }
 
-        /* Overlay ya Kuingia */
+        /* Login */
         #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
         .login-box { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid var(--blue); text-align: center; width: 85%; }
 
-        /* Urambazaji wa Juu */
-        .top-nav { width: 95%; display: flex; justify-content: space-between; margin-bottom: 5px; }
-        .btn-mini { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 6px; font-size: 10px; font-weight: bold; }
+        /* Top Nav */
+        .top-nav { width: 95%; display: flex; justify-content: space-between; }
+        .btn-mini { background: #111; color: #fff; border: 1px solid #333; padding: 5px 10px; border-radius: 6px; font-size: 10px; font-weight: bold; }
 
-        /* Sehemu ya Kichwa */
         .header-section { text-align: center; }
-        .app-name { font-size: 18px; font-weight: 900; margin: 0; letter-spacing: 1px; }
+        .app-name { font-size: 18px; font-weight: 900; }
         .c-y { color: var(--yellow); } .c-b { color: var(--blue); } .c-g { color: var(--green); }
-        .sub-title { font-size: 9px; color: var(--green); font-weight: bold; text-transform: uppercase; margin-top: 2px; }
 
-        /* Panel ya Taarifa */
-        .info-panel { background: rgba(255,255,255,0.03); padding: 8px; border-radius: 10px; width: 95%; max-width: 360px; text-align: center; border: 1px solid #1a2c3a; }
+        .info-panel { background: #0a0e14; padding: 8px; border-radius: 10px; width: 95%; text-align: center; border: 1px solid #1a2c3a; }
         #activeRound { color: #fff; background: var(--red); padding: 1px 8px; border-radius: 4px; font-weight: bold; }
 
-        /* Mipangilio na Input */
-        .input-group { width: 95%; max-width: 360px; display: flex; flex-direction: column; gap: 5px; }
+        /* Timer & Warning */
+        #cooldownDisplay { color: var(--red); font-size: 16px; font-weight: 900; display: none; margin: 5px 0; border: 1px solid var(--red); padding: 5px; border-radius: 8px; background: rgba(255,51,51,0.1); width: 90%; text-align: center; animation: pulse 1s infinite; }
+        #warningLabel { color: var(--red); font-size: 11px; font-weight: bold; display: none; margin-bottom: 5px; animation: blink 0.8s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+
+        .inputs { width: 95%; display: flex; flex-direction: column; gap: 4px; }
         input, select { 
             width: 100%; padding: 10px; background: #000; border: 1px solid #1a2c3a; 
-            color: var(--green); border-radius: 8px; text-align: center; font-size: 12px; font-weight: bold; outline: none;
+            color: var(--green); border-radius: 8px; text-align: center; font-size: 11px; outline: none; font-weight: bold;
         }
-        #bombSelect { color: var(--yellow); border-color: var(--yellow); }
 
-        /* Grid ya Mchezo */
         .grid { 
             display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; 
             background: #000; padding: 10px; border-radius: 12px; border: 1px solid var(--blue);
-            width: 95%; max-width: 320px;
+            width: 90%; max-width: 320px;
         }
         .cell { 
             aspect-ratio: 1/1; background: #0d1218; border-radius: 8px; 
             display: flex; justify-content: center; align-items: center; 
-            font-size: 20px; border: 1px solid #2a3b4a; /* Border inayoonekana wazi */
+            font-size: 20px; border: 1.5px solid #2a3b4a;
         }
-        .cell.safe { border: 2px solid var(--green); background: rgba(0,255,136,0.1); box-shadow: 0 0 10px var(--green); }
+        .cell.safe { border: 2px solid var(--green); background: rgba(0,255,136,0.15); box-shadow: 0 0 10px var(--green); }
 
-        /* Vitufe Vikuu */
-        .main-actions { width: 95%; max-width: 360px; display: flex; flex-direction: column; gap: 6px; }
-        #mainBtn { 
-            padding: 12px; background: #007bff; color: white; border: none; 
-            border-radius: 10px; font-weight: bold; text-transform: uppercase; font-size: 13px; 
-        }
-        #regBtn { 
-            padding: 12px; background: var(--yellow); color: #000; border: none; 
-            border-radius: 10px; font-weight: 900; text-transform: uppercase; font-size: 12px;
-        }
+        .actions { width: 95%; display: flex; flex-direction: column; gap: 6px; }
+        #mainBtn { padding: 14px; background: #007bff; color: white; border: none; border-radius: 10px; font-weight: bold; text-transform: uppercase; font-size: 13px; }
+        #regBtn { padding: 14px; background: var(--yellow); color: #000; border: none; border-radius: 10px; font-weight: 900; text-transform: uppercase; font-size: 11px; }
 
-        .footer-row { display: flex; gap: 8px; }
-        #clearBtn, #instBtn { flex: 1; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 11px; border: none; cursor: pointer; }
+        .footer-btns { display: flex; gap: 8px; }
+        .f-btn { flex: 1; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 10px; border: none; cursor: pointer; text-transform: uppercase; }
         #clearBtn { background: #1a2c3a; color: white; }
-        #instBtn { background: #ffcc00; color: #000; }
+        #instBtn { background: var(--yellow); color: #000; }
 
-        /* Modal na Kitufe cha WhatsApp */
-        #modal { 
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            width: 92%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); 
-            border-radius: 15px; padding: 15px; z-index: 10000; overflow-y: auto; 
-        }
-        /* Style ya WhatsApp Kama Kwenye Picha */
+        /* Modal & WA */
+        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 92%; background: #0d1217; border: 2px solid var(--blue); border-radius: 15px; padding: 20px; z-index: 10000; }
         .wa-btn { 
             display: block; width: 100%; margin: 15px 0; padding: 12px; 
-            background: #0a1810; /* Dark green background */
-            color: #00ff88; /* Bright green text */
-            text-align: center; border-radius: 8px; text-decoration: none; 
-            font-weight: 900; font-size: 12px; 
-            border: 1px dashed #00ff88; /* Dashed border */
-            text-transform: uppercase;
+            background: #0a1810; color: #00ff88; text-align: center; 
+            border-radius: 8px; text-decoration: none; font-weight: 900; font-size: 11px; 
+            border: 1px dashed #00ff88; text-transform: uppercase;
         }
-        .close-btn { width: 100%; padding: 12px; background: var(--red); color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- Access Overlay -->
     <div id="loginOverlay">
         <div class="login-box">
-            <h2 style="color:var(--yellow); font-size:18px; margin:0 0 15px 0;">MOON SUN PRO</h2>
+            <h2 style="color:var(--yellow); font-size:18px; margin-bottom:15px;">MOON SUN PRO</h2>
             <input type="password" id="accessKey" placeholder="Secret Key..." style="margin-bottom:10px;">
-            <button onclick="unlock()" style="width:100%; padding:12px; background:var(--blue); color:white; border:none; border-radius:8px; font-weight:bold;">AUTHORIZE</button>
+            <button onclick="unlock()" style="width:100%; padding:12px; background:var(--blue); color:white; border:none; border-radius:8px;">LOGIN</button>
         </div>
     </div>
 
-    <!-- Navigation -->
     <div class="top-nav">
-        <button class="btn-mini" onclick="toggleLang()" id="langBtn">LANG: SW</button>
-        <button class="btn-mini" id="volBtn" onclick="toggleMute()">SOUND: ON</button>
+        <button class="btn-mini" onclick="toggleLang()" id="langBtn">LUGHA: SW</button>
+        <button class="btn-mini" id="volBtn" onclick="toggleMute()">SAUTI: ON</button>
     </div>
 
-    <!-- Header -->
     <div class="header-section">
         <h1 class="app-name"><span class="c-y">MOON SUN</span> <span class="c-b">PREDICTOR</span> <span class="c-g">V12.5</span></h1>
-        <div class="sub-title">Mines 1win predictor</div>
+        <div style="font-size:9px; color:var(--green); font-weight:bold;">MINES 1WIN PREDICTOR</div>
     </div>
 
-    <!-- Info Panel -->
     <div class="info-panel">
         <div style="font-size:11px;"><span id="lText">USALAMA:</span> <span id="rText" style="font-weight:900;">99.8% USHINDI</span></div>
-        <div style="font-size:14px; font-weight:bold; margin-top:4px;">
+        <div style="font-size:14px; font-weight:bold; margin-top:2px;">
             <span id="roundLbl">MZUNGUKO</span> <span id="activeRound">0</span> / 3
         </div>
     </div>
 
-    <!-- Configuration -->
-    <div class="input-group">
-        <select id="bombSelect">
-            <option value="3" selected>💣 MABOMU 3</option>
-            <option value="5">💣 MABOMU 5</option>
-        </select>
+    <div id="cooldownDisplay">WAIT: 10:00</div>
+    <div id="warningLabel">⚠️ ONYO: WEKA HASH NA SALT KWANZA!</div>
+
+    <div class="inputs">
+        <select id="bombSelect"><option value="3">💣 MABOMU 3</option><option value="5">💣 MABOMU 5</option></select>
         <input type="text" id="hashIn" placeholder="Paste Hash ya Raundi Ijayo...">
         <input type="text" id="saltIn" placeholder="Paste Salt ya Raundi Iliyopita...">
     </div>
 
-    <!-- Game Grid -->
     <div class="grid" id="gameGrid"></div>
 
-    <!-- Main Buttons -->
-    <div class="main-actions">
+    <div class="actions">
         <button id="mainBtn" onclick="startAnalysis()">PATA SIGNAL 🚀</button>
         <a href="https://1win.com/registration?promo=MOON26" target="_blank" style="text-decoration:none;">
             <button id="regBtn">JISAJIRI 1WIN HAPA (PROMO: MOON26)</button>
         </a>
-        <div class="footer-row">
-            <button id="clearBtn" onclick="autoClear()">🔄 AUTO CLEAR</button>
-            <button id="instBtn" onclick="toggleModal()">MAELEKEZO</button>
+        <div class="footer-btns">
+            <button class="f-btn" id="clearBtn" onclick="autoClear()">🔄 AUTO CLEAR</button>
+            <button class="f-btn" id="instBtn" onclick="toggleModal()">MAELEKEZO</button>
         </div>
     </div>
 
-    <!-- Modal Area -->
     <div id="modal">
-        <div id="modalTitle" style="color:var(--yellow); font-weight:bold; text-align:center; border-bottom:1px solid #333; padding-bottom:10px; margin-bottom:10px;">MAELEKEZO YA KINA</div>
-        <div id="modalContent" style="font-size:11px; line-height:1.5; color:#ccc;"></div>
-        <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" target="_blank" class="wa-btn" id="waLinkBtn">CLICK HERE TO JOIN WHATSAPP CHANNEL</a>
-        <button class="close-btn" id="closeModalBtn" onclick="toggleModal()">FUNGA / CLOSE</button>
+        <div style="color:var(--yellow); font-weight:bold; text-align:center; border-bottom:1px solid #333; padding-bottom:8px; margin-bottom:10px;">MAELEKEZO YA KINA</div>
+        <div id="modalContent" style="font-size:11px; color:#ccc; line-height:1.4;"></div>
+        <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" target="_blank" class="wa-btn">CLICK HERE TO JOIN WHATSAPP CHANNEL</a>
+        <button onclick="toggleModal()" style="width:100%; padding:12px; background:var(--red); color:#fff; border:none; border-radius:10px; font-weight:bold;">FUNGA / CLOSE</button>
     </div>
 
     <script>
-        let roundIdx = 0;
+        let roundIdx = parseInt(localStorage.getItem('m_round')) || 0;
         let currentLang = 'sw';
-        let muted = false;
+        let isCD = false;
 
         const translations = {
-            sw: {
-                lang: "LUGHA: SW", sound: "SAUTI: ", secure: "99.8% USHINDI", round: "MZUNGUKO",
-                btn: "PATA SIGNAL 🚀", reg: "JISAJIRI 1WIN HAPA (PROMO: MOON26)", clear: "🔄 AUTO CLEAR", inst: "MAELEKEZO",
-                mBody: "1. Copy Hash na Salt kutoka 1Win Mines.<br>2. Paste hapa kupata signal.<br>3. Cheza raundi 3 tu kisha pumzika dakika 10."
+            sw: { 
+                lang: "LUGHA: SW", sound: "SAUTI: ", secure: "99.8% USHINDI", round: "MZUNGUKO", 
+                btn: "PATA SIGNAL 🚀", reg: "JISAJIRI 1WIN HAPA (PROMO: MOON26)", clear: "🔄 AUTO CLEAR", 
+                inst: "MAELEKEZO", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA!", wait: "PUMZIKA: ",
+                mBody: "1. Nakili Hash na Salt kutoka 1Win.<br>2. Paste hapa kisha uombe signal.<br>3. Cheza raundi 3 tu kisha upumzike dakika 10 kulinda ushindi wako."
             },
-            en: {
-                lang: "LANG: EN", sound: "SOUND: ", secure: "99.8% ACCURACY", round: "ROUND",
-                btn: "GET SIGNAL 🚀", reg: "REGISTER 1WIN HERE (PROMO: MOON26)", clear: "🔄 AUTO CLEAR", inst: "INSTRUCTIONS",
-                mBody: "1. Copy Hash and Salt from 1Win Mines.<br>2. Paste here to get signal.<br>3. Play 3 rounds only then rest for 10 mins."
+            en: { 
+                lang: "LANG: EN", sound: "SOUND: ", secure: "99.8% ACCURACY", round: "ROUND", 
+                btn: "GET SIGNAL 🚀", reg: "REGISTER 1WIN HERE (PROMO: MOON26)", clear: "🔄 AUTO CLEAR", 
+                inst: "INSTRUCTIONS", warn: "⚠️ WARNING: ENTER HASH & SALT FIRST!", wait: "WAIT: ",
+                mBody: "1. Copy Hash and Salt from 1Win.<br>2. Paste here to get signal.<br>3. Play 3 rounds only then rest for 10 mins to stay safe."
             }
         };
 
-        function unlock() { if(document.getElementById('accessKey').value === 'Mr winner123') document.getElementById('loginOverlay').style.display = 'none'; }
+        function unlock() { if(document.getElementById('accessKey').value === 'Mr winner123') document.getElementById('loginOverlay').style.display = 'none'; checkCD(); }
+        
         function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); refreshUI(); }
-        function toggleMute() { muted = !muted; refreshUI(); }
 
         function refreshUI() {
             const t = translations[currentLang];
             document.getElementById('langBtn').innerText = t.lang;
-            document.getElementById('volBtn').innerText = t.sound + (muted ? "OFF" : "ON");
             document.getElementById('rText').innerText = t.secure;
             document.getElementById('roundLbl').innerText = t.round;
             document.getElementById('mainBtn').innerText = t.btn;
             document.getElementById('regBtn').innerText = t.reg;
             document.getElementById('clearBtn').innerText = t.clear;
             document.getElementById('instBtn').innerText = t.inst;
+            document.getElementById('warningLabel').innerText = t.warn;
             document.getElementById('modalContent').innerHTML = t.mBody;
+            document.getElementById('activeRound').innerText = roundIdx;
         }
 
         const grid = document.getElementById('gameGrid');
         for (let i = 0; i < 25; i++) { 
-            const d = document.createElement('div'); 
-            d.className = 'cell'; d.id = 'cell-' + i; 
-            grid.appendChild(d); 
+            const d = document.createElement('div'); d.className = 'cell'; d.id = 'cell-' + i; grid.appendChild(d); 
         }
 
         function autoClear() { 
             document.querySelectorAll('.cell').forEach(c => { c.innerHTML = ''; c.className = 'cell'; });
+            document.getElementById('hashIn').value = ""; document.getElementById('saltIn').value = "";
+            document.getElementById('warningLabel').style.display = 'none';
         }
 
         function startAnalysis() {
-            if(roundIdx >= 3) { alert("Mwisho wa raundi! Pumzika dakika 10."); return; }
+            if(isCD) return;
             const h = document.getElementById('hashIn').value;
-            if(h.length < 5) return;
-            
+            const s = document.getElementById('saltIn').value;
+
+            if(h.length < 5 || s.length < 5) {
+                document.getElementById('warningLabel').style.display = 'block';
+                return;
+            }
+            document.getElementById('warningLabel').style.display = 'none';
+
             autoClear();
-            let safes = [];
+            let safes = []; 
             while(safes.length < 3) {
-                let r = Math.floor(Math.random() * 25);
+                let r = Math.floor(Math.random() * 25); 
                 if(!safes.includes(r)) safes.push(r);
             }
-            
             safes.forEach(idx => {
                 const c = document.getElementById('cell-' + idx);
-                c.innerHTML = '⭐';
-                c.className = 'cell safe';
+                c.innerHTML = '⭐'; c.className = 'cell safe';
             });
-            
+
             roundIdx++;
+            localStorage.setItem('m_round', roundIdx);
             document.getElementById('activeRound').innerText = roundIdx;
+
+            if(roundIdx >= 3) {
+                const endTime = Date.now() + 600000;
+                localStorage.setItem('m_cd', endTime);
+                startTimer(600);
+            }
+        }
+
+        function startTimer(sec) {
+            isCD = true;
+            document.getElementById('mainBtn').style.display = 'none';
+            const display = document.getElementById('cooldownDisplay');
+            display.style.display = 'block';
+
+            const timer = setInterval(() => {
+                let m = Math.floor(sec / 60);
+                let s = sec % 60;
+                display.innerText = translations[currentLang].wait + m + ":" + (s < 10 ? "0" : "") + s;
+                sec--;
+                if(sec < 0) {
+                    clearInterval(timer);
+                    isCD = false;
+                    roundIdx = 0;
+                    localStorage.setItem('m_round', 0);
+                    localStorage.removeItem('m_cd');
+                    display.style.display = 'none';
+                    document.getElementById('mainBtn').style.display = 'block';
+                    refreshUI();
+                }
+            }, 1000);
+        }
+
+        function checkCD() {
+            const end = localStorage.getItem('m_cd');
+            if(end) {
+                const diff = Math.floor((parseInt(end) - Date.now()) / 1000);
+                if(diff > 0) startTimer(diff);
+                else {
+                    localStorage.removeItem('m_cd');
+                    localStorage.setItem('m_round', 0);
+                    roundIdx = 0;
+                }
+            }
+            refreshUI();
         }
 
         function toggleModal() { 
-            const m = document.getElementById('modal');
-            m.style.display = (m.style.display === 'block' ? 'none' : 'block'); 
+            const m = document.getElementById('modal'); m.style.display = (m.style.display === 'block' ? 'none' : 'block'); 
         }
 
-        window.onload = refreshUI;
+        window.onload = checkCD;
     </script>
 </body>
 </html>
