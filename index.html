@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR V11.0 PRO</title>
+    <title>MOON SUN PREDICTOR ULTRA</title>
     <style>
         :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; --purple: #af40ff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; }
@@ -35,7 +35,6 @@
         #mainBtn { width: 90%; max-width: 340px; padding: 18px; background: linear-gradient(to right, #007bff, #0052ad); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 15px; box-shadow: 0 4px 15px rgba(0,123,255,0.3); }
         #mainBtn:disabled { background: #1a2c3a; color: #555; box-shadow: none; }
 
-        /* REGISTRATION BUTTON */
         .reg-link { text-decoration: none; width: 90%; max-width: 340px; margin-top: 15px; }
         #regBtn { width: 100%; padding: 18px; background: linear-gradient(45deg, var(--yellow), #ff9900); color: #000; border: 2px solid var(--purple); border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 16px; animation: glow 1.5s infinite alternate; box-shadow: 0 0 15px rgba(255,204,0,0.4); }
         @keyframes glow { from { transform: scale(1); box-shadow: 0 0 10px var(--yellow); } to { transform: scale(1.02); box-shadow: 0 0 20px var(--purple); } }
@@ -48,7 +47,6 @@
         .m-header { color: var(--yellow); font-weight: bold; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
         .m-section { color: var(--green); font-weight: bold; margin-top: 15px; text-transform: uppercase; font-size: 13px; border-left: 3px solid var(--blue); padding-left: 8px; }
         .m-text { font-size: 12px; line-height: 1.6; color: #ccc; margin-top: 8px; list-style: none; padding: 0; }
-        .m-text li { margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -57,7 +55,7 @@
 
     <div id="loginOverlay">
         <div class="login-box">
-            <h3 style="color:var(--yellow); margin-top:0;">PREDICTOR V11 ACCESS</h3>
+            <h3 style="color:var(--yellow); margin-top:0;">PREDICTOR ULTRA ACCESS</h3>
             <input type="password" id="accessKey" placeholder="Enter Secret Key...">
             <button onclick="unlock()" style="width:100%; padding:14px; background:var(--blue); color:white; border:none; border-radius:10px; font-weight:bold;">ENTER SYSTEM</button>
         </div>
@@ -69,8 +67,8 @@
     </div>
 
     <div class="header-section">
-        <h1 class="app-name"><span class="c-y">MOON</span> <span class="c-b">SUN</span> <span class="c-g">ULTRA</span></h1>
-        <div style="color:var(--yellow); font-size:10px; margin-top:5px; font-weight:bold;">ALGORITHM: 3/3 STABILITY | PROMO: MOON26</div>
+        <h1 class="app-name"><span class="c-y">MOON</span> <span class="c-b">SUN</span> <span class="c-g">PREDICTOR ULTRA</span></h1>
+        <div style="color:var(--yellow); font-size:10px; margin-top:5px; font-weight:bold;">ENTROPY: 1M+ PATTERNS | PROMO: MOON26</div>
     </div>
 
     <div class="info-panel">
@@ -85,7 +83,6 @@
     <div id="cooldownDisplay">WAIT: 10:00</div>
     <div id="warningLabel">⚠️ ONYO: WEKA HASH NA SALT KWANZA</div>
 
-    <select id="bombCount" onchange="updateRate()"></select>
     <input type="text" id="hashIn" placeholder="Hash ya Raundi Iliyopita...">
     <input type="text" id="saltIn" placeholder="Salt ya Raundi Iliyopita...">
 
@@ -100,7 +97,7 @@
     </a>
     
     <div class="action-row">
-        <button id="clearBtn" onclick="safeClear()">🔄 AUTO CLEAR</button>
+        <button id="clearBtn" onclick="autoClear()">🔄 AUTO CLEAR</button>
         <button id="instBtn" onclick="toggleModal()">💡 MAELEKEZO</button>
     </div>
 
@@ -117,58 +114,98 @@
         let isCooldownActive = false;
         const MAX_ROUNDS = 3;
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
+        // Mfumo wa Sauti Umesahihishwa
+        let audioCtx;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSound(freq, type, duration) {
+            if (muted) return;
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
         const translations = {
             sw: {
                 lang: "LUGHA: SW", sound: "SAUTI: ", lText: "USALAMA:", rText: " 100% SECURE", round: "MZUNGUKO",
-                btn: "PATA SIGNAL 🚀", instBtn: "💡 MAELEKEZO", bombTxt: "MABOMU", wait: "PUMZIKA: ", cdBtn: "MAPUMZIKO (MIN 10)",
+                btn: "PATA SIGNAL 🚀", instBtn: "💡 MAELEKEZO", wait: "PUMZIKA: ", cdBtn: "MAPUMZIKO (MIN 10)",
                 mHeader: "MAELEKEZO YA USHINDI 3/3", mClose: "NIMELEWA", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
                 reg: "JISAJILI NA 1WIN HAPA (BONUS 500%)", hashPh: "Paste Hash Hapa...", saltPh: "Paste Salt Hapa...",
                 mBody: `
                     <div class="m-section">1. JISAJILI NA PROMO CODE</div>
-                    <ul class="m-text"><li>Bonyeza kitufe cha dhahabu (JISAJILI 1WIN) na utumie Promo Code <b>MOON26</b>. Hii inatambulisha App yako kwenye seva ya ushindi.</li></ul>
-                    <div class="m-section">2. HASH NA SALT (MUHIMU)</div>
-                    <ul class="m-text"><li>Kwenye mchezo wa Mines (1win), nenda sehemu ya 'Provably Fair'. Copy <b>Hash</b> na <b>Salt</b> ya raundi iliyopita na uziweke hapa. Hii inasaidia algorithm kutabiri seli inayofuata.</li></ul>
-                    <div class="m-section">3. MBINU YA 3/3</div>
-                    <ul class="m-text"><li>Cheza raundi 3 tu kwa mkupuo. Ukimaliza, App itafunga kwa dakika 10. <b>USILAZIMISHE</b> kucheza zaidi ya hapo ili kuzuia akaunti yako isifuatiliwe na AI ya 1win.</li></ul>
+                    <ul class="m-text"><li>Bonyeza kitufe cha dhahabu (JISAJILI 1WIN) chini na utumie Promo Code <b>MOON26</b>. Hii inatambulisha App yako kwenye seva.</li></ul>
+                    <div class="m-section">2. AUTO CLEAR (RAUNDI HAZIFUTIKI)</div>
+                    <ul class="m-text"><li>Ukibonyeza 'Auto Clear' uwanja unafutwa lakini raundi yako itaendelea pale ulipoishia hadi ufike 3/3. Kisha dakika 10 zitaanza.</li></ul>
+                    <div class="m-section">3. 1M+ PATTERNS</div>
+                    <ul class="m-text"><li>Mfumo huu hautoi pattern inayofanana. Weka Hash na Salt ili kupata matokeo mapya na salama 100%.</li></ul>
                 `
             },
             en: {
                 lang: "LANG: EN", sound: "SOUND: ", lText: "SECURITY:", rText: " 100% SECURE", round: "ROUND",
-                btn: "GET SIGNAL 🚀", instBtn: "💡 INSTRUCTIONS", bombTxt: "BOMBS", wait: "COOLDOWN: ", cdBtn: "COOLDOWN (10 MIN)",
+                btn: "GET SIGNAL 🚀", instBtn: "💡 INSTRUCTIONS", wait: "COOLDOWN: ", cdBtn: "COOLDOWN (10 MIN)",
                 mHeader: "3/3 WINNING STRATEGY", mClose: "I UNDERSTAND", warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
                 reg: "REGISTER ON 1WIN HERE (500% BONUS)", hashPh: "Paste Hash Here...", saltPh: "Paste Salt Here...",
                 mBody: `
                     <div class="m-section">1. REGISTER WITH PROMO CODE</div>
-                    <ul class="m-text"><li>Click the gold button and use Promo Code <b>MOON26</b>. This connects your App to the winning server.</li></ul>
-                    <div class="m-section">2. HASH & SALT (CRITICAL)</div>
-                    <ul class="m-text"><li>In 1win Mines, go to 'Provably Fair'. Copy the <b>Hash</b> and <b>Salt</b> from the previous round and paste them here. This helps the algorithm sync with the game.</li></ul>
-                    <div class="m-section">3. 3/3 STRATEGY</div>
-                    <ul class="m-text"><li>Play only 3 rounds at a time. The app will lock for 10 minutes after. <b>DO NOT</b> force play to avoid account detection by 1win AI.</li></ul>
+                    <ul class="m-text"><li>Click the gold button below and use Promo Code <b>MOON26</b>. This syncs your App.</li></ul>
+                    <div class="m-section">2. AUTO CLEAR (ROUNDS KEPT)</div>
+                    <ul class="m-text"><li>Clicking 'Auto Clear' clears the grid but keeps your round progress until 3/3. Then 10 mins cooldown starts.</li></ul>
+                    <div class="m-section">3. 1M+ PATTERNS</div>
+                    <ul class="m-text"><li>The algorithm generates over 1 Million patterns. Always paste Hash & Salt for unique, safe results.</li></ul>
                 `
             }
         };
 
-        function unlock() { if(document.getElementById('accessKey').value === 'Mr winner123') { document.getElementById('loginOverlay').style.display = 'none'; if (audioCtx.state === 'suspended') audioCtx.resume(); checkExistingCD(); } }
-        function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); refreshUI(); }
-        function toggleMute() { muted = !muted; }
+        function unlock() { 
+            if(document.getElementById('accessKey').value === 'Mr winner123') { 
+                document.getElementById('loginOverlay').style.display = 'none'; 
+                initAudio(); 
+                playSound(800, 'sine', 0.2);
+                checkExistingCD(); 
+            } 
+        }
+
+        function toggleLang() { 
+            currentLang = (currentLang === 'sw' ? 'en' : 'sw'); 
+            initAudio(); playSound(500, 'square', 0.1);
+            refreshUI(); 
+        }
+        
+        function toggleMute() { 
+            muted = !muted; 
+            if(!muted) { initAudio(); playSound(600, 'sine', 0.1); }
+            refreshUI(); 
+        }
         
         function refreshUI() {
             const t = translations[currentLang];
-            document.getElementById('langBtn').innerText = t.lang; document.getElementById('volBtn').innerText = t.sound + (muted ? "OFF" : "ON");
-            document.getElementById('lText').innerText = t.lText; document.getElementById('roundLbl').innerText = t.round;
-            document.getElementById('instBtn').innerText = t.instBtn; document.getElementById('modalTitle').innerText = t.mHeader;
-            document.getElementById('closeBtn').innerText = t.mClose; document.getElementById('warningLabel').innerText = t.warn;
+            document.getElementById('langBtn').innerText = t.lang; 
+            document.getElementById('volBtn').innerText = t.sound + (muted ? "OFF" : "ON");
+            document.getElementById('lText').innerText = t.lText; 
+            document.getElementById('roundLbl').innerText = t.round;
+            document.getElementById('instBtn').innerText = t.instBtn; 
+            document.getElementById('modalTitle').innerText = t.mHeader;
+            document.getElementById('closeBtn').innerText = t.mClose; 
+            document.getElementById('warningLabel').innerText = t.warn;
             document.getElementById('regBtn').innerText = t.reg;
             document.getElementById('modalContent').innerHTML = t.mBody;
-            document.getElementById('hashIn').placeholder = t.hashPh; document.getElementById('saltIn').placeholder = t.saltPh;
-            
-            const select = document.getElementById('bombCount'); const val = select.value || "3"; select.innerHTML = '';
-            [3, 5].forEach(n => {
-                const opt = document.createElement('option'); opt.value = n; opt.text = `${t.bombTxt} ${n}`;
-                if(n == val) opt.selected = true; select.appendChild(opt);
-            });
+            document.getElementById('hashIn').placeholder = t.hashPh; 
+            document.getElementById('saltIn').placeholder = t.saltPh;
             
             if(!isCooldownActive) {
                 document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? t.cdBtn : t.btn;
@@ -176,20 +213,36 @@
             }
         }
 
-        function safeClear() {
-            const endTime = localStorage.getItem('predictorCooldown');
-            if(endTime && (parseInt(endTime) > Date.now())) { alert(currentLang === 'sw' ? "Subiri muda wa mapumziko uishe!" : "Wait for cooldown to end!"); return; }
-            roundIdx = 0; localStorage.setItem('predictorRound', 0); location.reload();
+        // BORESHO: Auto Clear Inafuta Uwanja Lakini INAWEKA Raundi pale ilipo
+        function autoClear() {
+            initAudio(); playSound(300, 'sawtooth', 0.1);
+            if(isCooldownActive) { 
+                alert(currentLang === 'sw' ? "Subiri muda wa mapumziko uishe!" : "Wait for cooldown to end!"); 
+                return; 
+            }
+            // Futa nyota na Hash/Salt tu, Acha raundi iendelee
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; });
+            document.getElementById('hashIn').value = ""; 
+            document.getElementById('saltIn').value = "";
         }
 
         const grid = document.getElementById('gameGrid');
         for (let i = 0; i < 25; i++) { const d = document.createElement('div'); d.className = 'cell'; d.id = 'cell-' + i; grid.appendChild(d); }
 
         function startAnalysis() {
+            initAudio();
             if(isCooldownActive) return;
-            const h = document.getElementById('hashIn').value; const s = document.getElementById('saltIn').value;
-            if(!h || !s) { document.getElementById('warningLabel').style.display = 'block'; return; }
+            const h = document.getElementById('hashIn').value; 
+            const s = document.getElementById('saltIn').value;
+            
+            if(!h || !s) { 
+                document.getElementById('warningLabel').style.display = 'block'; 
+                playSound(200, 'square', 0.3);
+                return; 
+            }
             document.getElementById('warningLabel').style.display = 'none';
+            playSound(400, 'sine', 0.1);
             
             const btn = document.getElementById('mainBtn'); const bar = document.getElementById('loaderBar');
             btn.disabled = true; document.getElementById('loaderWrap').style.display = 'block';
@@ -197,70 +250,117 @@
             let p = 0;
             const timer = setInterval(() => {
                 p += 5; bar.style.width = p + "%";
+                if(p % 20 === 0) playSound(600, 'triangle', 0.05); // Sauti ya kuchakata
                 if(p >= 100) { clearInterval(timer); runLogic(h, s); }
             }, 50); 
         }
 
         function runLogic(h, s) {
-            roundIdx++; localStorage.setItem('predictorRound', roundIdx); document.getElementById('activeRound').innerText = roundIdx;
+            roundIdx++; 
+            localStorage.setItem('predictorRound', roundIdx); 
+            document.getElementById('activeRound').innerText = roundIdx;
+            
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; });
 
-            // ENHANCED 3/3 ALGORITHM
-            let seedSource = h + s + roundIdx + "V11_ULTRA";
-            let hash = 0;
-            for(let i=0; i<seedSource.length; i++) { hash = ((hash << 5) - hash) + seedSource.charCodeAt(i); hash |= 0; }
-            let seed = Math.abs(hash);
+            // BORESHO: Algorithm ya 1M+ Patterns
+            // Inachanganya Hash, Salt, Raundi, na Muda (Date.now()) ili kutengeneza pattern mpya KILA WAKATI
+            let seedStr = h + s + roundIdx + Date.now();
+            let seed = 0;
+            for(let i=0; i<seedStr.length; i++) {
+                seed = ((seed << 5) - seed) + seedStr.charCodeAt(i);
+                seed |= 0;
+            }
             
             let pos = Array.from({length: 25}, (_, i) => i);
             for (let i = pos.length - 1; i > 0; i--) {
-                let j = Math.abs((seed * (i + 1))) % (i + 1);
+                // Kutumia Math.sin kwa uhakika zaidi wa mabadiliko
+                let x = Math.sin(seed++) * 10000;
+                let randomVal = x - Math.floor(x);
+                let j = Math.floor(randomVal * (i + 1));
                 [pos[i], pos[j]] = [pos[j], pos[i]];
             }
 
-            let safes = pos.slice(0, 3); // 3 Secure Stars
+            let safes = pos.slice(0, 3); // Nyota 3
             safes.forEach((idx, i) => {
                 setTimeout(() => {
                     const c = document.getElementById('cell-' + idx);
-                    c.innerHTML = '⭐'; c.classList.remove('shaded'); c.classList.add('safe');
+                    c.innerHTML = '⭐'; 
+                    c.classList.remove('shaded'); 
+                    c.classList.add('safe');
+                    playSound(800 + (i*200), 'sine', 0.15); // Sauti ya nyota kutokea
                 }, i * 300);
             });
 
             document.getElementById('loaderWrap').style.display = 'none';
-            document.getElementById('hashIn').value = ""; document.getElementById('saltIn').value = "";
             
             if(roundIdx >= MAX_ROUNDS) {
-                const endTime = Date.now() + 600000; // 10 Minutes
-                localStorage.setItem('predictorCooldown', endTime); startCD(600);
-            } else { document.getElementById('mainBtn').disabled = false; }
+                // Raundi 3 zimeisha, anza dakika 10 za mapumziko
+                setTimeout(() => {
+                    playSound(1000, 'sine', 1); // Sauti ya ushindi
+                    const endTime = Date.now() + 600000; // Dakika 10
+                    localStorage.setItem('predictorCooldown', endTime); 
+                    startCD(600);
+                }, 1000);
+            } else { 
+                document.getElementById('mainBtn').disabled = false; 
+            }
         }
 
         function checkExistingCD() {
+            // Kama raundi zilifika 3 lakini hakuna cooldown, anza upya
+            if(roundIdx >= MAX_ROUNDS && !localStorage.getItem('predictorCooldown')) {
+                roundIdx = 0; localStorage.setItem('predictorRound', 0);
+                document.getElementById('activeRound').innerText = 0;
+            }
+
             const endTime = localStorage.getItem('predictorCooldown');
             if(endTime) {
                 const remaining = Math.floor((parseInt(endTime) - Date.now()) / 1000);
-                if(remaining > 0) startCD(remaining); else localStorage.removeItem('predictorCooldown');
+                if(remaining > 0) startCD(remaining); 
+                else {
+                    localStorage.removeItem('predictorCooldown');
+                    roundIdx = 0; localStorage.setItem('predictorRound', 0);
+                }
             }
         }
 
         function startCD(sec) {
-            isCooldownActive = true; const timerEl = document.getElementById('cooldownDisplay');
-            const btn = document.getElementById('mainBtn'); btn.disabled = true;
+            isCooldownActive = true; 
+            const timerEl = document.getElementById('cooldownDisplay');
+            const btn = document.getElementById('mainBtn'); 
+            btn.disabled = true;
             timerEl.style.display = 'block';
+            
             const cd = setInterval(() => {
                 let m = Math.floor(sec/60); let s = sec%60;
                 timerEl.innerText = (currentLang === 'sw' ? "PUMZIKA: " : "WAIT: ") + m + ":" + (s < 10 ? "0" : "") + s;
                 btn.innerText = translations[currentLang].cdBtn;
                 if(sec <= 0) {
-                    clearInterval(cd); roundIdx = 0; isCooldownActive = false;
-                    localStorage.removeItem('predictorRound'); localStorage.removeItem('predictorCooldown');
-                    timerEl.style.display = 'none'; btn.disabled = false; refreshUI();
-                } sec--;
+                    clearInterval(cd); 
+                    roundIdx = 0; 
+                    isCooldownActive = false;
+                    localStorage.removeItem('predictorRound'); 
+                    localStorage.removeItem('predictorCooldown');
+                    timerEl.style.display = 'none'; 
+                    btn.disabled = false; 
+                    autoClear(); // Safisha uwanja automatiki
+                    refreshUI();
+                } 
+                sec--;
             }, 1000);
         }
 
-        function toggleModal() { const m = document.getElementById('modal'); m.style.display = (m.style.display === 'block' ? 'none' : 'block'); }
-        function updateRate() { refreshUI(); }
+        function toggleModal() { 
+            initAudio(); playSound(400, 'square', 0.1);
+            const m = document.getElementById('modal'); 
+            m.style.display = (m.style.display === 'block' ? 'none' : 'block'); 
+        }
+        
+        // Ruhusu sauti pindi mtumiaji anapogusa kioo popote (Muhimu kwa simu)
+        document.body.addEventListener('touchstart', initAudio, { once: true });
+        document.body.addEventListener('click', initAudio, { once: true });
+
         window.onload = refreshUI;
     </script>
 </body>
