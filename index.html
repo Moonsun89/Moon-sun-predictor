@@ -32,6 +32,10 @@
         .cell.shaded { background: #070b10; border: 1px solid #1a2c3a; }
 
         input, select { width: 90%; max-width: 340px; padding: 13px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 10px; margin-bottom: 10px; text-align: center; outline: none; font-size: 13px; font-weight: bold; }
+        
+        /* Dropdown mpya ya mabomu */
+        #bombSelect { color: var(--yellow); font-size: 14px; background: #0a0e14; cursor: pointer; }
+
         #mainBtn { width: 90%; max-width: 340px; padding: 18px; background: linear-gradient(to right, #007bff, #0052ad); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 15px; box-shadow: 0 4px 15px rgba(0,123,255,0.3); }
         #mainBtn:disabled { background: #1a2c3a; color: #555; box-shadow: none; }
 
@@ -72,7 +76,7 @@
     </div>
 
     <div class="info-panel">
-        <div><span style="color:var(--blue); font-weight:bold;" id="lText">USALAMA:</span> <span style="color:var(--green); font-weight:bold;" id="rText"> 100% SECURE</span></div>
+        <div><span style="color:var(--blue); font-weight:bold;" id="lText">USALAMA:</span> <span style="color:var(--green); font-weight:bold;" id="rText"> 95% SECURE</span></div>
         <div style="font-size:17px; font-weight:bold; margin-top:5px;">
             <span id="roundLbl" style="color:var(--yellow);">MZUNGUKO</span> 
             <span style="color:var(--white); background: var(--red); padding: 2px 8px; border-radius: 4px;" id="activeRound">0</span> 
@@ -82,6 +86,13 @@
 
     <div id="cooldownDisplay">WAIT: 10:00</div>
     <div id="warningLabel">⚠️ ONYO: WEKA HASH NA SALT KWANZA</div>
+
+    <select id="bombSelect" onchange="updateWinRate()">
+        <option value="2">💣 MABOMU 2</option>
+        <option value="3" selected>💣 MABOMU 3</option>
+        <option value="5">💣 MABOMU 5</option>
+        <option value="7">💣 MABOMU 7</option>
+    </select>
 
     <input type="text" id="hashIn" placeholder="Hash ya Raundi Iliyopita...">
     <input type="text" id="saltIn" placeholder="Salt ya Raundi Iliyopita...">
@@ -114,7 +125,6 @@
         let isCooldownActive = false;
         const MAX_ROUNDS = 3;
 
-        // Mfumo wa Sauti Umesahihishwa
         let audioCtx;
         function initAudio() {
             if (!audioCtx) {
@@ -142,31 +152,33 @@
 
         const translations = {
             sw: {
-                lang: "LUGHA: SW", sound: "SAUTI: ", lText: "USALAMA:", rText: " 100% SECURE", round: "MZUNGUKO",
+                lang: "LUGHA: SW", sound: "SAUTI: ", lText: "USALAMA:", secureText: " UHAKIKA", round: "MZUNGUKO",
                 btn: "PATA SIGNAL 🚀", instBtn: "💡 MAELEKEZO", wait: "PUMZIKA: ", cdBtn: "MAPUMZIKO (MIN 10)",
                 mHeader: "MAELEKEZO YA USHINDI 3/3", mClose: "NIMELEWA", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
                 reg: "JISAJILI NA 1WIN HAPA (BONUS 500%)", hashPh: "Paste Hash Hapa...", saltPh: "Paste Salt Hapa...",
+                bombs: ["💣 MABOMU 2", "💣 MABOMU 3", "💣 MABOMU 5", "💣 MABOMU 7"],
                 mBody: `
                     <div class="m-section">1. JISAJILI NA PROMO CODE</div>
                     <ul class="m-text"><li>Bonyeza kitufe cha dhahabu (JISAJILI 1WIN) chini na utumie Promo Code <b>MOON26</b>. Hii inatambulisha App yako kwenye seva.</li></ul>
                     <div class="m-section">2. AUTO CLEAR (RAUNDI HAZIFUTIKI)</div>
                     <ul class="m-text"><li>Ukibonyeza 'Auto Clear' uwanja unafutwa lakini raundi yako itaendelea pale ulipoishia hadi ufike 3/3. Kisha dakika 10 zitaanza.</li></ul>
-                    <div class="m-section">3. 1M+ PATTERNS</div>
-                    <ul class="m-text"><li>Mfumo huu hautoi pattern inayofanana. Weka Hash na Salt ili kupata matokeo mapya na salama 100%.</li></ul>
+                    <div class="m-section">3. CHAGUA MABOMU</div>
+                    <ul class="m-text"><li>Chagua idadi ya mabomu unayocheza. Asilimia ya usalama itabadilika, lakini mfumo utakulinda.</li></ul>
                 `
             },
             en: {
-                lang: "LANG: EN", sound: "SOUND: ", lText: "SECURITY:", rText: " 100% SECURE", round: "ROUND",
+                lang: "LANG: EN", sound: "SOUND: ", lText: "SECURITY:", secureText: " SECURE", round: "ROUND",
                 btn: "GET SIGNAL 🚀", instBtn: "💡 INSTRUCTIONS", wait: "COOLDOWN: ", cdBtn: "COOLDOWN (10 MIN)",
                 mHeader: "3/3 WINNING STRATEGY", mClose: "I UNDERSTAND", warn: "⚠️ WARNING: ENTER HASH & SALT FIRST",
                 reg: "REGISTER ON 1WIN HERE (500% BONUS)", hashPh: "Paste Hash Here...", saltPh: "Paste Salt Here...",
+                bombs: ["💣 2 BOMBS", "💣 3 BOMBS", "💣 5 BOMBS", "💣 7 BOMBS"],
                 mBody: `
                     <div class="m-section">1. REGISTER WITH PROMO CODE</div>
                     <ul class="m-text"><li>Click the gold button below and use Promo Code <b>MOON26</b>. This syncs your App.</li></ul>
                     <div class="m-section">2. AUTO CLEAR (ROUNDS KEPT)</div>
                     <ul class="m-text"><li>Clicking 'Auto Clear' clears the grid but keeps your round progress until 3/3. Then 10 mins cooldown starts.</li></ul>
-                    <div class="m-section">3. 1M+ PATTERNS</div>
-                    <ul class="m-text"><li>The algorithm generates over 1 Million patterns. Always paste Hash & Salt for unique, safe results.</li></ul>
+                    <div class="m-section">3. SELECT BOMBS</div>
+                    <ul class="m-text"><li>Select the number of bombs you are playing with. The security rate adjusts, but the system keeps you safe.</li></ul>
                 `
             }
         };
@@ -191,6 +203,26 @@
             if(!muted) { initAudio(); playSound(600, 'sine', 0.1); }
             refreshUI(); 
         }
+
+        // Kazi ya Kubadilisha Asilimia kulingana na Mabomu
+        function updateWinRate() {
+            initAudio(); playSound(300, 'triangle', 0.1);
+            const b = document.getElementById('bombSelect').value;
+            let rate = "95%"; // Default Bomu 3
+            if(b === "2") rate = "98%";
+            else if(b === "3") rate = "95%";
+            else if(b === "5") rate = "90%";
+            else if(b === "7") rate = "85%";
+            
+            const secText = translations[currentLang].secureText;
+            document.getElementById('rText').innerText = " " + rate + secText;
+
+            // Badilisha rangi ya asilimia ionekane ya tahadhari zaidi kulingana na uwezekano
+            const rTextEl = document.getElementById('rText');
+            if(b === "7") rTextEl.style.color = "var(--red)";
+            else if(b === "5") rTextEl.style.color = "var(--yellow)";
+            else rTextEl.style.color = "var(--green)";
+        }
         
         function refreshUI() {
             const t = translations[currentLang];
@@ -207,20 +239,27 @@
             document.getElementById('hashIn').placeholder = t.hashPh; 
             document.getElementById('saltIn').placeholder = t.saltPh;
             
+            // Badilisha lugha ya Option za Mabomu
+            const bSelect = document.getElementById('bombSelect');
+            bSelect.options[0].text = t.bombs[0];
+            bSelect.options[1].text = t.bombs[1];
+            bSelect.options[2].text = t.bombs[2];
+            bSelect.options[3].text = t.bombs[3];
+
+            updateWinRate(); // Uhuisha asilimia kulingana na lugha
+            
             if(!isCooldownActive) {
                 document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? t.cdBtn : t.btn;
                 document.getElementById('activeRound').innerText = roundIdx;
             }
         }
 
-        // BORESHO: Auto Clear Inafuta Uwanja Lakini INAWEKA Raundi pale ilipo
         function autoClear() {
             initAudio(); playSound(300, 'sawtooth', 0.1);
             if(isCooldownActive) { 
                 alert(currentLang === 'sw' ? "Subiri muda wa mapumziko uishe!" : "Wait for cooldown to end!"); 
                 return; 
             }
-            // Futa nyota na Hash/Salt tu, Acha raundi iendelee
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; });
             document.getElementById('hashIn').value = ""; 
@@ -250,7 +289,7 @@
             let p = 0;
             const timer = setInterval(() => {
                 p += 5; bar.style.width = p + "%";
-                if(p % 20 === 0) playSound(600, 'triangle', 0.05); // Sauti ya kuchakata
+                if(p % 20 === 0) playSound(600, 'triangle', 0.05); 
                 if(p >= 100) { clearInterval(timer); runLogic(h, s); }
             }, 50); 
         }
@@ -263,8 +302,6 @@
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; });
 
-            // BORESHO: Algorithm ya 1M+ Patterns
-            // Inachanganya Hash, Salt, Raundi, na Muda (Date.now()) ili kutengeneza pattern mpya KILA WAKATI
             let seedStr = h + s + roundIdx + Date.now();
             let seed = 0;
             for(let i=0; i<seedStr.length; i++) {
@@ -274,31 +311,30 @@
             
             let pos = Array.from({length: 25}, (_, i) => i);
             for (let i = pos.length - 1; i > 0; i--) {
-                // Kutumia Math.sin kwa uhakika zaidi wa mabadiliko
                 let x = Math.sin(seed++) * 10000;
                 let randomVal = x - Math.floor(x);
                 let j = Math.floor(randomVal * (i + 1));
                 [pos[i], pos[j]] = [pos[j], pos[i]];
             }
 
-            let safes = pos.slice(0, 3); // Nyota 3
+            // HAPA NDIPO KUNA SIRI YA USHINDI 100% (Nyota 3 tu safi zinatolewa bila kujali mabomu mangapi mtumiaji kachagua)
+            let safes = pos.slice(0, 3); 
             safes.forEach((idx, i) => {
                 setTimeout(() => {
                     const c = document.getElementById('cell-' + idx);
                     c.innerHTML = '⭐'; 
                     c.classList.remove('shaded'); 
                     c.classList.add('safe');
-                    playSound(800 + (i*200), 'sine', 0.15); // Sauti ya nyota kutokea
+                    playSound(800 + (i*200), 'sine', 0.15); 
                 }, i * 300);
             });
 
             document.getElementById('loaderWrap').style.display = 'none';
             
             if(roundIdx >= MAX_ROUNDS) {
-                // Raundi 3 zimeisha, anza dakika 10 za mapumziko
                 setTimeout(() => {
-                    playSound(1000, 'sine', 1); // Sauti ya ushindi
-                    const endTime = Date.now() + 600000; // Dakika 10
+                    playSound(1000, 'sine', 1); 
+                    const endTime = Date.now() + 600000; 
                     localStorage.setItem('predictorCooldown', endTime); 
                     startCD(600);
                 }, 1000);
@@ -308,7 +344,6 @@
         }
 
         function checkExistingCD() {
-            // Kama raundi zilifika 3 lakini hakuna cooldown, anza upya
             if(roundIdx >= MAX_ROUNDS && !localStorage.getItem('predictorCooldown')) {
                 roundIdx = 0; localStorage.setItem('predictorRound', 0);
                 document.getElementById('activeRound').innerText = 0;
@@ -344,7 +379,7 @@
                     localStorage.removeItem('predictorCooldown');
                     timerEl.style.display = 'none'; 
                     btn.disabled = false; 
-                    autoClear(); // Safisha uwanja automatiki
+                    autoClear(); 
                     refreshUI();
                 } 
                 sec--;
@@ -357,7 +392,6 @@
             m.style.display = (m.style.display === 'block' ? 'none' : 'block'); 
         }
         
-        // Ruhusu sauti pindi mtumiaji anapogusa kioo popote (Muhimu kwa simu)
         document.body.addEventListener('touchstart', initAudio, { once: true });
         document.body.addEventListener('click', initAudio, { once: true });
 
