@@ -28,6 +28,7 @@
         .cell { width: 50px; height: 50px; background: #12181f; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid #1b262f; transition: 0.2s; }
         
         .cell.safe { border: 2.5px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0,255,136,0.2); transform: scale(1.05); }
+        .cell.bomb { border: 1px solid rgba(255,51,51,0.5); background: rgba(255,51,51,0.15); font-size: 20px; }
         .cell.shaded { background: #070b10; border: 1px solid #1a2c3a; }
 
         input, select { width: 90%; max-width: 340px; padding: 13px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 10px; margin-bottom: 10px; text-align: center; outline: none; font-size: 13px; font-weight: bold; }
@@ -46,12 +47,14 @@
 
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 20px; padding: 20px; z-index: 10000; overflow-y: auto; box-shadow: 0 0 50px #000; }
         .m-header { color: var(--yellow); font-weight: bold; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
-        .m-section { color: var(--green); font-weight: bold; margin-top: 15px; text-transform: uppercase; font-size: 13px; border-left: 3px solid var(--blue); padding-left: 8px; }
-        .m-text { font-size: 12px; line-height: 1.6; color: #ccc; margin-top: 8px; padding-left: 15px; list-style: square; }
-        .wa-link { display: block; margin-top: 15px; padding: 12px; background: #25d366; color: #000; text-align: center; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 13px; border: 2px solid #fff; }
+        .m-section { color: var(--green); font-weight: bold; margin-top: 18px; text-transform: uppercase; font-size: 13px; border-left: 3px solid var(--blue); padding-left: 8px; }
+        .m-text { font-size: 12px; line-height: 1.6; color: #ccc; margin-top: 8px; padding-left: 15px; }
+        .wa-link { display: block; margin-top: 15px; padding: 12px; background: #25d366; color: #000; text-align: center; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 12px; }
     </style>
 </head>
 <body>
+
+    <canvas id="confettiCanvas" style="position:fixed; top:0; left:0; pointer-events:none; z-index:10001;"></canvas>
 
     <div id="loginOverlay">
         <div class="login-box">
@@ -108,7 +111,7 @@
     </div>
 
     <div id="modal">
-        <div id="modalTitle" class="m-header">MAELEKEZO YA USHINDI</div>
+        <div id="modalTitle" class="m-header">MWONGOZO WA USHINDI</div>
         <div id="modalContent"></div>
         <button id="closeBtn" onclick="toggleModal()" style="width:100%; margin-top:20px; padding:15px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">NIMELEWA / CLOSE</button>
     </div>
@@ -121,28 +124,52 @@
         const MAX_ROUNDS = 3;
 
         let audioCtx;
-        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
-        function playSound(freq, type, duration) { if (muted) return; initAudio(); const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration); }
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        // Mfumo mpya wa sauti wenye nguvu (Volume 0.5 badala ya 0.1)
+        function playSound(freq, type, duration, vol = 0.5) {
+            if (muted) return;
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
 
         const translations = {
             sw: {
                 lang: "LUGHA: SW", sound: "SAUTI: ", lText: "USALAMA:", secureText: " UHAKIKA", round: "MZUNGUKO",
                 btn: "PATA SIGNAL 🚀", instBtn: "💡 MAELEKEZO", wait: "PUMZIKA: ", cdBtn: "MAPUMZIKO (MIN 10)",
-                mHeader: "MAELEKEZO YA USHINDI V12.0", mClose: "NIMELEWA", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
+                mHeader: "MWONGOZO WA USHINDI V12.0", mClose: "NIMELEWA", warn: "⚠️ ONYO: WEKA HASH NA SALT KWANZA",
                 reg: "JISAJILI NA 1WIN HAPA (BONUS 500%)", hashPh: "Paste Hash Hapa...", saltPh: "Paste Salt Hapa...",
                 bombs: ["💣 MABOMU 2", "💣 MABOMU 3", "💣 MABOMU 5", "💣 MABOMU 7"],
                 mBody: `
-                    <div class="m-section">1. JISAJILI NA PROMO CODE</div>
+                    <div class="m-section">1. MATUMIZI YA BATANI</div>
                     <ul class="m-text">
-                        <li>Bonyeza kitufe cha dhahabu na utumie Promo Code <b>MOON26</b>. Hii ni lazima ili kutoa matokeo sahihi 100%.</li>
+                        <li><b>PATA SIGNAL:</b> Inachakata data na kutoa nyota 3 salama.</li>
+                        <li><b>AUTO CLEAR:</b> Inasafisha gridi lakini HAIFUTI raundi zako.</li>
                     </ul>
-                    <div class="m-section">2. HATUA ZA KUPATA SIGNAL</div>
+                    <div class="m-section">2. HATUA ZA KUPATA MATOKEO</div>
                     <ul class="m-text">
-                        <li>Fungua Mines, copy <b>'Next Round Hash'</b> na <b>'Last Round Salt'</b> kisha uweke hapa.</li>
+                        <li>Copy <b>'Next Round Hash'</b> na <b>'Last Round Salt'</b> kutoka 1Win Provably Fair.</li>
+                        <li>Paste hapa kwenye App na ubonyeze Pata Signal.</li>
+                    </ul>
+                    <div class="m-section">3. JISAJILI NA PROMO CODE</div>
+                    <ul class="m-text">
+                        <li>Ni LAZIMA kutumia Promo Code: <b>MOON26</b> wakati wa kujisajili 1Win ili akaunti yako iunganishe na seva yetu.</li>
                     </ul>
                     <hr style="border:0.5px solid #333; margin-top:15px;">
-                    <p style="font-size:11px; color:var(--yellow); text-align:center;">Kwa maelekezo zaidi fuata hii chaneli:</p>
-                    <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">FOLLOW THE MOON SUN PREDICTOR CHANNEL ON WHATSAPP</a>
+                    <p style="font-size:10px; color:var(--yellow); text-align:center;">Kwa maelekezo zaidi fuata hii chaneli:</p>
+                    <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">FOLLOW MOON SUN PREDICTOR WHATSAPP</a>
                 `
             },
             en: {
@@ -152,29 +179,45 @@
                 reg: "REGISTER ON 1WIN HERE (500% BONUS)", hashPh: "Paste Hash Here...", saltPh: "Paste Salt Here...",
                 bombs: ["💣 2 BOMBS", "💣 3 BOMBS", "💣 5 BOMBS", "💣 7 BOMBS"],
                 mBody: `
-                    <div class="m-section">1. REGISTER WITH PROMO CODE</div>
+                    <div class="m-section">1. BUTTON USAGE</div>
                     <ul class="m-text">
-                        <li>Use Promo Code <b>MOON26</b> during registration to sync your account with our server.</li>
+                        <li><b>GET SIGNAL:</b> Processes data to show 3 safe stars.</li>
                     </ul>
-                    <div class="m-section">2. HOW TO GET SIGNAL</div>
+                    <div class="m-section">2. HOW TO WIN</div>
                     <ul class="m-text">
-                        <li>Open Mines, copy <b>'Next Round Hash'</b> and <b>'Last Round Salt'</b> then paste them here.</li>
+                        <li>Copy <b>'Next Round Hash'</b> and <b>'Last Round Salt'</b> from 1Win.</li>
+                    </ul>
+                    <div class="m-section">3. PROMO CODE</div>
+                    <ul class="m-text">
+                        <li>MUST use Promo Code: <b>MOON26</b> for 100% accuracy.</li>
                     </ul>
                     <hr style="border:0.5px solid #333; margin-top:15px;">
-                    <p style="font-size:11px; color:var(--yellow); text-align:center;">For more instructions follow this channel:</p>
-                    <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">FOLLOW THE MOON SUN PREDICTOR CHANNEL ON WHATSAPP</a>
+                    <p style="font-size:10px; color:var(--yellow); text-align:center;">For more instructions, follow this channel:</p>
+                    <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">FOLLOW MOON SUN PREDICTOR WHATSAPP</a>
                 `
             }
         };
 
-        function unlock() { if(document.getElementById('accessKey').value === 'Mr winner123') { document.getElementById('loginOverlay').style.display = 'none'; initAudio(); playSound(800, 'sine', 0.2); checkExistingCD(); } }
-        function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); refreshUI(); }
-        function toggleMute() { muted = !muted; refreshUI(); }
+        function unlock() { 
+            if(document.getElementById('accessKey').value === 'Mr winner123') { 
+                document.getElementById('loginOverlay').style.display = 'none'; 
+                initAudio(); 
+                playSound(600, 'triangle', 0.4); 
+                checkExistingCD(); 
+            } 
+        }
+
+        function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); playSound(400, 'sine', 0.1); refreshUI(); }
+        function toggleMute() { muted = !muted; if(!muted) playSound(500, 'sine', 0.1); refreshUI(); }
+
         function updateWinRate() {
             const b = document.getElementById('bombSelect').value;
             let rate = b === "2" ? "98%" : b === "3" ? "95%" : b === "5" ? "90%" : "85%";
             document.getElementById('rText').innerText = " " + rate + translations[currentLang].secureText;
+            document.getElementById('rText').style.color = b === "7" ? "var(--red)" : b === "5" ? "var(--yellow)" : "var(--green)";
+            playSound(300, 'sine', 0.05);
         }
+
         function refreshUI() {
             const t = translations[currentLang];
             document.getElementById('langBtn').innerText = t.lang; 
@@ -195,19 +238,36 @@
             if(!isCooldownActive) { document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? t.cdBtn : t.btn; document.getElementById('activeRound').innerText = roundIdx; }
         }
 
-        function autoClear() { if(isCooldownActive) return; const cells = document.querySelectorAll('.cell'); cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; }); document.getElementById('hashIn').value = ""; document.getElementById('saltIn').value = ""; }
+        function autoClear() { 
+            if(isCooldownActive) return; 
+            playSound(200, 'square', 0.1); 
+            const cells = document.querySelectorAll('.cell'); 
+            cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; }); 
+            document.getElementById('hashIn').value = ""; 
+            document.getElementById('saltIn').value = ""; 
+        }
+
         const grid = document.getElementById('gameGrid');
         for (let i = 0; i < 25; i++) { const d = document.createElement('div'); d.className = 'cell'; d.id = 'cell-' + i; grid.appendChild(d); }
 
         function startAnalysis() {
             if(isCooldownActive) return;
             const h = document.getElementById('hashIn').value; const s = document.getElementById('saltIn').value;
-            if(!h || !s) { document.getElementById('warningLabel').style.display = 'block'; return; }
+            if(!h || !s) { 
+                document.getElementById('warningLabel').style.display = 'block'; 
+                playSound(150, 'square', 0.3, 0.8);
+                return; 
+            }
             document.getElementById('warningLabel').style.display = 'none';
+            playSound(400, 'triangle', 0.1);
             const btn = document.getElementById('mainBtn'); const bar = document.getElementById('loaderBar');
             btn.disabled = true; document.getElementById('loaderWrap').style.display = 'block';
             let p = 0;
-            const timer = setInterval(() => { p += 5; bar.style.width = p + "%"; if(p >= 100) { clearInterval(timer); runLogic(h, s); } }, 50); 
+            const timer = setInterval(() => { 
+                p += 5; bar.style.width = p + "%"; 
+                if(p % 20 === 0) playSound(800, 'sine', 0.05, 0.2);
+                if(p >= 100) { clearInterval(timer); runLogic(h, s); } 
+            }, 50); 
         }
 
         function runLogic(h, s) {
@@ -218,14 +278,39 @@
             let pos = Array.from({length: 25}, (_, i) => i);
             for (let i = pos.length - 1; i > 0; i--) { let x = Math.sin(seed++) * 10000; let r = x - Math.floor(x); let j = Math.floor(r * (i + 1)); [pos[i], pos[j]] = [pos[j], pos[i]]; }
             let safes = pos.slice(0, 3);
-            safes.forEach((idx, i) => { setTimeout(() => { const c = document.getElementById('cell-' + idx); c.innerHTML = '⭐'; c.className = 'cell safe'; playSound(800 + (i*200), 'sine', 0.15); }, i * 300); });
+            safes.forEach((idx, i) => { 
+                setTimeout(() => { 
+                    const c = document.getElementById('cell-' + idx); 
+                    c.innerHTML = '⭐'; 
+                    c.className = 'cell safe'; 
+                    playSound(800 + (i*200), 'triangle', 0.3, 0.6); 
+                }, i * 400); 
+            });
             document.getElementById('loaderWrap').style.display = 'none';
-            if(roundIdx >= MAX_ROUNDS) { setTimeout(() => { const endTime = Date.now() + 600000; localStorage.setItem('predictorCooldown', endTime); startCD(600); }, 1000); } else { document.getElementById('mainBtn').disabled = false; }
+            if(roundIdx >= MAX_ROUNDS) { setTimeout(() => { playSound(200, 'sawtooth', 0.5, 0.4); const endTime = Date.now() + 600000; localStorage.setItem('predictorCooldown', endTime); startCD(600); }, 1500); } else { document.getElementById('mainBtn').disabled = false; }
         }
 
         function checkExistingCD() { const endTime = localStorage.getItem('predictorCooldown'); if(endTime) { const rem = Math.floor((parseInt(endTime) - Date.now()) / 1000); if(rem > 0) startCD(rem); else localStorage.removeItem('predictorCooldown'); } }
-        function startCD(sec) { isCooldownActive = true; const timerEl = document.getElementById('cooldownDisplay'); const btn = document.getElementById('mainBtn'); btn.disabled = true; timerEl.style.display = 'block'; const cd = setInterval(() => { let m = Math.floor(sec/60); let s = sec%60; timerEl.innerText = (currentLang === 'sw' ? "PUMZIKA: " : "WAIT: ") + m + ":" + (s < 10 ? "0" : "") + s; btn.innerText = translations[currentLang].cdBtn; if(sec <= 0) { clearInterval(cd); roundIdx = 0; isCooldownActive = false; localStorage.removeItem('predictorRound'); localStorage.removeItem('predictorCooldown'); timerEl.style.display = 'none'; btn.disabled = false; autoClear(); refreshUI(); } sec--; }, 1000); }
-        function toggleModal() { const m = document.getElementById('modal'); m.style.display = (m.style.display === 'block' ? 'none' : 'block'); }
+        function startCD(sec) { 
+            isCooldownActive = true; 
+            const timerEl = document.getElementById('cooldownDisplay'); 
+            const btn = document.getElementById('mainBtn'); 
+            btn.disabled = true; 
+            timerEl.style.display = 'block'; 
+            const cd = setInterval(() => { 
+                let m = Math.floor(sec/60); let s = sec%60; 
+                timerEl.innerText = (currentLang === 'sw' ? "PUMZIKA: " : "WAIT: ") + m + ":" + (s < 10 ? "0" : "") + s; 
+                btn.innerText = translations[currentLang].cdBtn; 
+                if(sec <= 0) { 
+                    clearInterval(cd); roundIdx = 0; isCooldownActive = false; 
+                    localStorage.removeItem('predictorRound'); localStorage.removeItem('predictorCooldown'); 
+                    timerEl.style.display = 'none'; btn.disabled = false; autoClear(); refreshUI(); 
+                    playSound(1000, 'sine', 0.5, 0.7);
+                } 
+                sec--; 
+            }, 1000); 
+        }
+        function toggleModal() { const m = document.getElementById('modal'); m.style.display = (m.style.display === 'block' ? 'none' : 'block'); playSound(400, 'sine', 0.1); }
         window.onload = refreshUI;
     </script>
 </body>
