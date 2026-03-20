@@ -49,7 +49,7 @@
 
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 25px; padding: 25px; z-index: 10000; overflow-y: auto; box-shadow: 0 0 100px #000; }
         .m-header { color: var(--yellow); font-weight: bold; font-size: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; text-align: center; }
-        .wa-link { display: block; margin-top: 20px; padding: 15px; background: transparent; color: #25d366; text-align: center; border-radius: 12px; border: 2px dashed #25d366; text-decoration: none; font-weight: bold; font-size: 13px; }
+        .wa-link { display: block; margin-top: 10px; padding: 15px; background: transparent; color: #25d366; text-align: center; border-radius: 12px; border: 2px dashed #25d366; text-decoration: none; font-weight: bold; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -113,12 +113,12 @@
     <div id="modal">
         <div id="modalTitle" class="m-header">MAELEKEZO YA KINA</div>
         <div id="modalContent"></div>
+        <p style="color:#777; font-size:12px; margin-top:20px; text-align:center; font-weight:bold;">Kwa maelekezo zaidi fuata hii chaneli</p>
         <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link" id="waBtn">BONYEZA HAPA KUJIUNGA CHANNEL YA WHATSAPP</a>
         <button id="closeModalBtn" onclick="toggleModal()" style="width:100%; margin-top:15px; padding:15px; background:var(--red); color:white; border:none; border-radius:12px; font-weight:bold;">FUNGA</button>
     </div>
 
     <script>
-        // MAREKEBISHO: Initialize kwa 0 kama hakuna data sahihi
         let roundIdx = parseInt(localStorage.getItem('predictorRound')) || 0;
         let currentLang = 'sw';
         let muted = false;
@@ -149,14 +149,54 @@
                 btn: "PATA SIGNAL 🚀", regBtn: "JISAJIRI 1WIN HAPA (PROMO: MOON26)", instBtn: "MAELEKEZO", wait: "PUMZIKA: ", cdBtn: "MAPUMZIKO (MIN 10)",
                 mHeader: "MAELEKEZO YA KINA", closeBtn: "FUNGA", waText: "BONYEZA HAPA KUJIUNGA CHANNEL YA WHATSAPP",
                 warn: "⚠️ WEKA HASH NA SALT KWANZA!",
-                mBody: `<div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. KAZI ZA VITUFE</div><ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;"><li><b>PATA SIGNAL:</b> Inatafuta sehemu salama.</li><li><b>AUTO CLEAR:</b> Inasafisha data za mchezo.</li></ul>`
+                mBody: `<div style="text-align:left; font-size:13px; line-height:1.6;">
+                    <b style="color:var(--yellow);">1. KAZI ZA VITUFE:</b><br>
+                    • <b>PATA SIGNAL:</b> Huwasha algorithm kutafuta nyota salama.<br>
+                    • <b>AUTO CLEAR:</b> Husafisha ubao na data za zamani ili kuanza upya.<br>
+                    • <b>BOMU SELECT:</b> Chagua idadi ya mabomu unayocheza (2, 3, 5, 7).<br><br>
+                    
+                    <b style="color:var(--yellow);">2. HASH NA SALT NI NINI?</b><br>
+                    Hizi ni kodi za siri kutoka 1win zinazohakikisha mchezo ni wa haki. Programu yetu huzitumia kusoma mpangilio wa mabomu kabla mchezo haujaanza.<br><br>
+                    
+                    <b style="color:var(--yellow);">3. JINSI YA KUPATA HASH NA SALT:</b><br>
+                    1. Fungua mchezo wa <b>Mines</b> kule <b>1win</b>.<br>
+                    2. Bonyeza alama ya <b>"i"</b> au <b>"Provably Fair"</b>.<br>
+                    3. Nakili (Copy) <b>Next Round Hash</b> na uipaste hapa kwenye kisanduku cha Hash.<br>
+                    4. Nakili (Copy) <b>Previous Round Salt</b> na uipaste kwenye kisanduku cha Salt.<br><br>
+                    
+                    <b style="color:var(--yellow);">4. UMUHIMU WA DAKIKA 10:</b><br>
+                    Baada ya raundi 3, mfumo hujifunga kwa dakika 10. Hii ni muhimu ili kuzuia mfumo wa ulinzi wa 1win (Anti-Cheat) usigundue kuwa unatumia programu msaidizi. Pia husaidia kurejesha usahihi wa algorithm.<br><br>
+                    
+                    <b style="color:var(--yellow);">5. PROMO CODE (MOON26):</b><br>
+                    Ni lazima uwe unatumia akaunti mpya iliyosajiliwa na Promo Code <b>MOON26</b>. Hii inaruhusu seva yetu kuunganishwa na akaunti yako na kutoa signal zenye uhakika wa 95%. bila hii, signal zinaweza zisifanye kazi.
+                </div>`
             },
             en: {
                 lang: "LANG: EN", sound: "SOUND: ", lText: "SECURITY:", secure: " SECURE", round: "ROUNDS",
                 btn: "GET SIGNAL 🚀", regBtn: "REGISTER 1WIN HERE (PROMO: MOON26)", instBtn: "INSTRUCTIONS", wait: "WAIT: ", cdBtn: "COOLDOWN (10 MIN)",
                 mHeader: "DETAILED INSTRUCTIONS", closeBtn: "CLOSE", waText: "CLICK HERE TO JOIN WHATSAPP CHANNEL",
                 warn: "⚠️ ENTER HASH AND SALT FIRST!",
-                mBody: `<div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. BUTTON FUNCTIONS</div><ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;"><li><b>GET SIGNAL:</b> Finds safe spots.</li><li><b>AUTO CLEAR:</b> Clears game data.</li></ul>`
+                mBody: `<div style="text-align:left; font-size:13px; line-height:1.6;">
+                    <b style="color:var(--yellow);">1. BUTTON FUNCTIONS:</b><br>
+                    • <b>GET SIGNAL:</b> Activates the algorithm to find safe stars.<br>
+                    • <b>AUTO CLEAR:</b> Clears the board and old data to start fresh.<br>
+                    • <b>BOMB SELECT:</b> Choose the number of bombs you are playing with.<br><br>
+                    
+                    <b style="color:var(--yellow);">2. WHAT ARE HASH AND SALT?</b><br>
+                    These are secret codes from 1win that ensure game fairness. Our app uses them to read the bomb layout before the game starts.<br><br>
+                    
+                    <b style="color:var(--yellow);">3. HOW TO GET HASH & SALT:</b><br>
+                    1. Open <b>Mines</b> game on <b>1win</b>.<br>
+                    2. Click the <b>"i"</b> icon or <b>"Provably Fair"</b>.<br>
+                    3. Copy <b>Next Round Hash</b> and paste it in the Hash box.<br>
+                    4. Copy <b>Previous Round Salt</b> and paste it in the Salt box.<br><br>
+                    
+                    <b style="color:var(--yellow);">4. IMPORTANCE OF 10 MINUTES:</b><br>
+                    After 3 rounds, the system locks for 10 minutes. This is vital to prevent 1win's Anti-Cheat from detecting AI assistance and to recalibrate the algorithm.<br><br>
+                    
+                    <b style="color:var(--yellow);">5. PROMO CODE (MOON26):</b><br>
+                    You must use a new account registered with Promo Code <b>MOON26</b>. This allows our server to sync with your account for 95% accuracy.
+                </div>`
             }
         };
 
@@ -288,25 +328,12 @@
 
         function checkExistingCD() { 
             const endTime = localStorage.getItem('predictorCooldown'); 
-            const savedRound = localStorage.getItem('predictorRound') || 0;
-            
             if(endTime) { 
                 const rem = Math.floor((parseInt(endTime) - Date.now()) / 1000); 
-                if(rem > 0) {
-                    startCD(rem); 
-                } else { 
-                    // Muda umeisha, weka kila kitu 0
-                    localStorage.removeItem('predictorCooldown'); 
-                    localStorage.setItem('predictorRound', 0);
-                    roundIdx = 0; 
-                    refreshUI(); 
-                } 
-            } else {
-                // MAREKEBISHO: Kama hakuna Cooldown timestamp, lazima ianzie 0
-                localStorage.setItem('predictorRound', 0);
-                roundIdx = 0;
-                refreshUI();
-            }
+                if(rem > 0) { startCD(rem); } else { localStorage.removeItem('predictorCooldown'); localStorage.setItem('predictorRound', 0); roundIdx = 0; refreshUI(); } 
+            } else if (roundIdx >= MAX_ROUNDS) {
+                localStorage.setItem('predictorRound', 0); roundIdx = 0; refreshUI();
+            } else { refreshUI(); }
         }
         
         function toggleModal() { document.getElementById('modal').style.display = (document.getElementById('modal').style.display === 'block' ? 'none' : 'block'); playSound(400, 'sine', 0.1); }
