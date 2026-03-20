@@ -3,53 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR ULTRA | NEURAL SYNC</title>
+    <title>MOON SUN PREDICTOR ULTRA | ODD SYNC V8</title>
     <style>
-        :root { --bg: #030508; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; --purple: #af40ff; --cyan: #00f2ff; }
+        :root { --bg: #020406; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; --cyan: #00f2ff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
 
-        #loginOverlay { position: fixed; inset: 0; background: radial-gradient(circle, #0a0e14 0%, #000 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .login-box { background: var(--card); padding: 35px; border-radius: 20px; border: 1px solid var(--blue); text-align: center; width: 85%; max-width: 320px; box-shadow: 0 0 30px rgba(0,123,255,0.2); }
+        #loginOverlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .login-box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid var(--cyan); text-align: center; width: 80%; max-width: 300px; }
 
-        .top-nav { width: 95%; display: flex; justify-content: space-between; position: fixed; top: 12px; z-index: 1000; }
-        .btn-mini { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; backdrop-filter: blur(5px); }
+        .top-nav { width: 95%; display: flex; justify-content: space-between; position: fixed; top: 10px; z-index: 1000; }
+        .btn-mini { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; cursor: pointer; }
 
-        .header-section { text-align: center; margin-top: 65px; margin-bottom: 5px; }
-        .app-name { font-size: 26px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-        .c-y { color: var(--yellow); text-shadow: 0 0 10px var(--yellow); } 
-        .c-b { color: var(--blue); text-shadow: 0 0 10px var(--blue); }
-        .sync-badge { font-size: 10px; color: var(--green); border: 1px solid var(--green); padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 5px; animation: pulse 1.5s infinite; }
+        .header-section { text-align: center; margin-top: 60px; }
+        .app-name { font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin: 0; }
+        .sync-badge { font-size: 10px; color: var(--green); border: 1px solid var(--green); padding: 2px 10px; border-radius: 20px; margin-top: 5px; display: inline-block; animation: pulse 1.5s infinite; }
 
-        .info-panel { background: rgba(10, 14, 20, 0.9); padding: 15px; border-radius: 15px; margin: 10px 0; width: 90%; max-width: 360px; text-align: center; border: 1px solid #1a2c3a; }
-        #cooldownDisplay { color: var(--red); font-size: 16px; font-weight: 900; display: none; margin-bottom: 10px; border: 2px solid var(--red); padding: 8px; border-radius: 12px; animation: blinker 1s infinite; background: rgba(255,51,51,0.1); }
-        
-        #warningLabel { color: var(--red); font-size: 13px; font-weight: bold; display: none; margin-bottom: 10px; animation: blinker 0.8s infinite; text-transform: uppercase; }
-        @keyframes blinker { 50% { opacity: 0.3; } }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        .info-panel { background: rgba(10, 14, 20, 0.9); padding: 12px; border-radius: 12px; margin: 10px 0; width: 90%; max-width: 360px; text-align: center; border: 1px solid #1a2c3a; }
+        #activeRound { background: var(--blue); padding: 2px 8px; border-radius: 4px; font-weight: bold; }
 
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--cyan); margin-bottom: 15px; width: fit-content; }
-        .cell { width: 52px; height: 52px; background: #0d1218; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 26px; border: 1px solid #1b262f; transition: 0.3s; will-change: transform; }
+        #warningLabel { color: var(--red); font-size: 12px; font-weight: bold; display: none; margin-bottom: 10px; text-align: center; animation: blink 0.8s infinite; }
+        @keyframes blink { 50% { opacity: 0.3; } }
+        @keyframes pulse { 50% { opacity: 0.5; } }
+
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; background: #000; padding: 12px; border-radius: 15px; border: 1px solid var(--cyan); margin-bottom: 10px; }
+        .cell { width: 50px; height: 50px; background: #0d1218; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 24px; border: 1px solid #1b262f; transition: 0.3s; }
         .cell.safe { border: 2px solid var(--green); box-shadow: 0 0 15px var(--green); background: rgba(0,255,136,0.1); transform: scale(1.05); }
-        .cell.shaded { background: #151b22; }
 
-        input, select { width: 92%; max-width: 360px; padding: 14px; background: #05070a; border: 1px solid #1a2c3a; color: var(--green); border-radius: 10px; margin-bottom: 10px; text-align: center; outline: none; font-size: 13px; font-weight: bold; }
-        #bombSelect { color: var(--yellow); border-color: var(--yellow); }
-
-        #mainBtn { width: 92%; max-width: 360px; padding: 15px; background: linear-gradient(135deg, #007bff, #00c3ff); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        input, select { width: 92%; max-width: 360px; padding: 12px; background: #05070a; border: 1px solid #1a2c3a; color: var(--green); border-radius: 10px; margin-bottom: 8px; text-align: center; outline: none; font-size: 13px; font-weight: bold; }
+        
+        #mainBtn { width: 92%; max-width: 360px; padding: 15px; background: linear-gradient(135deg, #007bff, #00c3ff); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         #mainBtn:disabled { background: #1a2c3a; color: #444; }
 
-        #regBtn { width: 92%; max-width: 360px; padding: 14px; background: linear-gradient(45deg, var(--yellow), #ffae00); color: #000; border: none; border-radius: 12px; font-weight: 900; margin-top: 10px; }
-
-        .action-row { display: flex; width: 92%; max-width: 360px; gap: 8px; margin-top: 10px; }
-        #clearBtn, #instBtn { flex: 1; padding: 12px; border-radius: 10px; font-weight: bold; border: none; font-size: 11px; }
-        #clearBtn { background: #1a2c3a; color: white; }
-        #instBtn { background: transparent; border: 1px solid var(--yellow); color: var(--yellow); }
-
         #loaderWrap { width: 92%; height: 4px; background: #111; display: none; margin-bottom: 15px; border-radius: 10px; overflow: hidden; }
-        #loaderBar { height: 100%; width: 0%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+        #loaderBar { height: 100%; width: 0%; background: var(--cyan); }
 
-        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-height: 80%; background: #0a0e14; border: 1px solid var(--blue); border-radius: 20px; padding: 20px; z-index: 10000; overflow-y: auto; }
-        .m-header { color: var(--yellow); font-weight: bold; font-size: 18px; text-align: center; margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        #cooldownDisplay { color: var(--red); font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 8px; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -57,9 +45,9 @@
     <div id="loginOverlay">
         <div class="login-box">
             <h2 style="color:var(--yellow); margin:0;">NEURAL SYNC</h2>
-            <p style="color:#555; font-size:11px; margin-bottom:20px;">V12.0.6 ENCRYPTED ACCESS</p>
+            <p style="color:#555; font-size:11px; margin-bottom:20px;">V12.0.8 FULL ODD ACCESS</p>
             <input type="password" id="accessKey" placeholder="Password...">
-            <button onclick="unlock()" style="width:100%; padding:15px; background:var(--blue); color:white; border:none; border-radius:10px; font-weight:bold;">DECRYPT SYSTEM</button>
+            <button onclick="unlock()" style="width:100%; padding:12px; background:var(--blue); color:white; border:none; border-radius:8px; font-weight:bold;">DECRYPT</button>
         </div>
     </div>
 
@@ -69,51 +57,38 @@
     </div>
 
     <div class="header-section">
-        <h1 class="app-name"><span class="c-y">MOON</span> <span class="c-b">SUN</span> <span class="c-g" style="color:var(--cyan);">NEURAL</span></h1>
-        <div id="syncStatus" class="sync-badge">📡 SYNCING WITH 1WIN DATA POOL...</div>
+        <h1 class="app-name"><span style="color:var(--yellow);">MOON</span> <span style="color:var(--blue);">SUN</span> <span style="color:var(--cyan);">V8</span></h1>
+        <div class="sync-badge">📡 FULL ODD MINUTE SYNC ENABLED</div>
     </div>
 
     <div class="info-panel">
-        <div style="font-size:12px; color:#777;">ANALYSIS CONFIDENCE</div>
-        <div id="rText" style="font-size:22px; font-weight:900; color:var(--green);">98.4%</div>
-        <div style="margin-top:10px; font-size:14px;">
-            <span id="roundLbl" style="color:var(--yellow);">MIZUNGUKO:</span> 
-            <span id="activeRound" style="background:var(--red); padding:2px 8px; border-radius:4px;">0</span> / 4
+        <div style="font-size:11px; color:#777;">SYSTEM STATUS: SECURE</div>
+        <div style="margin-top:8px; font-size:15px;">
+            <span id="roundLbl">MIZUNGUKO:</span> 
+            <span id="activeRound">0</span> / 10
         </div>
     </div>
 
-    <div id="cooldownDisplay">PUMZIKA: 10:00</div>
+    <div id="cooldownDisplay">WAIT: 10:00</div>
     <div id="warningLabel"></div>
 
-    <select id="bombSelect" onchange="updateWinRate()">
+    <select id="bombSelect">
         <option value="2">💣 MABOMU 2</option>
         <option value="3" selected>💣 MABOMU 3</option>
         <option value="5">💣 MABOMU 5</option>
-        <option value="7">💣 MABOMU 7</option>
     </select>
 
-    <input type="text" id="hashIn" placeholder="Next Round Hash...">
-    <input type="text" id="saltIn" placeholder="Previous Round Salt...">
+    <input type="text" id="hashIn" placeholder="Enter Round Hash...">
+    <input type="text" id="saltIn" placeholder="Enter Round Salt...">
 
     <div id="loaderWrap"><div id="loaderBar"></div></div>
-
     <div class="grid" id="gameGrid"></div>
 
     <button id="mainBtn" onclick="startAnalysis()">NEURAL ANALYSIS 🚀</button>
 
-    <a href="https://1win.com/registration?promo=MOON26" target="_blank" style="text-decoration:none; width:100%; display:flex; justify-content:center;">
-        <button id="regBtn">JISAJIRI 1WIN HAPA</button>
-    </a>
-    
-    <div class="action-row">
-        <button id="clearBtn" onclick="autoClear()">🔄 RESET</button>
-        <button id="instBtn" onclick="toggleModal()">💡 INFO</button>
-    </div>
-
-    <div id="modal">
-        <div id="modalTitle" class="m-header">NEURAL GUIDE</div>
-        <div id="modalContent" style="font-size:12px; color:#aaa; line-height:1.6;"></div>
-        <button onclick="toggleModal()" style="width:100%; margin-top:15px; padding:12px; background:var(--red); color:white; border:none; border-radius:10px; font-weight:bold;">FUNGA</button>
+    <div style="margin-top:15px; width:92%; display:flex; gap:10px;">
+        <button onclick="autoClear()" style="flex:1; padding:12px; background:#1a2c3a; color:white; border:none; border-radius:10px; font-size:11px; font-weight:bold;">RESET</button>
+        <button onclick="location.reload()" style="flex:1; padding:12px; background:transparent; border:1px solid var(--yellow); color:var(--yellow); border-radius:10px; font-size:11px; font-weight:bold;">REFRESH</button>
     </div>
 
     <script>
@@ -121,104 +96,66 @@
         let currentLang = 'sw';
         let muted = false;
         let isCooldownActive = false;
-        const MAX_ROUNDS = 4;
-        const PRIME_MINS = [1, 3, 7, 9];
-
-        let audioCtx;
-        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
-
-        function playSound(freq, type, duration, vol = 0.2) {
-            if (muted) return;
-            initAudio();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = type;
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + duration);
-        }
-
-        const translations = {
-            sw: {
-                lang: "LUGHA: SW", sound: "SAUTI: ", rLbl: "MIZUNGUKO:", btn: "NEURAL ANALYSIS 🚀", 
-                warnHash: "⚠️ WEKA HASH NA SALT!", warnTime: "⚠️ SUBIRI DAKIKA TASA (1,3,7,9)!",
-                mBody: "Algorithm hii inasoma Hash na Salt ya 1Win kwa kutumia 'Deep Prime Logic'. Toa signal mara 4 tu kila dakika 10 za namba tasa ili kulinda akaunti yako."
-            },
-            en: {
-                lang: "LANG: EN", sound: "SOUND: ", rLbl: "ROUNDS:", btn: "NEURAL ANALYSIS 🚀",
-                warnHash: "⚠️ ENTER HASH & SALT!", warnTime: "⚠️ WAIT FOR PRIME MINUTE (1,3,7,9)!",
-                mBody: "This algorithm analyzes 1Win Hash & Salt using 'Deep Prime Logic'. Only request 4 signals every 10 minutes on prime minutes to protect your account."
-            }
-        };
+        const MAX_ROUNDS = 10; 
 
         function unlock() { 
             if(document.getElementById('accessKey').value === 'Mr winner123') { 
                 document.getElementById('loginOverlay').style.display = 'none';
-                initAudio(); playSound(800, 'triangle', 0.3);
                 checkExistingCD(); 
             } 
         }
 
         function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); refreshUI(); }
-        function toggleMute() { muted = !muted; refreshUI(); }
+        function toggleMute() { muted = !muted; document.getElementById('volBtn').innerText = "SAUTI: " + (muted ? "OFF" : "ON"); }
 
         function refreshUI() {
-            const t = translations[currentLang];
-            document.getElementById('langBtn').innerText = t.lang;
-            document.getElementById('volBtn').innerText = t.sound + (muted ? "OFF" : "ON");
-            document.getElementById('roundLbl').innerText = t.rLbl;
-            document.getElementById('modalContent').innerText = t.mBody;
-            if(!isCooldownActive) document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? "COOLDOWN..." : t.btn;
+            document.getElementById('langBtn').innerText = currentLang === 'sw' ? "LUGHA: SW" : "LANG: EN";
+            document.getElementById('roundLbl').innerText = currentLang === 'sw' ? "MIZUNGUKO:" : "ROUNDS:";
+            document.getElementById('activeRound').innerText = roundIdx;
         }
 
-        function autoClear() { if(isCooldownActive) return; const cells = document.querySelectorAll('.cell'); cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; }); document.getElementById('hashIn').value = ""; document.getElementById('saltIn').value = ""; }
-
         const grid = document.getElementById('gameGrid');
-        for (let i = 0; i < 25; i++) { const d = document.createElement('div'); d.className = 'cell shaded'; d.id = 'cell-' + i; grid.appendChild(d); }
+        for (let i = 0; i < 25; i++) { const d = document.createElement('div'); d.className = 'cell'; d.id = 'cell-' + i; grid.appendChild(d); }
+
+        function autoClear() { if(isCooldownActive) return; const cells = document.querySelectorAll('.cell'); cells.forEach(c => { c.innerHTML = ''; c.className = 'cell'; }); }
 
         function startAnalysis() {
             if(isCooldownActive) return;
             const now = new Date();
-            const min = now.getMinutes() % 10;
+            const min = now.getMinutes(); // Dakika kamili (0-59)
             const h = document.getElementById('hashIn').value; 
             const s = document.getElementById('saltIn').value;
             const warn = document.getElementById('warningLabel');
 
-            if (!PRIME_MINS.includes(min)) {
-                warn.innerText = translations[currentLang].warnTime;
-                warn.style.display = 'block';
-                playSound(100, 'square', 0.5); return;
+            // MFUMO WA DAKIKA WITIRI (1, 3, 5, 7, 9, 11, ... 59)
+            if (min % 2 === 0) {
+                warn.innerText = currentLang === 'sw' ? "⚠️ SUBIRI DAKIKA WITIRI (1, 3, 5, 7, 9, 11...)" : "⚠️ WAIT FOR ODD MINUTES (1, 3, 5, 7, 9, 11...)";
+                warn.style.display = 'block'; return;
             }
 
             if(h.length < 10 || s.length < 10) { 
-                warn.innerText = translations[currentLang].warnHash;
-                warn.style.display = 'block'; 
-                playSound(100, 'square', 0.5); return; 
+                warn.innerText = "⚠️ ENTER DATA FIRST!";
+                warn.style.display = 'block'; return; 
             }
 
             warn.style.display = 'none';
-            const btn = document.getElementById('mainBtn'); 
-            const bar = document.getElementById('loaderBar');
-            btn.disabled = true; document.getElementById('loaderWrap').style.display = 'block';
+            document.getElementById('mainBtn').disabled = true;
+            document.getElementById('loaderWrap').style.display = 'block';
             
             let p = 0;
+            const bar = document.getElementById('loaderBar');
             const timer = setInterval(() => { 
-                p += 1.5; bar.style.width = p + "%"; 
-                if(p % 15 === 0) playSound(500 + p, 'sine', 0.05);
-                if(p >= 100) { clearInterval(timer); runDeepLogic(h, s); } 
+                p += 2; bar.style.width = p + "%"; 
+                if(p >= 100) { clearInterval(timer); runLogic(h, s); } 
             }, 30); 
         }
 
-        function runDeepLogic(h, s) {
+        function runLogic(h, s) {
             roundIdx++; localStorage.setItem('predictorRound', roundIdx);
-            document.getElementById('activeRound').innerText = roundIdx;
-            const cells = document.querySelectorAll('.cell'); cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; });
+            refreshUI();
+            autoClear();
 
-            // NEURAL SEED CALCULATION
-            // Inachanganya Hash, Salt, na Muda wa Sasa (Microseconds) kupata Probability
-            let seedStr = h + s + Date.now() + Math.random();
+            let seedStr = h + s + Date.now();
             let seed = 0; 
             for(let i=0; i<seedStr.length; i++) { seed = ((seed << 5) - seed) + seedStr.charCodeAt(i); seed |= 0; }
             
@@ -229,15 +166,13 @@
                 [pos[i], pos[j]] = [pos[j], pos[i]]; 
             }
 
-            // Inatoa kati ya nyota 3 hadi 5 kwa usalama
-            let safes = pos.slice(0, Math.floor(Math.random() * 3) + 3);
+            let safes = pos.slice(0, 4);
             safes.forEach((idx, i) => { 
                 setTimeout(() => { 
                     const c = document.getElementById('cell-' + idx); 
                     c.innerHTML = '⭐'; c.className = 'cell safe'; 
-                    playSound(900 + (i*150), 'triangle', 0.2);
-                    if(navigator.vibrate) navigator.vibrate(40);
-                }, i * 350); 
+                    if(navigator.vibrate) navigator.vibrate(50);
+                }, i * 400); 
             });
 
             document.getElementById('loaderWrap').style.display = 'none';
@@ -253,14 +188,12 @@
         function startCD(sec) {
             isCooldownActive = true; 
             const timerEl = document.getElementById('cooldownDisplay'); 
-            const btn = document.getElementById('mainBtn');
-            btn.disabled = true; timerEl.style.display = 'block';
-            
+            timerEl.style.display = 'block';
             const cd = setInterval(() => {
                 if(sec <= 0) { 
                     clearInterval(cd); roundIdx = 0; isCooldownActive = false; 
                     localStorage.removeItem('predictorRound'); localStorage.removeItem('predictorCooldown'); 
-                    timerEl.style.display = 'none'; btn.disabled = false; refreshUI(); return; 
+                    timerEl.style.display = 'none'; document.getElementById('mainBtn').disabled = false; refreshUI(); return; 
                 }
                 let m = Math.floor(sec/60); let s = sec%60;
                 timerEl.innerText = "PUMZIKA: " + m + ":" + (s < 10 ? "0" : "") + s;
@@ -276,8 +209,6 @@
                 else { localStorage.removeItem('predictorCooldown'); roundIdx = 0; refreshUI(); } 
             } 
         }
-        
-        function toggleModal() { document.getElementById('modal').style.display = (document.getElementById('modal').style.display === 'block' ? 'none' : 'block'); }
         window.onload = refreshUI;
     </script>
 </body>
