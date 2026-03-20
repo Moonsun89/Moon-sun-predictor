@@ -118,6 +118,7 @@
     </div>
 
     <script>
+        // MAREKEBISHO: Initialize kwa 0 kama hakuna data sahihi
         let roundIdx = parseInt(localStorage.getItem('predictorRound')) || 0;
         let currentLang = 'sw';
         let muted = false;
@@ -148,50 +149,14 @@
                 btn: "PATA SIGNAL 🚀", regBtn: "JISAJIRI 1WIN HAPA (PROMO: MOON26)", instBtn: "MAELEKEZO", wait: "PUMZIKA: ", cdBtn: "MAPUMZIKO (MIN 10)",
                 mHeader: "MAELEKEZO YA KINA", closeBtn: "FUNGA", waText: "BONYEZA HAPA KUJIUNGA CHANNEL YA WHATSAPP",
                 warn: "⚠️ WEKA HASH NA SALT KWANZA!",
-                mBody: `
-                    <div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. KAZI ZA VITUFE</div>
-                    <ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;">
-                        <li><b>PATA SIGNAL:</b> Inatafuta sehemu salama kwa kutumia V12.0 Algorithm.</li>
-                        <li><b>AUTO CLEAR:</b> Inasafisha data za mchezo kwa usalama.</li>
-                        <li><b>LUGHA:</b> Inabadilisha kati ya Kiingereza na Kiswahili.</li>
-                        <li><b>MABOMU:</b> Chagua idadi ya mabomu kwa usahihi zaidi.</li>
-                        <li><b>SAUTI:</b> Washa au zima sauti za programu.</li>
-                    </ul>
-                    <div style="color:var(--blue); font-weight:bold; margin-top:15px; font-size:13px;">2. HATUA ZA USHINDI</div>
-                    <ol style="font-size:12px; color:#ccc; text-align:left; padding-left:18px; margin-top:5px; line-height:1.6;">
-                        <li><b>Hash na Salt:</b> Nakili data hizi kutoka 'Provably Fair' ndani ya 1Win Mines.</li>
-                        <li><b>Kupanga:</b> Weka data hapa, bonyeza BET kule 1Win kwanza, kisha uombe signal hapa.</li>
-                        <li><b>Kupumzika:</b> Baada ya ushindi 3/3, lazima upumzike dakika 10 kuepuka kugundulika.</li>
-                        <li><b>Pumziko:</b> Baada ya raundi 3, pumzika dakika 10 kulinda faida yako.</li>
-                        <li><b>Chanzo:</b> 1Win pekee ndio chanzo cha Hash na Salt halali.</li>
-                        <li><b>Muhimu:</b> Lazima ubonyeze <b>BET</b> kule 1Win baada ya kuweka data lakini KABLA ya kubonyeza PATA SIGNAL hapa.</li>
-                    </ol>
-                `
+                mBody: `<div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. KAZI ZA VITUFE</div><ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;"><li><b>PATA SIGNAL:</b> Inatafuta sehemu salama.</li><li><b>AUTO CLEAR:</b> Inasafisha data za mchezo.</li></ul>`
             },
             en: {
                 lang: "LANG: EN", sound: "SOUND: ", lText: "SECURITY:", secure: " SECURE", round: "ROUNDS",
                 btn: "GET SIGNAL 🚀", regBtn: "REGISTER 1WIN HERE (PROMO: MOON26)", instBtn: "INSTRUCTIONS", wait: "WAIT: ", cdBtn: "COOLDOWN (10 MIN)",
                 mHeader: "DETAILED INSTRUCTIONS", closeBtn: "CLOSE", waText: "CLICK HERE TO JOIN WHATSAPP CHANNEL",
                 warn: "⚠️ ENTER HASH AND SALT FIRST!",
-                mBody: `
-                    <div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. BUTTON FUNCTIONS</div>
-                    <ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;">
-                        <li><b>GET SIGNAL:</b> Finds safe spots using the V12.0 Algorithm.</li>
-                        <li><b>AUTO CLEAR:</b> Safely clears game data.</li>
-                        <li><b>LANGUAGE:</b> Switches between English and Swahili.</li>
-                        <li><b>BOMBS:</b> Choose the number of bombs for higher accuracy.</li>
-                        <li><b>SOUND:</b> Turn app sounds on or off.</li>
-                    </ul>
-                    <div style="color:var(--blue); font-weight:bold; margin-top:15px; font-size:13px;">2. WINNING STEPS</div>
-                    <ol style="font-size:12px; color:#ccc; text-align:left; padding-left:18px; margin-top:5px; line-height:1.6;">
-                        <li><b>Hash & Salt:</b> Copy these from 'Provably Fair' inside 1Win Mines.</li>
-                        <li><b>Order:</b> Paste here, click BET on 1Win first, then request a signal here.</li>
-                        <li><b>Resting:</b> After winning 3/3, you must rest for 10 mins to avoid detection.</li>
-                        <li><b>Rest:</b> After 3 rounds, rest 10 mins to protect your profit.</li>
-                        <li><b>Source:</b> 1Win is the only valid source for Hash and Salt.</li>
-                        <li><b>Important:</b> You must click <b>BET</b> on 1Win after pasting data but BEFORE clicking GET SIGNAL here.</li>
-                    </ol>
-                `
+                mBody: `<div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. BUTTON FUNCTIONS</div><ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;"><li><b>GET SIGNAL:</b> Finds safe spots.</li><li><b>AUTO CLEAR:</b> Clears game data.</li></ul>`
             }
         };
 
@@ -229,10 +194,11 @@
             document.getElementById('waBtn').innerText = t.waText;
             document.getElementById('warningLabel').innerText = t.warn;
             updateWinRate();
+            
             if(!isCooldownActive) { 
                 document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? t.cdBtn : t.btn; 
                 document.getElementById('activeRound').innerText = roundIdx;
-                if(roundIdx < MAX_ROUNDS) document.getElementById('mainBtn').disabled = false;
+                document.getElementById('mainBtn').disabled = (roundIdx >= MAX_ROUNDS);
             }
         }
 
@@ -259,13 +225,13 @@
         }
 
         function runLogic(h, s) {
-            roundIdx++; localStorage.setItem('predictorRound', roundIdx);
+            roundIdx++; 
+            localStorage.setItem('predictorRound', roundIdx);
             document.getElementById('activeRound').innerText = roundIdx;
             const cells = document.querySelectorAll('.cell'); cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; });
 
             let seedStr = h + s + roundIdx + Date.now();
             let seed = 0; for(let i=0; i<seedStr.length; i++) { seed = ((seed << 5) - seed) + seedStr.charCodeAt(i); seed |= 0; }
-            
             let pos = Array.from({length: 25}, (_, i) => i);
             for (let i = pos.length - 1; i > 0; i--) { 
                 let x = Math.sin(seed++) * 10000; 
@@ -289,7 +255,7 @@
                     localStorage.setItem('predictorCooldown', endTime); 
                     startCD(600); 
                 }, 2000); 
-            } else { const btn = document.getElementById('mainBtn'); btn.disabled = false; }
+            } else { document.getElementById('mainBtn').disabled = false; }
         }
 
         function startCD(sec) {
@@ -302,39 +268,45 @@
             const cd = setInterval(() => {
                 if(sec <= 0) { 
                     clearInterval(cd); 
-                    // MABORESHO: Reset round counter to 0 and unlock button
                     roundIdx = 0; 
                     isCooldownActive = false; 
-                    localStorage.setItem('predictorRound', 0); // Reset in storage
+                    localStorage.setItem('predictorRound', 0);
                     localStorage.removeItem('predictorCooldown'); 
                     timerEl.style.display = 'none'; 
-                    
-                    // Unlock UI
                     btn.disabled = false; 
                     autoClear(); 
-                    refreshUI(); // Will revert button text to "PATA SIGNAL"
+                    refreshUI(); 
                     return; 
                 }
                 let m = Math.floor(sec/60); let s = sec%60;
-                timerEl.innerText = (currentLang === 'sw' ? "PUMZIKA: " : "WAIT: ") + m + ":" + (s < 10 ? "0" : "") + s;
-                btn.innerText = (currentLang === 'sw' ? "PUMZIKA: " : "WAIT: ") + m + ":" + (s < 10 ? "0" : "") + s;
+                let timeStr = m + ":" + (s < 10 ? "0" : "") + s;
+                timerEl.innerText = (currentLang === 'sw' ? "PUMZIKA: " : "WAIT: ") + timeStr;
+                btn.innerText = (currentLang === 'sw' ? "PUMZIKA: " : "WAIT: ") + timeStr;
                 sec--;
             }, 1000);
         }
 
         function checkExistingCD() { 
             const endTime = localStorage.getItem('predictorCooldown'); 
+            const savedRound = localStorage.getItem('predictorRound') || 0;
+            
             if(endTime) { 
                 const rem = Math.floor((parseInt(endTime) - Date.now()) / 1000); 
                 if(rem > 0) {
                     startCD(rem); 
                 } else { 
+                    // Muda umeisha, weka kila kitu 0
                     localStorage.removeItem('predictorCooldown'); 
+                    localStorage.setItem('predictorRound', 0);
                     roundIdx = 0; 
-                    localStorage.setItem('predictorRound', 0); 
                     refreshUI(); 
                 } 
-            } 
+            } else {
+                // MAREKEBISHO: Kama hakuna Cooldown timestamp, lazima ianzie 0
+                localStorage.setItem('predictorRound', 0);
+                roundIdx = 0;
+                refreshUI();
+            }
         }
         
         function toggleModal() { document.getElementById('modal').style.display = (document.getElementById('modal').style.display === 'block' ? 'none' : 'block'); playSound(400, 'sine', 0.1); }
