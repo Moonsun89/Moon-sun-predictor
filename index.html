@@ -29,16 +29,18 @@
         .cell { width: 55px; height: 55px; background: #0d1218; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 28px; border: 1px solid #1b262f; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
         .cell.safe { border: 3px solid var(--green); box-shadow: 0 0 20px var(--green); background: rgba(0,255,136,0.15); transform: scale(1.1) rotate(360deg); }
-        .cell.shaded { background: #05080b; border: 1px solid #131d26; }
+        /* Marekebisho ya grid mabox kuonekana vizuri */
+        .cell.shaded { background: #1a2430; border: 1px solid #3a4b60; }
 
         input, select { width: 92%; max-width: 360px; padding: 15px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 12px; margin-bottom: 12px; text-align: center; outline: none; font-size: 14px; font-weight: bold; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
         #bombSelect { color: var(--yellow); cursor: pointer; border-color: var(--yellow); }
 
-        #mainBtn { width: 92%; max-width: 360px; padding: 20px; background: linear-gradient(135deg, #007bff, #0052ad); color: white; border: none; border-radius: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 16px; box-shadow: 0 5px 20px rgba(0,123,255,0.4); transition: 0.2s; }
+        /* Marekebisho ya vitufe kupunguza ukubwa */
+        #mainBtn { width: 92%; max-width: 360px; padding: 14px; background: linear-gradient(135deg, #007bff, #0052ad); color: white; border: none; border-radius: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; box-shadow: 0 5px 20px rgba(0,123,255,0.4); transition: 0.2s; }
         #mainBtn:active { transform: scale(0.96); }
         #mainBtn:disabled { background: #1a2c3a; color: #555; box-shadow: none; transform: none; }
 
-        #regBtn { width: 92%; max-width: 360px; padding: 20px; background: linear-gradient(45deg, var(--yellow), #ff9900); color: #000; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 16px; margin-top: 15px; animation: glow 2s infinite alternate; }
+        #regBtn { width: 92%; max-width: 360px; padding: 14px; background: linear-gradient(45deg, var(--yellow), #ff9900); color: #000; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-top: 15px; animation: glow 2s infinite alternate; }
         @keyframes glow { from { box-shadow: 0 0 5px var(--yellow); } to { box-shadow: 0 0 20px var(--purple); } }
 
         .action-row { display: flex; width: 92%; max-width: 360px; gap: 10px; margin-top: 15px; }
@@ -48,7 +50,8 @@
 
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 25px; padding: 25px; z-index: 10000; overflow-y: auto; box-shadow: 0 0 100px #000; }
         .m-header { color: var(--yellow); font-weight: bold; font-size: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; text-align: center; }
-        .wa-link { display: block; margin-top: 20px; padding: 15px; background: #25d366; color: #000; text-align: center; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        /* Marekebisho ya kitufe cha WhatsApp */
+        .wa-link { display: block; margin-top: 20px; padding: 15px; background: transparent; color: #25d366; text-align: center; border-radius: 12px; border: 2px dashed #25d366; text-decoration: none; font-weight: bold; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -112,7 +115,7 @@
     <div id="modal">
         <div id="modalTitle" class="m-header">MAELEKEZO YA KINA</div>
         <div id="modalContent"></div>
-        <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link">CLICK HERE TO JOIN WHATSAPP CHANNEL</a>
+        <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link" id="waBtn">BONYEZA HAPA KUJIUNGA CHANNEL YA WHATSAPP</a>
         <button id="closeModalBtn" onclick="toggleModal()" style="width:100%; margin-top:15px; padding:15px; background:var(--red); color:white; border:none; border-radius:12px; font-weight:bold;">FUNGA</button>
     </div>
 
@@ -145,31 +148,31 @@
             sw: {
                 lang: "LUGHA: SW", sound: "SAUTI: ", lText: "USALAMA:", secure: " UHAKIKA", round: "RAUNDI",
                 btn: "PATA SIGNAL 🚀", regBtn: "JISAJIRI 1WIN HAPA (PROMO: MOON26)", instBtn: "MAELEKEZO", wait: "PUMZIKA: ", cdBtn: "MAPUMZIKO (MIN 10)",
-                mHeader: "MAELEKEZO YA KINA", closeBtn: "FUNGA",
+                mHeader: "MAELEKEZO YA KINA", closeBtn: "FUNGA", waText: "BONYEZA HAPA KUJIUNGA CHANNEL YA WHATSAPP",
                 mBody: `
-                    <div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. KAZI ZA BATANI (BUTTON FUNCTIONS)</div>
+                    <div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. KAZI ZA VITUFE</div>
                     <ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;">
-                        <li><b>GET SIGNAL:</b> Inatafuta sehemu salama kwa kutumia V12.0 Algorithm.</li>
+                        <li><b>PATA SIGNAL:</b> Inatafuta sehemu salama kwa kutumia V12.0 Algorithm.</li>
                         <li><b>AUTO CLEAR:</b> Inasafisha data za mchezo kwa usalama.</li>
-                        <li><b>LANGUAGE:</b> Inabadilisha kati ya Kiingereza na Kiswahili.</li>
-                        <li><b>BOMBS:</b> Chagua idadi ya mabomu kwa usahihi zaidi.</li>
-                        <li><b>SOUND:</b> Washa au zima sauti za programu.</li>
+                        <li><b>LUGHA:</b> Inabadilisha kati ya Kiingereza na Kiswahili.</li>
+                        <li><b>MABOMU:</b> Chagua idadi ya mabomu kwa usahihi zaidi.</li>
+                        <li><b>SAUTI:</b> Washa au zima sauti za programu.</li>
                     </ul>
-                    <div style="color:var(--blue); font-weight:bold; margin-top:15px; font-size:13px;">2. HATUA ZA USHINDI (WINNING STEPS)</div>
+                    <div style="color:var(--blue); font-weight:bold; margin-top:15px; font-size:13px;">2. HATUA ZA USHINDI</div>
                     <ol style="font-size:12px; color:#ccc; text-align:left; padding-left:18px; margin-top:5px; line-height:1.6;">
-                        <li><b>Hash & Salt:</b> Nakili data hizi kutoka 'Provably Fair' ndani ya 1Win Mines.</li>
-                        <li><b>Order:</b> Paste hapa, bonyeza BET kule 1Win kwanza, kisha uombe signal hapa.</li>
-                        <li><b>Resting:</b> Baada ya ushindi 3/3, lazima upumzike dakika 10 kuepuka kugundulika.</li>
-                        <li><b>Rest:</b> Baada ya raundi 3, pumzika dakika 10 kulinda faida yako.</li>
-                        <li><b>Source:</b> 1Win pekee ndio chanzo cha Hash na Salt halali.</li>
-                        <li><b>Important:</b> Lazima ubonyeze <b>BET</b> kule 1Win baada ya kupaste data lakini KABLA ya kubonyeza PATA SIGNAL hapa.</li>
+                        <li><b>Hash na Salt:</b> Nakili data hizi kutoka 'Provably Fair' ndani ya 1Win Mines.</li>
+                        <li><b>Kupanga:</b> Weka data hapa, bonyeza BET kule 1Win kwanza, kisha uombe signal hapa.</li>
+                        <li><b>Kupumzika:</b> Baada ya ushindi 3/3, lazima upumzike dakika 10 kuepuka kugundulika.</li>
+                        <li><b>Pumziko:</b> Baada ya raundi 3, pumzika dakika 10 kulinda faida yako.</li>
+                        <li><b>Chanzo:</b> 1Win pekee ndio chanzo cha Hash na Salt halali.</li>
+                        <li><b>Muhimu:</b> Lazima ubonyeze <b>BET</b> kule 1Win baada ya kuweka data lakini KABLA ya kubonyeza PATA SIGNAL hapa.</li>
                     </ol>
                 `
             },
             en: {
                 lang: "LANG: EN", sound: "SOUND: ", lText: "SECURITY:", secure: " SECURE", round: "ROUND",
                 btn: "GET SIGNAL 🚀", regBtn: "REGISTER 1WIN HERE (PROMO: MOON26)", instBtn: "INSTRUCTIONS", wait: "WAIT: ", cdBtn: "COOLDOWN (10 MIN)",
-                mHeader: "DETAILED INSTRUCTIONS", closeBtn: "CLOSE",
+                mHeader: "DETAILED INSTRUCTIONS", closeBtn: "CLOSE", waText: "CLICK HERE TO JOIN WHATSAPP CHANNEL",
                 mBody: `
                     <div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. BUTTON FUNCTIONS</div>
                     <ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;">
@@ -223,6 +226,7 @@
             document.getElementById('modalTitle').innerText = t.mHeader;
             document.getElementById('modalContent').innerHTML = t.mBody;
             document.getElementById('closeModalBtn').innerText = t.closeBtn;
+            document.getElementById('waBtn').innerText = t.waText;
             updateWinRate();
             if(!isCooldownActive) { 
                 document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? t.cdBtn : t.btn; 
