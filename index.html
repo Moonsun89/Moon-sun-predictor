@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>MOON SUN PREDICTOR ULTRA | ODD SYNC V8</title>
+    <title>MOON SUN PREDICTOR ULTRA | ODD SYNC V9</title>
     <style>
         :root { --bg: #020406; --card: #0a0e14; --blue: #007bff; --green: #00ff88; --yellow: #ffcc00; --red: #ff3333; --white: #ffffff; --cyan: #00f2ff; }
         body { background: var(--bg); color: var(--white); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
@@ -37,7 +37,11 @@
         #loaderWrap { width: 92%; height: 4px; background: #111; display: none; margin-bottom: 15px; border-radius: 10px; overflow: hidden; }
         #loaderBar { height: 100%; width: 0%; background: var(--cyan); }
 
-        #cooldownDisplay { color: var(--red); font-weight: 900; display: none; margin-bottom: 10px; border: 1px solid var(--red); padding: 8px; border-radius: 10px; }
+        #cooldownDisplay { color: var(--red); font-weight: 900; display: none; margin-bottom: 10px; border: 2px solid var(--red); padding: 10px; border-radius: 10px; background: rgba(255,0,0,0.1); text-align: center; }
+
+        /* Modal / Info Box Styles */
+        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; max-width: 320px; background: var(--card); border: 1px solid var(--blue); border-radius: 20px; padding: 20px; z-index: 10001; box-shadow: 0 0 20px rgba(0, 123, 255, 0.3); }
+        .m-header { color: var(--yellow); font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 5px; text-align: center; font-size: 18px; }
     </style>
 </head>
 <body>
@@ -45,7 +49,7 @@
     <div id="loginOverlay">
         <div class="login-box">
             <h2 style="color:var(--yellow); margin:0;">NEURAL SYNC</h2>
-            <p style="color:#555; font-size:11px; margin-bottom:20px;">V12.0.8 FULL ODD ACCESS</p>
+            <p style="color:#555; font-size:11px; margin-bottom:20px;">V12.0.9 FULL ODD ACCESS</p>
             <input type="password" id="accessKey" placeholder="Password...">
             <button onclick="unlock()" style="width:100%; padding:12px; background:var(--blue); color:white; border:none; border-radius:8px; font-weight:bold;">DECRYPT</button>
         </div>
@@ -57,19 +61,19 @@
     </div>
 
     <div class="header-section">
-        <h1 class="app-name"><span style="color:var(--yellow);">MOON</span> <span style="color:var(--blue);">SUN</span> <span style="color:var(--cyan);">V8</span></h1>
-        <div class="sync-badge">📡 FULL ODD MINUTE SYNC ENABLED</div>
+        <h1 class="app-name"><span style="color:var(--yellow);">MOON</span> <span style="color:var(--blue);">SUN</span> <span style="color:var(--cyan);">V9</span></h1>
+        <div class="sync-badge">📡 ODD MINUTE SYNC ENABLED (5 ROUNDS)</div>
     </div>
 
     <div class="info-panel">
         <div style="font-size:11px; color:#777;">SYSTEM STATUS: SECURE</div>
         <div style="margin-top:8px; font-size:15px;">
             <span id="roundLbl">MIZUNGUKO:</span> 
-            <span id="activeRound">0</span> / 10
+            <span id="activeRound">0</span> / 5
         </div>
     </div>
 
-    <div id="cooldownDisplay">WAIT: 10:00</div>
+    <div id="cooldownDisplay">PUMZIKA: 10:00</div>
     <div id="warningLabel"></div>
 
     <select id="bombSelect">
@@ -88,7 +92,19 @@
 
     <div style="margin-top:15px; width:92%; display:flex; gap:10px;">
         <button onclick="autoClear()" style="flex:1; padding:12px; background:#1a2c3a; color:white; border:none; border-radius:10px; font-size:11px; font-weight:bold;">RESET</button>
-        <button onclick="location.reload()" style="flex:1; padding:12px; background:transparent; border:1px solid var(--yellow); color:var(--yellow); border-radius:10px; font-size:11px; font-weight:bold;">REFRESH</button>
+        <button onclick="toggleModal()" style="flex:1; padding:12px; background:transparent; border:1px solid var(--yellow); color:var(--yellow); border-radius:10px; font-size:11px; font-weight:bold;">💡 INFO</button>
+    </div>
+
+    <!-- Modal Box for Instructions -->
+    <div id="modal">
+        <div class="m-header">MAELEKEZO</div>
+        <div id="modalContent" style="font-size:13px; color:#ccc; line-height:1.6;">
+            1. 🕒 Mfumo unafanya kazi <b>dakika tasa tu</b> (1, 3, 5, 7, 9... mpaka 59).<br><br>
+            2. 🔄 Unaruhusiwa kucheza <b>mizunguko 5</b> pekee kwa wakati mmoja.<br><br>
+            3. ⏳ Ukimaliza mizunguko 5, itabidi usubiri <b>dakika 10</b> kabla ya kucheza tena.<br><br>
+            4. ⚠️ Hakikisha unaweka Hash na Salt sahihi kwa kila mzunguko mpya.
+        </div>
+        <button onclick="toggleModal()" style="width:100%; margin-top:15px; padding:12px; background:var(--red); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">FUNGA</button>
     </div>
 
     <script>
@@ -96,17 +112,32 @@
         let currentLang = 'sw';
         let muted = false;
         let isCooldownActive = false;
-        const MAX_ROUNDS = 10; 
+        const MAX_ROUNDS = 5; 
+
+        // Mfumo wa Sauti (Audio Context)
+        let audioCtx;
+        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        function playSfx(f, t, d) {
+            if (muted) return; initAudio();
+            const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
+            osc.type = t; osc.frequency.setValueAtTime(f, audioCtx.currentTime);
+            g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
+            osc.connect(g); g.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + d);
+        }
 
         function unlock() { 
             if(document.getElementById('accessKey').value === 'Mr winner123') { 
                 document.getElementById('loginOverlay').style.display = 'none';
+                playSfx(800, 'sine', 0.2);
                 checkExistingCD(); 
             } 
         }
 
         function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); refreshUI(); }
         function toggleMute() { muted = !muted; document.getElementById('volBtn').innerText = "SAUTI: " + (muted ? "OFF" : "ON"); }
+        function toggleModal() { document.getElementById('modal').style.display = (document.getElementById('modal').style.display === 'block' ? 'none' : 'block'); }
 
         function refreshUI() {
             document.getElementById('langBtn').innerText = currentLang === 'sw' ? "LUGHA: SW" : "LANG: EN";
@@ -122,20 +153,24 @@
         function startAnalysis() {
             if(isCooldownActive) return;
             const now = new Date();
-            const min = now.getMinutes(); // Dakika kamili (0-59)
+            const min = now.getMinutes(); 
             const h = document.getElementById('hashIn').value; 
             const s = document.getElementById('saltIn').value;
             const warn = document.getElementById('warningLabel');
 
-            // MFUMO WA DAKIKA WITIRI (1, 3, 5, 7, 9, 11, ... 59)
+            // MFUMO WA DAKIKA WITIRI/TASA (1, 3, 5, 7, 9, 11, ... 59)
             if (min % 2 === 0) {
-                warn.innerText = currentLang === 'sw' ? "⚠️ SUBIRI DAKIKA WITIRI (1, 3, 5, 7, 9, 11...)" : "⚠️ WAIT FOR ODD MINUTES (1, 3, 5, 7, 9, 11...)";
-                warn.style.display = 'block'; return;
+                warn.innerText = currentLang === 'sw' ? "⚠️ SUBIRI DAKIKA TASA (1, 3, 5, 7, 9, 11...)" : "⚠️ WAIT FOR ODD MINUTES (1, 3, 5, 7, 9...)";
+                warn.style.display = 'block'; 
+                playSfx(150, 'square', 0.3); // Sauti ya Error
+                return;
             }
 
-            if(h.length < 10 || s.length < 10) { 
+            if(h.length < 5 || s.length < 5) { 
                 warn.innerText = "⚠️ ENTER DATA FIRST!";
-                warn.style.display = 'block'; return; 
+                warn.style.display = 'block'; 
+                playSfx(150, 'square', 0.3);
+                return; 
             }
 
             warn.style.display = 'none';
@@ -146,6 +181,7 @@
             const bar = document.getElementById('loaderBar');
             const timer = setInterval(() => { 
                 p += 2; bar.style.width = p + "%"; 
+                if(p % 20 === 0) playSfx(400 + p, 'sine', 0.1); // Sauti ya Loading
                 if(p >= 100) { clearInterval(timer); runLogic(h, s); } 
             }, 30); 
         }
@@ -171,6 +207,7 @@
                 setTimeout(() => { 
                     const c = document.getElementById('cell-' + idx); 
                     c.innerHTML = '⭐'; c.className = 'cell safe'; 
+                    playSfx(600 + (i*100), 'triangle', 0.2); // Sauti ya Nyota
                     if(navigator.vibrate) navigator.vibrate(50);
                 }, i * 400); 
             });
@@ -178,9 +215,9 @@
             document.getElementById('loaderWrap').style.display = 'none';
             if(roundIdx >= MAX_ROUNDS) { 
                 setTimeout(() => { 
-                    const end = Date.now() + 600000; 
+                    const end = Date.now() + 600000; // Dakika 10 (Milisec 600,000)
                     localStorage.setItem('predictorCooldown', end); 
-                    startCD(600); 
+                    startCD(600); // Sekunde 600 = Dakika 10
                 }, 1500); 
             } else { document.getElementById('mainBtn').disabled = false; }
         }
@@ -189,11 +226,15 @@
             isCooldownActive = true; 
             const timerEl = document.getElementById('cooldownDisplay'); 
             timerEl.style.display = 'block';
+            document.getElementById('mainBtn').disabled = true; // Funga kitufe
+
             const cd = setInterval(() => {
                 if(sec <= 0) { 
                     clearInterval(cd); roundIdx = 0; isCooldownActive = false; 
                     localStorage.removeItem('predictorRound'); localStorage.removeItem('predictorCooldown'); 
-                    timerEl.style.display = 'none'; document.getElementById('mainBtn').disabled = false; refreshUI(); return; 
+                    timerEl.style.display = 'none'; 
+                    document.getElementById('mainBtn').disabled = false; 
+                    refreshUI(); return; 
                 }
                 let m = Math.floor(sec/60); let s = sec%60;
                 timerEl.innerText = "PUMZIKA: " + m + ":" + (s < 10 ? "0" : "") + s;
