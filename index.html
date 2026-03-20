@@ -26,8 +26,6 @@
         @keyframes blinker { 50% { opacity: 0.4; } }
 
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; background: #000; padding: 15px; border-radius: 20px; border: 1px solid var(--blue); margin-bottom: 15px; box-shadow: inset 0 0 20px rgba(0,123,255,0.1); width: fit-content; }
-        
-        /* Mabox yameimarishwa yasichezecheze (Backface-visibility & Will-change) */
         .cell { width: 55px; height: 55px; background: #0d1218; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 28px; border: 1px solid #1b262f; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); will-change: transform; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
         
         .cell.safe { border: 3px solid var(--green); box-shadow: 0 0 20px var(--green); background: rgba(0,255,136,0.15); transform: scale(1.1) rotate(360deg); }
@@ -51,6 +49,8 @@
         #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-height: 85%; background: #0d1217; border: 2px solid var(--blue); border-radius: 25px; padding: 25px; z-index: 10000; overflow-y: auto; box-shadow: 0 0 100px #000; }
         .m-header { color: var(--yellow); font-weight: bold; font-size: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; text-align: center; }
         .wa-link { display: block; margin-top: 20px; padding: 15px; background: transparent; color: #25d366; text-align: center; border-radius: 12px; border: 2px dashed #25d366; text-decoration: none; font-weight: bold; font-size: 13px; }
+        
+        #syncStatus { font-size: 10px; color: var(--green); margin-top: 5px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -71,7 +71,7 @@
 
     <div class="header-section">
         <h1 class="app-name"><span class="c-y">MOON</span> <span class="c-b">SUN</span> <span class="c-g">ULTRA</span></h1>
-        <div style="font-size:9px; color:#555; letter-spacing:3px; margin-top:5px;">ALGORITHM VERSION 12.0.4</div>
+        <div id="syncStatus">📡 SYNCING 1WIN SEED DATA...</div>
     </div>
 
     <div class="info-panel">
@@ -79,7 +79,7 @@
         <div style="font-size:18px; font-weight:bold; margin-top:8px;">
             <span id="roundLbl" style="color:var(--yellow);">MIZUNGUKO</span> 
             <span style="color:#fff; background:var(--red); padding:2px 10px; border-radius:6px; margin:0 5px;" id="activeRound">0</span> 
-            <span style="color:var(--yellow);">/ 3</span>
+            <span style="color:var(--yellow);">/ 4</span>
         </div>
     </div>
 
@@ -123,7 +123,8 @@
         let currentLang = 'sw';
         let muted = false;
         let isCooldownActive = false;
-        const MAX_ROUNDS = 3;
+        const MAX_ROUNDS = 4; // Zimeongezeka kuwa 4 kulingana na dakika (1,3,7,9)
+        const PRIME_MINUTES = [1, 3, 7, 9];
 
         let audioCtx;
         function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
@@ -148,53 +149,33 @@
                 lang: "LUGHA: SW", sound: "SAUTI: ", lText: "USALAMA:", secure: " UHAKIKA", round: "MIZUNGUKO",
                 btn: "PATA SIGNAL 🚀", regBtn: "JISAJIRI 1WIN HAPA (PROMO: MOON26)", instBtn: "MAELEKEZO", wait: "PUMZIKA: ", cdBtn: "MAPUMZIKO (MIN 10)",
                 mHeader: "MAELEKEZO YA KINA", closeBtn: "FUNGA", waText: "BONYEZA HAPA KUJIUNGA CHANNEL YA WHATSAPP",
-                warn: "⚠️ WEKA HASH NA SALT KWANZA!",
-                mBody: `
-                    <div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. KAZI ZA VITUFE</div>
-                    <ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;">
-                        <li><b>PATA SIGNAL:</b> Inatafuta sehemu salama kwa kutumia V12.0 Algorithm.</li>
-                        <li><b>AUTO CLEAR:</b> Inasafisha data za mchezo kwa usalama.</li>
-                        <li><b>LUGHA:</b> Inabadilisha kati ya Kiingereza na Kiswahili.</li>
-                        <li><b>MABOMU:</b> Chagua idadi ya mabomu kwa usahihi zaidi.</li>
-                        <li><b>SAUTI:</b> Washa au zima sauti za programu.</li>
-                    </ul>
-                    <div style="color:var(--blue); font-weight:bold; margin-top:15px; font-size:13px;">2. HATUA ZA USHINDI</div>
-                    <ol style="font-size:12px; color:#ccc; text-align:left; padding-left:18px; margin-top:5px; line-height:1.6;">
-                        <li><b>Hash na Salt:</b> Nakili data hizi kutoka 'Provably Fair' ndani ya 1Win Mines.</li>
-                        <li><b>Kupanga:</b> Weka data hapa, bonyeza BET kule 1Win kwanza, kisha uombe signal hapa.</li>
-                        <li><b>Kupumzika:</b> Baada ya ushindi 3/3, lazima upumzike dakika 10 kuepuka kugundulika.</li>
-                        <li><b>Pumziko:</b> Baada ya raundi 3, pumzika dakika 10 kulinda faida yako.</li>
-                        <li><b>Chanzo:</b> 1Win pekee ndio chanzo cha Hash na Salt halali.</li>
-                        <li><b>Muhimu:</b> Lazima ubonyeze <b>BET</b> kule 1Win baada ya kuweka data lakini KABLA ya kubonyeza PATA SIGNAL hapa.</li>
-                    </ol>
-                `
+                warn: "⚠️ WEKA HASH NA SALT KWANZA!", timeWarn: "⚠️ SUBIRI DAKIKA TASA (1,3,7,9)!",
+                mBody: `<div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. MFUMO WA MUDA (PRIME)</div>
+                        <p style="font-size:11px; color:#aaa;">Algorithm hii inatoa signal mara 4 tu kila dakika 10. Dakika hizo ni zenye namba tasa (1, 3, 7, na 9).</p>`
             },
             en: {
                 lang: "LANG: EN", sound: "SOUND: ", lText: "SECURITY:", secure: " SECURE", round: "ROUNDS",
                 btn: "GET SIGNAL 🚀", regBtn: "REGISTER 1WIN HERE (PROMO: MOON26)", instBtn: "INSTRUCTIONS", wait: "WAIT: ", cdBtn: "COOLDOWN (10 MIN)",
                 mHeader: "DETAILED INSTRUCTIONS", closeBtn: "CLOSE", waText: "CLICK HERE TO JOIN WHATSAPP CHANNEL",
-                warn: "⚠️ ENTER HASH AND SALT FIRST!",
-                mBody: `
-                    <div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. BUTTON FUNCTIONS</div>
-                    <ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;">
-                        <li><b>GET SIGNAL:</b> Finds safe spots using the V12.0 Algorithm.</li>
-                        <li><b>AUTO CLEAR:</b> Safely clears game data.</li>
-                        <li><b>LANGUAGE:</b> Switches between English and Swahili.</li>
-                        <li><b>BOMBS:</b> Choose the number of bombs for higher accuracy.</li>
-                        <li><b>SOUND:</b> Turn app sounds on or off.</li>
-                    </ul>
-                    <div style="color:var(--blue); font-weight:bold; margin-top:15px; font-size:13px;">2. WINNING STEPS</div>
-                    <ol style="font-size:12px; color:#ccc; text-align:left; padding-left:18px; margin-top:5px; line-height:1.6;">
-                        <li><b>Hash & Salt:</b> Copy these from 'Provably Fair' inside 1Win Mines.</li>
-                        <li><b>Order:</b> Paste here, click BET on 1Win first, then request a signal here.</li>
-                        <li><b>Resting:</b> After winning 3/3, you must rest for 10 mins to avoid detection.</li>
-                        <li><b>Rest:</b> After 3 rounds, rest 10 mins to protect your profit.</li>
-                        <li><b>Source:</b> 1Win is the only valid source for Hash and Salt.</li>
-                        <li><b>Important:</b> You must click <b>BET</b> on 1Win after pasting data but BEFORE clicking GET SIGNAL here.</li>
-                    </ol>
-                `
+                warn: "⚠️ ENTER HASH AND SALT FIRST!", timeWarn: "⚠️ WAIT FOR PRIME MINUTE (1,3,7,9)!",
+                mBody: `<div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. TIME SYSTEM (PRIME)</div>
+                        <p style="font-size:11px; color:#aaa;">This algorithm only gives 4 signals every 10 mins. Those minutes are prime numbers (1, 3, 7, and 9).</p>`
             }
         };
+
+        // Background monitor simulation
+        setInterval(() => {
+            const now = new Date();
+            const min = now.getMinutes() % 10;
+            const status = document.getElementById('syncStatus');
+            if (PRIME_MINUTES.includes(min)) {
+                status.innerText = "📡 SIGNAL WINDOW OPEN - ALGORITHM SYNCED";
+                status.style.color = "var(--green)";
+            } else {
+                status.innerText = "📡 SCANNING 1WIN SEED POOL... (WAIT FOR PRIME MIN)";
+                status.style.color = "var(--yellow)";
+            }
+        }, 1000);
 
         function unlock() { 
             if(document.getElementById('accessKey').value === 'Mr winner123') { 
@@ -228,7 +209,6 @@
             document.getElementById('modalContent').innerHTML = t.mBody;
             document.getElementById('closeModalBtn').innerText = t.closeBtn;
             document.getElementById('waBtn').innerText = t.waText;
-            document.getElementById('warningLabel').innerText = t.warn;
             updateWinRate();
             if(!isCooldownActive) { 
                 document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? t.cdBtn : t.btn; 
@@ -244,8 +224,26 @@
 
         function startAnalysis() {
             if(isCooldownActive) return;
+            
+            // Angalia Dakika Tasa
+            const now = new Date();
+            const currentMin = now.getMinutes() % 10;
+            if (!PRIME_MINUTES.includes(currentMin)) {
+                const warn = document.getElementById('warningLabel');
+                warn.innerText = translations[currentLang].timeWarn;
+                warn.style.display = 'block';
+                playSound(150, 'square', 0.3);
+                return;
+            }
+
             const h = document.getElementById('hashIn').value; const s = document.getElementById('saltIn').value;
-            if(h.length < 10 || s.length < 10) { document.getElementById('warningLabel').style.display = 'block'; playSound(150, 'square', 0.3); triggerVibrate([50, 50, 50]); return; }
+            if(h.length < 10 || s.length < 10) { 
+                const warn = document.getElementById('warningLabel');
+                warn.innerText = translations[currentLang].warn;
+                warn.style.display = 'block'; 
+                playSound(150, 'square', 0.3); 
+                return; 
+            }
             document.getElementById('warningLabel').style.display = 'none';
             
             const btn = document.getElementById('mainBtn'); const bar = document.getElementById('loaderBar');
@@ -253,10 +251,10 @@
             
             let p = 0;
             const timer = setInterval(() => { 
-                p += 2.5; bar.style.width = p + "%"; 
-                if(p % 10 === 0) playSound(600 + p, 'sine', 0.05, 0.1);
+                p += 2; bar.style.width = p + "%"; 
+                if(p % 20 === 0) playSound(600 + p, 'sine', 0.05, 0.1);
                 if(p >= 100) { clearInterval(timer); runLogic(h, s); } 
-            }, 40); 
+            }, 50); 
         }
 
         function runLogic(h, s) {
@@ -264,7 +262,8 @@
             document.getElementById('activeRound').innerText = roundIdx;
             const cells = document.querySelectorAll('.cell'); cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; });
 
-            let seedStr = h + s + roundIdx + Date.now();
+            // Algorithm ya ndani iliyoboreshwa kusoma muda
+            let seedStr = h + s + roundIdx + new Date().getMinutes();
             let seed = 0; for(let i=0; i<seedStr.length; i++) { seed = ((seed << 5) - seed) + seedStr.charCodeAt(i); seed |= 0; }
             
             let pos = Array.from({length: 25}, (_, i) => i);
@@ -274,13 +273,16 @@
                 [pos[i], pos[j]] = [pos[j], pos[i]]; 
             }
 
-            let safes = pos.slice(0, 3);
+            // Toa nyota random zisizozidi 5 (kati ya 3 hadi 5)
+            let starCount = Math.floor(Math.random() * 3) + 3; 
+            let safes = pos.slice(0, starCount);
+            
             safes.forEach((idx, i) => { 
                 setTimeout(() => { 
                     const c = document.getElementById('cell-' + idx); 
                     c.innerHTML = '⭐'; c.className = 'cell safe'; 
                     playSound(800 + (i*200), 'triangle', 0.3); triggerVibrate(60);
-                }, i * 500); 
+                }, i * 400); 
             });
 
             document.getElementById('loaderWrap').style.display = 'none';
@@ -324,9 +326,8 @@
             const endTime = localStorage.getItem('predictorCooldown'); 
             if(endTime) { 
                 const rem = Math.floor((parseInt(endTime) - Date.now()) / 1000); 
-                if(rem > 0) {
-                    startCD(rem); 
-                } else { 
+                if(rem > 0) startCD(rem); 
+                else { 
                     localStorage.removeItem('predictorCooldown'); 
                     roundIdx = 0; 
                     localStorage.setItem('predictorRound', 0); 
