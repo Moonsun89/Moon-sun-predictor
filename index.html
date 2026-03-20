@@ -20,27 +20,26 @@
         .c-b { color: var(--blue); text-shadow: 0 0 10px var(--blue); }
 
         .info-panel { background: rgba(10, 14, 20, 0.8); padding: 15px; border-radius: 15px; margin: 10px 0; width: 90%; max-width: 360px; text-align: center; border: 1px solid #1a2c3a; backdrop-filter: blur(10px); }
-        #cooldownDisplay { color: var(--red); font-size: 16px; font-weight: 900; display: none; margin-bottom: 10px; border: 2px solid var(--red); padding: 8px; border-radius: 12px; animation: blinker 1s infinite; background: rgba(255,51,51,0.1); }
+        #cooldownDisplay { color: var(--red); font-size: 18px; font-weight: 900; display: none; margin-bottom: 10px; border: 2px solid var(--red); padding: 10px; border-radius: 12px; background: rgba(255,51,51,0.1); box-shadow: 0 0 15px rgba(255,51,51,0.3); }
         
-        #warningLabel { color: var(--red); font-size: 13px; font-weight: bold; display: none; margin-bottom: 10px; animation: blinker 0.8s infinite; }
+        #warningLabel { color: var(--red); font-size: 13px; font-weight: bold; display: none; margin-bottom: 10px; animation: blinker 0.8s infinite; text-align: center; width: 90%; }
         @keyframes blinker { 50% { opacity: 0.4; } }
 
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; background: #000; padding: 15px; border-radius: 20px; border: 1px solid var(--blue); margin-bottom: 15px; box-shadow: inset 0 0 20px rgba(0,123,255,0.1); width: fit-content; }
         
-        /* Mabox yameimarishwa yasichezecheze (Backface-visibility & Will-change) */
-        .cell { width: 55px; height: 55px; background: #0d1218; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 28px; border: 1px solid #1b262f; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); will-change: transform; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        .cell { width: 55px; height: 55px; background: #0d1218; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 28px; border: 1px solid #1b262f; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); will-change: transform; backface-visibility: hidden; }
         
         .cell.safe { border: 3px solid var(--green); box-shadow: 0 0 20px var(--green); background: rgba(0,255,136,0.15); transform: scale(1.1) rotate(360deg); }
         .cell.shaded { background: #1a2430; border: 1px solid #3a4b60; }
 
-        input, select { width: 92%; max-width: 360px; padding: 15px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 12px; margin-bottom: 12px; text-align: center; outline: none; font-size: 14px; font-weight: bold; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
+        input, select { width: 92%; max-width: 360px; padding: 15px; background: #000; border: 1px solid #1a2c3a; color: var(--green); border-radius: 12px; margin-bottom: 12px; text-align: center; outline: none; font-size: 14px; font-weight: bold; }
         #bombSelect { color: var(--yellow); cursor: pointer; border-color: var(--yellow); }
 
         #mainBtn { width: 92%; max-width: 360px; padding: 14px; background: linear-gradient(135deg, #007bff, #0052ad); color: white; border: none; border-radius: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; box-shadow: 0 5px 20px rgba(0,123,255,0.4); transition: 0.2s; }
         #mainBtn:active { transform: scale(0.96); }
-        #mainBtn:disabled { background: #1a2c3a; color: #555; box-shadow: none; transform: none; }
+        #mainBtn:disabled { background: #1a2c3a; color: #555; box-shadow: none; cursor: not-allowed; }
 
-        #regBtn { width: 92%; max-width: 360px; padding: 14px; background: linear-gradient(45deg, var(--yellow), #ff9900); color: #000; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-top: 15px; animation: glow 2s infinite alternate; }
+        #regBtn { width: 92%; max-width: 360px; padding: 14px; background: linear-gradient(45deg, var(--yellow), #ff9900); color: #000; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-top: 15px; animation: glow 2s infinite alternate; text-align: center; }
         @keyframes glow { from { box-shadow: 0 0 5px var(--yellow); } to { box-shadow: 0 0 20px var(--purple); } }
 
         .action-row { display: flex; width: 92%; max-width: 360px; gap: 10px; margin-top: 15px; }
@@ -60,7 +59,7 @@
             <h2 style="color:var(--yellow); margin-bottom:5px;">MOON SUN PRO</h2>
             <p style="color:#777; font-size:12px; margin-bottom:20px;">ACCESS ENCRYPTED SYSTEM</p>
             <input type="password" id="accessKey" placeholder="Enter Secret Key...">
-            <button onclick="unlock()" style="width:100%; padding:15px; background:var(--blue); color:white; border:none; border-radius:12px; font-weight:bold; letter-spacing:1px;">AUTHORIZE</button>
+            <button onclick="unlock()" style="width:100%; padding:15px; background:var(--blue); color:white; border-radius:12px; font-weight:bold;">AUTHORIZE</button>
         </div>
     </div>
 
@@ -70,7 +69,7 @@
     </div>
 
     <div class="header-section">
-        <h1 class="app-name"><span class="c-y">MOON</span> <span class="c-b">SUN</span> <span class="c-g">ULTRA</span></h1>
+        <h1 class="app-name"><span class="c-y">MOON</span> <span class="c-b">SUN</span></h1>
         <div style="font-size:9px; color:#555; letter-spacing:3px; margin-top:5px;">ALGORITHM VERSION 12.0.4</div>
     </div>
 
@@ -84,7 +83,7 @@
     </div>
 
     <div id="cooldownDisplay">WAIT: 10:00</div>
-    <div id="warningLabel">⚠️ WEKA HASH NA SALT KWANZA!</div>
+    <div id="warningLabel"></div>
 
     <select id="bombSelect" onchange="updateWinRate()">
         <option value="2">💣 MABOMU 2</option>
@@ -93,8 +92,8 @@
         <option value="7">💣 MABOMU 7</option>
     </select>
 
-    <input type="text" id="hashIn" placeholder="Paste Hash ya Raundi Ijayo...">
-    <input type="text" id="saltIn" placeholder="Paste Salt ya Raundi Iliyopita...">
+    <input type="text" id="hashIn" placeholder="Paste Hash hapa...">
+    <input type="text" id="saltIn" placeholder="Paste Salt hapa...">
 
     <div id="loaderWrap" style="width:92%; height:6px; background:#111; display:none; margin-bottom:15px; border-radius:10px; overflow:hidden;"><div id="loaderBar" style="height:100%; width:0%; background:linear-gradient(90deg, var(--blue), var(--purple)); transition: 0.1s;"></div></div>
 
@@ -102,7 +101,7 @@
 
     <button id="mainBtn" onclick="startAnalysis()">PATA SIGNAL 🚀</button>
 
-    <a href="https://1win.com/registration?promo=MOON26" target="_blank" style="text-decoration:none; width:100%; display:flex; justify-content:center;">
+    <a href="https://1win.com/registration?promo=MOON26" target="_blank" style="text-decoration:none; width:100%;">
         <button id="regBtn">JISAJIRI 1WIN HAPA (PROMO: MOON26)</button>
     </a>
     
@@ -114,8 +113,8 @@
     <div id="modal">
         <div id="modalTitle" class="m-header">MAELEKEZO YA KINA</div>
         <div id="modalContent"></div>
-        <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link" id="waBtn">BONYEZA HAPA KUJIUNGA CHANNEL YA WHATSAPP</a>
-        <button id="closeModalBtn" onclick="toggleModal()" style="width:100%; margin-top:15px; padding:15px; background:var(--red); color:white; border:none; border-radius:12px; font-weight:bold;">FUNGA</button>
+        <a href="https://whatsapp.com/channel/0029VbCiKfM47XeC5HJtd336" class="wa-link" id="waBtn">JOIN WHATSAPP CHANNEL</a>
+        <button onclick="toggleModal()" style="width:100%; margin-top:15px; padding:15px; background:var(--red); color:white; border:none; border-radius:12px; font-weight:bold;">FUNGA</button>
     </div>
 
     <script>
@@ -124,8 +123,8 @@
         let muted = false;
         let isCooldownActive = false;
         const MAX_ROUNDS = 3;
-
         let audioCtx;
+
         function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
 
         function playSound(freq, type, duration, vol = 0.4) {
@@ -146,76 +145,32 @@
         const translations = {
             sw: {
                 lang: "LUGHA: SW", sound: "SAUTI: ", lText: "USALAMA:", secure: " UHAKIKA", round: "MIZUNGUKO",
-                btn: "PATA SIGNAL 🚀", regBtn: "JISAJIRI 1WIN HAPA (PROMO: MOON26)", instBtn: "MAELEKEZO", wait: "PUMZIKA: ", cdBtn: "MAPUMZIKO (MIN 10)",
-                mHeader: "MAELEKEZO YA KINA", closeBtn: "FUNGA", waText: "BONYEZA HAPA KUJIUNGA CHANNEL YA WHATSAPP",
+                btn: "PATA SIGNAL 🚀", regBtn: "JISAJIRI 1WIN HAPA (PROMO: MOON26)", instBtn: "MAELEKEZO", wait: "PUMZIKA: ", cdBtn: "MAPUMZIKO",
                 warn: "⚠️ WEKA HASH NA SALT KWANZA!",
-                warnOdd: "⚠️ SUBIRI DAKIKA TASA (K.M. 1, 3, 5) KUPATA SIGNAL!",
-                mBody: `
-                    <div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. KAZI ZA VITUFE</div>
-                    <ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;">
-                        <li><b>PATA SIGNAL:</b> Inatafuta sehemu salama kwa kutumia V12.0 Algorithm.</li>
-                        <li><b>AUTO CLEAR:</b> Inasafisha data za mchezo kwa usalama.</li>
-                        <li><b>LUGHA:</b> Inabadilisha kati ya Kiingereza na Kiswahili.</li>
-                        <li><b>MABOMU:</b> Chagua idadi ya mabomu kwa usahihi zaidi.</li>
-                        <li><b>SAUTI:</b> Washa au zima sauti za programu.</li>
-                    </ul>
-                    <div style="color:var(--blue); font-weight:bold; margin-top:15px; font-size:13px;">2. HATUA ZA USHINDI</div>
-                    <ol style="font-size:12px; color:#ccc; text-align:left; padding-left:18px; margin-top:5px; line-height:1.6;">
-                        <li><b>Hash na Salt:</b> Nakili data hizi kutoka 'Provably Fair' ndani ya 1Win Mines.</li>
-                        <li><b>Kupanga:</b> Weka data hapa, bonyeza BET kule 1Win kwanza, kisha uombe signal hapa.</li>
-                        <li><b>Kupumzika:</b> Baada ya ushindi 3/3, lazima upumzike dakika 10 kuepuka kugundulika.</li>
-                        <li><b>Pumziko:</b> Baada ya raundi 3, pumzika dakika 10 kulinda faida yako.</li>
-                        <li><b>Chanzo:</b> 1Win pekee ndio chanzo cha Hash na Salt halali.</li>
-                        <li><b>Muhimu:</b> Lazima ubonyeze <b>BET</b> kule 1Win baada ya kuweka data lakini KABLA ya kubonyeza PATA SIGNAL hapa.</li>
-                    </ol>
-                `
+                warnOdd: "⚠️ SUBIRI DAKIKA TASA (1, 3, 5...) KUPATA SIGNAL!",
+                mBody: `Raundi 3 lazima zichezwe dakika tasa tu. Baada ya hapo pumzika dakika 10.`
             },
             en: {
                 lang: "LANG: EN", sound: "SOUND: ", lText: "SECURITY:", secure: " SECURE", round: "ROUNDS",
-                btn: "GET SIGNAL 🚀", regBtn: "REGISTER 1WIN HERE (PROMO: MOON26)", instBtn: "INSTRUCTIONS", wait: "WAIT: ", cdBtn: "COOLDOWN (10 MIN)",
-                mHeader: "DETAILED INSTRUCTIONS", closeBtn: "CLOSE", waText: "CLICK HERE TO JOIN WHATSAPP CHANNEL",
+                btn: "GET SIGNAL 🚀", regBtn: "REGISTER 1WIN HERE (PROMO: MOON26)", instBtn: "INSTRUCTIONS", wait: "WAIT: ", cdBtn: "COOLDOWN",
                 warn: "⚠️ ENTER HASH AND SALT FIRST!",
-                warnOdd: "⚠️ WAIT FOR AN ODD MINUTE (E.G. 1, 3, 5) FOR SIGNAL!",
-                mBody: `
-                    <div style="color:var(--blue); font-weight:bold; margin-top:5px; font-size:13px;">1. BUTTON FUNCTIONS</div>
-                    <ul style="font-size:12px; color:#ccc; text-align:left; padding-left:15px; margin-top:5px; line-height:1.6;">
-                        <li><b>GET SIGNAL:</b> Finds safe spots using the V12.0 Algorithm.</li>
-                        <li><b>AUTO CLEAR:</b> Safely clears game data.</li>
-                        <li><b>LANGUAGE:</b> Switches between English and Swahili.</li>
-                        <li><b>BOMBS:</b> Choose the number of bombs for higher accuracy.</li>
-                        <li><b>SOUND:</b> Turn app sounds on or off.</li>
-                    </ul>
-                    <div style="color:var(--blue); font-weight:bold; margin-top:15px; font-size:13px;">2. WINNING STEPS</div>
-                    <ol style="font-size:12px; color:#ccc; text-align:left; padding-left:18px; margin-top:5px; line-height:1.6;">
-                        <li><b>Hash & Salt:</b> Copy these from 'Provably Fair' inside 1Win Mines.</li>
-                        <li><b>Order:</b> Paste here, click BET on 1Win first, then request a signal here.</li>
-                        <li><b>Resting:</b> After winning 3/3, you must rest for 10 mins to avoid detection.</li>
-                        <li><b>Rest:</b> After 3 rounds, rest 10 mins to protect your profit.</li>
-                        <li><b>Source:</b> 1Win is the only valid source for Hash and Salt.</li>
-                        <li><b>Important:</b> You must click <b>BET</b> on 1Win after pasting data but BEFORE clicking GET SIGNAL here.</li>
-                    </ol>
-                `
+                warnOdd: "⚠️ WAIT FOR AN ODD MINUTE (1, 3, 5...) FOR SIGNAL!",
+                mBody: `3 Rounds must be played on odd minutes only. Then rest for 10 minutes.`
             }
         };
 
         function unlock() { 
             if(document.getElementById('accessKey').value === 'Mr winner123') { 
-                document.getElementById('loginOverlay').style.opacity = '0';
-                setTimeout(() => document.getElementById('loginOverlay').style.display = 'none', 500);
-                initAudio(); playSound(800, 'triangle', 0.3); triggerVibrate(100);
+                document.getElementById('loginOverlay').style.display = 'none';
+                initAudio(); playSound(800, 'triangle', 0.3);
                 checkExistingCD(); 
             } 
         }
 
-        function toggleLang() { currentLang = (currentLang === 'sw' ? 'en' : 'sw'); playSound(500, 'sine', 0.1); refreshUI(); }
-        function toggleMute() { muted = !muted; refreshUI(); }
-
         function updateWinRate() {
             const b = document.getElementById('bombSelect').value;
             let rate = b === "2" ? "98%" : b === "3" ? "95%" : b === "5" ? "90%" : "85%";
-            const rText = document.getElementById('rText');
-            rText.innerText = rate + translations[currentLang].secure;
-            rText.style.color = b === "7" ? "var(--red)" : b === "5" ? "var(--yellow)" : "var(--green)";
+            document.getElementById('rText').innerText = rate + translations[currentLang].secure;
         }
 
         function refreshUI() {
@@ -225,153 +180,139 @@
             document.getElementById('lText').innerText = t.lText;
             document.getElementById('roundLbl').innerText = t.round;
             document.getElementById('instBtn').innerText = t.instBtn;
-            document.getElementById('regBtn').innerText = t.regBtn;
-            document.getElementById('modalTitle').innerText = t.mHeader;
-            document.getElementById('modalContent').innerHTML = t.mBody;
-            document.getElementById('closeModalBtn').innerText = t.closeBtn;
-            document.getElementById('waBtn').innerText = t.waText;
-            // Update the warning label text based on language but keep it hidden by default
-            const warnLabel = document.getElementById('warningLabel');
-            if (warnLabel.innerText === translations['sw'].warn || warnLabel.innerText === translations['en'].warn) {
-                 warnLabel.innerText = t.warn;
-            } else if (warnLabel.innerText === translations['sw'].warnOdd || warnLabel.innerText === translations['en'].warnOdd) {
-                 warnLabel.innerText = t.warnOdd;
+            document.getElementById('activeRound').innerText = roundIdx;
+            if(!isCooldownActive) {
+                document.getElementById('mainBtn').innerText = t.btn;
             }
             updateWinRate();
-            if(!isCooldownActive) { 
-                document.getElementById('mainBtn').innerText = (roundIdx >= MAX_ROUNDS) ? t.cdBtn : t.btn; 
-                document.getElementById('activeRound').innerText = roundIdx;
-                if(roundIdx < MAX_ROUNDS) document.getElementById('mainBtn').disabled = false;
-            }
         }
-
-        function autoClear() { if(isCooldownActive) return; triggerVibrate(30); const cells = document.querySelectorAll('.cell'); cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; }); document.getElementById('hashIn').value = ""; document.getElementById('saltIn').value = ""; }
-
-        const grid = document.getElementById('gameGrid');
-        for (let i = 0; i < 25; i++) { const d = document.createElement('div'); d.className = 'cell shaded'; d.id = 'cell-' + i; grid.appendChild(d); }
 
         function startAnalysis() {
             if(isCooldownActive) return;
             
-            // Check for odd minute
+            // SHARTI: Dakika Tasa pekee
             const currentMinute = new Date().getMinutes();
             if (currentMinute % 2 === 0) {
                 const warnLabel = document.getElementById('warningLabel');
                 warnLabel.innerText = translations[currentLang].warnOdd;
                 warnLabel.style.display = 'block';
                 playSound(150, 'square', 0.3);
-                triggerVibrate([50, 50, 50]);
+                triggerVibrate([50, 50]);
                 return;
             }
 
-            const h = document.getElementById('hashIn').value; const s = document.getElementById('saltIn').value;
-            if(h.length < 10 || s.length < 10) { 
+            const h = document.getElementById('hashIn').value; 
+            const s = document.getElementById('saltIn').value;
+            if(h.length < 5 || s.length < 5) { 
                 const warnLabel = document.getElementById('warningLabel');
                 warnLabel.innerText = translations[currentLang].warn;
                 warnLabel.style.display = 'block'; 
-                playSound(150, 'square', 0.3); 
-                triggerVibrate([50, 50, 50]); 
                 return; 
             }
             document.getElementById('warningLabel').style.display = 'none';
             
-            const btn = document.getElementById('mainBtn'); const bar = document.getElementById('loaderBar');
-            btn.disabled = true; document.getElementById('loaderWrap').style.display = 'block';
+            const btn = document.getElementById('mainBtn');
+            btn.disabled = true;
+            document.getElementById('loaderWrap').style.display = 'block';
             
             let p = 0;
             const timer = setInterval(() => { 
-                p += 2.5; bar.style.width = p + "%"; 
-                if(p % 10 === 0) playSound(600 + p, 'sine', 0.05, 0.1);
+                p += 5; document.getElementById('loaderBar').style.width = p + "%"; 
                 if(p >= 100) { clearInterval(timer); runLogic(h, s); } 
-            }, 40); 
+            }, 50); 
         }
 
         function runLogic(h, s) {
-            roundIdx++; localStorage.setItem('predictorRound', roundIdx);
+            roundIdx++;
+            localStorage.setItem('predictorRound', roundIdx);
             document.getElementById('activeRound').innerText = roundIdx;
-            const cells = document.querySelectorAll('.cell'); cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; });
-
-            let seedStr = h + s + roundIdx + Date.now();
-            let seed = 0; for(let i=0; i<seedStr.length; i++) { seed = ((seed << 5) - seed) + seedStr.charCodeAt(i); seed |= 0; }
+            document.getElementById('loaderWrap').style.display = 'none';
             
-            let pos = Array.from({length: 25}, (_, i) => i);
-            for (let i = pos.length - 1; i > 0; i--) { 
-                let x = Math.sin(seed++) * 10000; 
-                let j = Math.floor((x - Math.floor(x)) * (i + 1)); 
-                [pos[i], pos[j]] = [pos[j], pos[i]]; 
-            }
+            // Safisha Grid
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; });
 
+            // Simu-logic ya kutafuta nyota
             const bombCount = document.getElementById('bombSelect').value;
-            let starCount = 3; // Default
-            if (bombCount === "2") {
-                starCount = 6;
-            } else if (bombCount === "3") {
-                starCount = 4;
+            let starLimit = bombCount == "2" ? 6 : bombCount == "3" ? 4 : 3;
+            
+            let positions = [];
+            while(positions.length < starLimit) {
+                let r = Math.floor(Math.random() * 25);
+                if(!positions.includes(r)) positions.push(r);
             }
 
-            let safes = pos.slice(0, starCount);
-            safes.forEach((idx, i) => { 
-                setTimeout(() => { 
-                    const c = document.getElementById('cell-' + idx); 
-                    c.innerHTML = '⭐'; c.className = 'cell safe'; 
-                    playSound(800 + (i*200), 'triangle', 0.3); triggerVibrate(60);
-                }, i * 500); 
+            positions.forEach((idx, i) => {
+                setTimeout(() => {
+                    const c = document.getElementById('cell-' + idx);
+                    c.innerHTML = '⭐';
+                    c.className = 'cell safe';
+                    playSound(800 + (i*100), 'triangle', 0.2);
+                }, i * 300);
             });
 
-            document.getElementById('loaderWrap').style.display = 'none';
-            if(roundIdx >= MAX_ROUNDS) { 
-                setTimeout(() => { 
-                    const endTime = Date.now() + 600000; 
-                    localStorage.setItem('predictorCooldown', endTime); 
-                    startCD(600); 
-                }, 2000); 
-            } else { const btn = document.getElementById('mainBtn'); btn.disabled = false; }
+            if(roundIdx >= MAX_ROUNDS) {
+                const endTime = Date.now() + 600000; // 10 minutes
+                localStorage.setItem('predictorCooldown', endTime);
+                startCD(600);
+            } else {
+                document.getElementById('mainBtn').disabled = false;
+            }
         }
 
         function startCD(sec) {
-            isCooldownActive = true; 
-            const timerEl = document.getElementById('cooldownDisplay'); 
+            isCooldownActive = true;
+            const timerEl = document.getElementById('cooldownDisplay');
             const btn = document.getElementById('mainBtn');
-            btn.disabled = true; 
+            btn.disabled = true;
             timerEl.style.display = 'block';
-            
-            const cd = setInterval(() => {
-                if(sec <= 0) { 
-                    clearInterval(cd); 
-                    roundIdx = 0; 
-                    isCooldownActive = false; 
-                    localStorage.removeItem('predictorRound'); 
-                    localStorage.removeItem('predictorCooldown'); 
-                    timerEl.style.display = 'none'; 
-                    btn.disabled = false; 
-                    autoClear(); 
-                    refreshUI(); 
-                    return; 
+
+            const countdown = setInterval(() => {
+                if(sec <= 0) {
+                    clearInterval(countdown);
+                    isCooldownActive = false;
+                    roundIdx = 0;
+                    localStorage.setItem('predictorRound', 0);
+                    localStorage.removeItem('predictorCooldown');
+                    timerEl.style.display = 'none';
+                    btn.disabled = false;
+                    btn.innerText = translations[currentLang].btn;
+                    refreshUI();
+                    return;
                 }
-                let m = Math.floor(sec/60); let s = sec%60;
-                timerEl.innerText = (currentLang === 'sw' ? "PUMZIKA: " : "WAIT: ") + m + ":" + (s < 10 ? "0" : "") + s;
-                btn.innerText = translations[currentLang].cdBtn;
                 sec--;
+                let m = Math.floor(sec / 60);
+                let s = sec % 60;
+                let timeStr = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+                timerEl.innerText = (currentLang === 'sw' ? "PUMZIKA: " : "WAIT: ") + timeStr;
+                btn.innerText = translations[currentLang].cdBtn + " (" + timeStr + ")";
             }, 1000);
         }
 
-        function checkExistingCD() { 
-            const endTime = localStorage.getItem('predictorCooldown'); 
-            if(endTime) { 
-                const rem = Math.floor((parseInt(endTime) - Date.now()) / 1000); 
-                if(rem > 0) {
-                    startCD(rem); 
-                } else { 
-                    localStorage.removeItem('predictorCooldown'); 
-                    roundIdx = 0; 
-                    localStorage.setItem('predictorRound', 0); 
-                    refreshUI(); 
-                } 
-            } 
+        function checkExistingCD() {
+            const endTime = localStorage.getItem('predictorCooldown');
+            if(endTime) {
+                const rem = Math.floor((parseInt(endTime) - Date.now()) / 1000);
+                if(rem > 0) startCD(rem);
+                else { localStorage.removeItem('predictorCooldown'); roundIdx = 0; refreshUI(); }
+            }
         }
-        
-        function toggleModal() { document.getElementById('modal').style.display = (document.getElementById('modal').style.display === 'block' ? 'none' : 'block'); playSound(400, 'sine', 0.1); }
-        window.onload = refreshUI;
+
+        function autoClear() { if(isCooldownActive) return; const cells = document.querySelectorAll('.cell'); cells.forEach(c => { c.innerHTML = ''; c.className = 'cell shaded'; }); }
+        function toggleLang() { currentLang = currentLang === 'sw' ? 'en' : 'sw'; refreshUI(); }
+        function toggleMute() { muted = !muted; refreshUI(); }
+        function toggleModal() { document.getElementById('modal').style.display = document.getElementById('modal').style.display === 'block' ? 'none' : 'block'; }
+
+        // Tengeneza Grid
+        const grid = document.getElementById('gameGrid');
+        for (let i = 0; i < 25; i++) {
+            const d = document.createElement('div');
+            d.className = 'cell shaded';
+            d.id = 'cell-' + i;
+            grid.appendChild(d);
+        }
+
+        window.onload = () => { refreshUI(); checkExistingCD(); };
     </script>
 </body>
 </html>
